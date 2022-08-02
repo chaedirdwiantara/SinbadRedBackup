@@ -73,7 +73,7 @@ const OnBoardingView: React.FC<Props> = () => {
           title="Dengan daftar atau masuk, Anda menyetujui Syarat & Ketentuan serta
           Kebijakan Privasi kami"
           color="blue"
-          align='center'
+          align="center"
         />
       </View>
     );

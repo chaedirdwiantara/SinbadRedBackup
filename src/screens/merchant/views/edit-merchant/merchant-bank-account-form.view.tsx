@@ -11,7 +11,7 @@ import {
   SnbBottomSheetPart,
   SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View, BackHandler } from 'react-native';
+import { ScrollView, View, BackHandler, Keyboard } from 'react-native';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { NavigationAction } from '@navigation';
 import { contexts } from '@contexts';
@@ -218,7 +218,10 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         </SnbText2.Paragraph.Small>
         <View style={{ marginLeft: -layout.spacing.sm }}>
           <SnbButton2.Link
-            onPress={() => bottomSheetRef.current?.open()}
+            onPress={() => {
+              Keyboard.dismiss();
+              bottomSheetRef.current?.open();
+            }}
             title="Syarat dan Ketentuan"
             size="small"
           />
