@@ -32,13 +32,9 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
   sellerName,
   testID,
 }) => {
-  if (!data || !sellerName) {
-    return null;
-  }
-
   /** === HOOK === */
   const deliveryFee = 0;
-  const totalProductsPrice = totalBarangPrice(data);
+  const totalProductsPrice = totalBarangPrice(data || []);
 
   const productDetail = () => {
     return (
@@ -50,7 +46,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
             {sellerName}
           </SnbText2.Body.Default>
         </View>
-        {productList(data)}
+        {productList(data || [])}
         <View style={{ marginVertical: 8 }}>
           <SnbDivider2 />
         </View>

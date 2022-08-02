@@ -62,8 +62,8 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
                     `btn-openParcelDetail.seller${item.sellerId}.productContainer.${testID}`,
                   )}
                   onPress={() => {
-                    handleOpenModalParcelDetail();
                     handleSetParcelDetailData(item.products, item.sellerName);
+                    handleOpenModalParcelDetail();
                   }}>
                   <SnbText2.Body.Small
                     testID={`title.btn-openParcelDetail.seller${item.sellerId}.productContainer.${testID}`}
