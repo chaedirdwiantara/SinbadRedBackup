@@ -37,7 +37,7 @@ const BottomSheetUpdate: React.FC<ErrorProps> = (props) => {
   const button = () => {
     return (
       <FooterButton.Dual
-        title1="Perbarui Sekarang"
+        title1="Perbarui"
         title2="Nanti Saja"
         shadow={false}
         loading={false}
