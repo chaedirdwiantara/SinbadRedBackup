@@ -240,6 +240,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       value={countTotalPrice}
       description={`${countTotalProduct} barang dipilih`}
       buttonPress={handleOnPressCheckout}
+      type={'cart'}
     />
   );
 
