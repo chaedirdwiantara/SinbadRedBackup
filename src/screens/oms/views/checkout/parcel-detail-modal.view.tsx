@@ -91,10 +91,8 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
 
   const productList = (products: models.CheckoutCartProduct[]) => {
     return products.map((product) => (
-      <>
-        <View
-          style={CheckoutStyle.modalDetailItemContainer}
-          key={product.productId}>
+      <React.Fragment key={product.productId}>
+        <View style={CheckoutStyle.modalDetailItemContainer}>
           <View style={{ width: '50%' }}>
             <SnbText2.Paragraph.Default
               testID={`productName.product${product.productId}.modalParcelDetail.${testID}`}
@@ -111,7 +109,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
             })}
           </SnbText2.Paragraph.Default>
         </View>
-      </>
+      </React.Fragment>
     ));
   };
 
