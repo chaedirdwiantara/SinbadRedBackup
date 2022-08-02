@@ -2,51 +2,88 @@
 import {
   matchCartWithCheckData,
   useCheckoutAction,
-  useOmsGeneralFailedState,
+  useCheckSinbadVoucherAction,
+  useFooterData,
   usePostCheckProductAction,
   usePostCheckSellerAction,
   usePostCheckStockAction,
   useUpdateCartAction,
-} from '@screen/oms/functions';
-import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
+} from '../../functions';
+import { useVoucherLocalData } from '@screen/voucher/functions';
+import React, {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { View } from 'react-native';
-import { FooterButton, SnbBottomSheet2Ref } from 'react-native-sinbad-ui';
-import ShoppingCartValidation from './shopping-cart-validation.view';
+import { FooterButton } from 'react-native-sinbad-ui';
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
 import * as models from '@models';
-import BottomSheetError from '@core/components/BottomSheetError';
 import { goToCheckout } from '@core/functions/product';
 import { useIsFocused } from '@react-navigation/native';
+import { toCurrency } from '@core/functions/global/currency-format';
+import { NavigationAction } from '@core/functions/navigation';
 
 /** === INTERFACE === */
 interface FooterProps {
   cartData: models.CartMaster;
+  localCartMasterDebouce: models.CartMaster;
   countTotalProduct: number;
   countTotalPrice: number;
   isCheckoutDisabled: boolean;
-  handleCartCycle: () => void;
+  handleOpenErrorBusinessModal: () => void;
+  handleErrorGlobalModalData: ErrorGlobalModalDataProps;
+  handleParentToast: (message: string, height: number) => void;
+  handleOpenErrorCheckVoucher: () => void;
+  testID: string;
 }
+interface ErrorGlobalModalDataProps {
+  setOpen: (val: boolean) => void;
+  setRetryAction: (val: () => void) => void;
+  setCloseAction: (val: () => void) => void;
+  setErrorData: (val: models.ErrorProps | null) => void;
+  setRetryCount: (val: number) => void;
+  isOpen: boolean;
+  retryAction: Function;
+  closeAction: Function;
+  errorData: models.ErrorProps | null;
+  retryCount: number;
+}
+type IVoucherStatus = 'green' | 'yellow' | 'gray' | 'hidden';
 /** === COMPONENT ===  */
 export const ShoppingCartFooter: FC<FooterProps> = ({
   cartData,
-  countTotalPrice,
+  localCartMasterDebouce,
   countTotalProduct,
+  countTotalPrice,
   isCheckoutDisabled,
-  handleCartCycle,
+  handleOpenErrorBusinessModal,
+  handleErrorGlobalModalData,
+  handleParentToast,
+  handleOpenErrorCheckVoucher,
+  testID,
 }) => {
   /** === STATES === */
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const { stateCheckout, dispatchCheckout } = useContext(
     contexts.CheckoutContext,
   );
-  const [isErrorShown, setErrorShown] = useState(false);
+  const { stateVoucher, dispatchVoucher } = React.useContext(
+    contexts.VoucherContext,
+  );
   const [isMatchValid, setMatchValid] = useState(false);
   const [isCheckoutPressed, setCheckoutPressed] = useState(false);
   const [isCheckoutBtnLoading, setCheckoutBtnLoading] = useState(false);
   const [isUpdateError, setUpdateError] = useState(false);
-  const errorModal = useOmsGeneralFailedState();
   const isFocused = useIsFocused();
+  const { selectedVoucher, resetSelectedVoucher } = useVoucherLocalData();
+  const { footerData, setFooterData } = useFooterData();
+  const refFooterHeight = useRef(0);
+  const [isDeleteVoucher, setDeleteVoucher] = useState(false);
 
   /** === ACTIONS === */
   const postCheckProductAction = usePostCheckProductAction();
@@ -54,9 +91,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const postCheckStockAction = usePostCheckStockAction();
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
-
-  /** => MODAL REF */
-  const refCartValidationModal = React.useRef<SnbBottomSheet2Ref>(null);
+  const checkSinbadVoucherAction = useCheckSinbadVoucherAction();
 
   /** === FUNCTIONS === */
   /** Update cart after checkout button was clicked */
@@ -64,24 +99,30 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     updateCartAction.fetch(dispatchCart, cartData);
     setCheckoutPressed(true);
     setCheckoutBtnLoading(true);
-  }, [cartData, stateCart.buyerAddress.data]);
+  }, [cartData, stateCart.checkBuyer.data]);
+
+  const handleResetSelectedVoucher = () => {
+    resetSelectedVoucher();
+  };
 
   /** ==> Check product, seller, and stock after checkout button was clicked and update API requested */
   const checkProductSellerStock = () => {
     if (stateCart.update.data !== null && isCheckoutPressed) {
       /** Input product(s) that's been selected and available as payload */
+      checkSinbadVoucherAction.reset(dispatchVoucher);
       postCheckProductAction.fetch(dispatchCart, cartData);
       postCheckSellerAction.fetch(dispatchCart, cartData);
       postCheckStockAction.fetch(dispatchCart, cartData);
+      const carts = reformatCarts();
+      checkSinbadVoucherAction.fetch(
+        dispatchVoucher,
+        true,
+        selectedVoucher?.voucherId || null,
+        carts,
+      );
       setCheckoutPressed(false);
       setCheckoutBtnLoading(true);
     }
-  };
-
-  /** ==> Run cart validation cycle after business error modal dismissed */
-  const handleClose = () => {
-    handleCartCycle();
-    refCartValidationModal.current?.close();
   };
 
   /** === HOOKS === */
@@ -95,6 +136,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       postCheckSellerAction.reset(dispatchCart);
       postCheckStockAction.reset(dispatchCart);
       checkoutAction.reset(dispatchCheckout);
+      checkSinbadVoucherAction.reset(dispatchVoucher);
     };
   }, []);
 
@@ -122,14 +164,19 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
       /** Show business error if and only if the data from those responses doesn't match with Cart Master  */
       if (!validationResult) {
-        setErrorShown(true);
-        refCartValidationModal.current?.open();
+        handleOpenErrorBusinessModal();
+      } else if (
+        stateVoucher.checkSinbadVoucher.error !== null &&
+        stateVoucher.checkSinbadVoucher.error.code === 50170000017
+      ) {
+        handleOpenErrorCheckVoucher();
       }
     }
   }, [
     stateCart.postCheckProduct.data,
     stateCart.postCheckSeller.data,
     stateCart.postCheckStock.data,
+    stateVoucher.checkSinbadVoucher,
   ]);
 
   /** => if one of the check endpoint fail, show CTA */
@@ -146,7 +193,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       const isErrorCheckStock = stateCart.postCheckStock.error !== null;
 
       const action = () => {
-        errorModal.setOpen(false);
+        handleErrorGlobalModalData.setOpen(false);
       };
       // determine the error data
       let errorData = null;
@@ -159,9 +206,9 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       }
       // show the modal and the data
       if (isErrorCheckProduct || isErrorCheckSeller || isErrorCheckStock) {
-        errorModal.setCloseAction(() => action);
-        errorModal.setErrorData(errorData);
-        errorModal.setOpen(true);
+        handleErrorGlobalModalData.setCloseAction(() => action);
+        handleErrorGlobalModalData.setErrorData(errorData);
+        handleErrorGlobalModalData.setOpen(true);
         setCheckoutBtnLoading(false);
       }
     }
@@ -197,15 +244,15 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     // wait all fetch done first
     if (stateCheckout.checkout.error !== null) {
       const action = () => {
-        errorModal.setOpen(false);
+        handleErrorGlobalModalData.setOpen(false);
       };
       // determine the error data
       let errorData = stateCheckout.checkout.error;
       // show the modal and the data
       errorData = stateCheckout.checkout.error;
-      errorModal.setCloseAction(() => action);
-      errorModal.setErrorData(errorData);
-      errorModal.setOpen(true);
+      handleErrorGlobalModalData.setCloseAction(() => action);
+      handleErrorGlobalModalData.setErrorData(errorData);
+      handleErrorGlobalModalData.setOpen(true);
       setCheckoutBtnLoading(false);
     }
   }, [stateCheckout.checkout.error]);
@@ -221,51 +268,226 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     if (isUpdateError && stateCart.update.error) {
       const action = () => {
         setUpdateError(false);
-        errorModal.setOpen(false);
+        handleErrorGlobalModalData.setOpen(false);
       };
-      errorModal.setCloseAction(() => action);
-      errorModal.setErrorData(stateCart.update.error);
-      errorModal.setOpen(true);
+      handleErrorGlobalModalData.setCloseAction(() => action);
+      handleErrorGlobalModalData.setErrorData(stateCart.update.error);
+      handleErrorGlobalModalData.setOpen(true);
       setCheckoutBtnLoading(false);
     }
   }, [isUpdateError]);
 
+  /** => listen check voucher fetch success */
+  useEffect(() => {
+    if (stateVoucher.checkSinbadVoucher.data !== null) {
+      setFooterData(stateVoucher.checkSinbadVoucher.data);
+    }
+  }, [stateVoucher.checkSinbadVoucher.data]);
+
+  /** => listen check voucher fetch error */
+  useEffect(() => {
+    if (stateVoucher.checkSinbadVoucher.error !== null) {
+      resetSelectedVoucher();
+      setFooterData({
+        isVoucherExist: false,
+        sinbadVoucherId: null,
+        totalOrder: countTotalPrice,
+        sinbadVoucherDiscountOrder: 0,
+        totalOrderAfterSinbadVoucher: countTotalPrice,
+        carts: [],
+      });
+    }
+  }, [stateVoucher.checkSinbadVoucher.error]);
+
+  /** => listen when something change in products */
+  useEffect(() => {
+    if (localCartMasterDebouce) {
+      const carts = reformatCarts();
+      /** fetch check sinbad voucher */
+      checkSinbadVoucherAction.fetch(
+        dispatchVoucher,
+        false,
+        selectedVoucher?.voucherId || null,
+        carts,
+      );
+    }
+  }, [localCartMasterDebouce]);
+
+  /** => listen relate count total selected product */
+  useEffect(() => {
+    if (
+      stateVoucher.checkSinbadVoucher.data &&
+      stateVoucher.checkSinbadVoucher.data.isVoucherExist &&
+      countTotalProduct === 0
+    ) {
+      handleResetSelectedVoucher();
+      setTimeout(() => {
+        handleParentToast(
+          'Pilih produk sebelum pakai voucher',
+          refFooterHeight.current,
+        );
+      }, 300);
+    }
+  }, [countTotalProduct]);
+
+  /** listen relate  */
+  useEffect(() => {
+    if (footerData) {
+      if (
+        footerData.sinbadVoucherId !== selectedVoucher?.voucherId &&
+        selectedVoucher !== null
+      ) {
+        handleResetSelectedVoucher();
+        setTimeout(() => {
+          handleParentToast(
+            'Maaf, total belanja kamu dibawah syarat pemakaian voucher',
+            refFooterHeight.current,
+          );
+        }, 300);
+      } else if (
+        footerData.totalOrder < 100000 &&
+        countTotalProduct > 0 &&
+        !isDeleteVoucher
+      ) {
+        setTimeout(() => {
+          handleParentToast(
+            'Min. belanja 100rb untuk checkout',
+            refFooterHeight.current,
+          );
+        }, 300);
+      }
+    }
+  }, [footerData]);
+
+  const reformatCarts = () => {
+    // format payload from redux master
+    const carts: models.CheckSinbadVoucherPayloadCarts[] = [];
+    localCartMasterDebouce.sellers.map((sellerItem) => {
+      const products: models.CheckSinbadVoucherPayloadProducts[] = [];
+      sellerItem.products.map((productItem) => {
+        if (productItem.selected) {
+          products.push({
+            productId: productItem.productId,
+            qty: productItem.qty,
+            priceAfterTax: productItem.priceAfterTax,
+          });
+        }
+      });
+      carts.push({ sellerId: sellerItem.sellerId, products });
+    });
+
+    return carts;
+  };
+
+  const manageVoucherCheckbox = () => {
+    const isVoucherSelected =
+      selectedVoucher && selectedVoucher.voucherId !== null;
+    const isProductSelected = countTotalProduct > 0;
+    const isSinbadVoucherExist =
+      (footerData && footerData.isVoucherExist) || false;
+    let voucherStatus: IVoucherStatus, voucherBadgeTitle, voucherBadgeSubtitle;
+
+    if (isSinbadVoucherExist && isProductSelected && isVoucherSelected) {
+      voucherStatus = 'green';
+      voucherBadgeTitle = `Kamu Hemat ${toCurrency(
+        (footerData && footerData.sinbadVoucherDiscountOrder) || 0,
+        { withFraction: false },
+      )}`;
+      voucherBadgeSubtitle = '1 Voucher digunakan';
+    } else if (
+      isSinbadVoucherExist &&
+      isProductSelected &&
+      !isVoucherSelected
+    ) {
+      voucherStatus = 'yellow';
+      voucherBadgeTitle = 'Gunakan voucher untuk dapat diskon';
+    } else if (isSinbadVoucherExist && !isProductSelected) {
+      voucherStatus = 'gray';
+      voucherBadgeTitle = 'Pilih produk sebelum pakai voucher';
+    } else {
+      voucherStatus = 'hidden';
+    }
+
+    return { voucherStatus, voucherBadgeTitle, voucherBadgeSubtitle };
+  };
+
   /** === VIEWS === */
   /** ==> content */
-  const renderFooterContent = () => (
-    <FooterButton.Order
-      titleButton="Checkout Sekarang"
-      loadingButton={isCheckoutBtnLoading}
-      disabled={isCheckoutDisabled || isCheckoutBtnLoading}
-      value={countTotalPrice}
-      description={`${countTotalProduct} barang dipilih`}
-      buttonPress={handleOnPressCheckout}
-    />
-  );
-
-  /** ==> Error Business Modal */
-  const renderBusinessErrorModal = () => (
-    <ShoppingCartValidation
-      closeAction={handleClose}
-      parentRef={refCartValidationModal}
-    />
-  );
+  const renderFooterContent = () => {
+    const { voucherStatus, voucherBadgeTitle, voucherBadgeSubtitle } =
+      manageVoucherCheckbox();
+    const totalDisplayPrice =
+      (footerData && footerData.totalOrderAfterSinbadVoucher) || 0;
+    return (
+      <FooterButton.Cart
+        testID={`footer.${testID}`}
+        titleButton="Checkout Sekarang"
+        loading={!footerData}
+        loadingButton={isCheckoutBtnLoading}
+        disabled={
+          totalDisplayPrice < 100000 ||
+          isCheckoutBtnLoading ||
+          isCheckoutDisabled ||
+          stateVoucher.checkSinbadVoucher.loading
+        }
+        value={totalDisplayPrice || 0}
+        description={
+          countTotalProduct > 0
+            ? `(${countTotalProduct}) barang dipilih`
+            : undefined
+        }
+        buttonPress={handleOnPressCheckout}
+        voucherStatus={voucherStatus}
+        voucherTitle={voucherBadgeTitle}
+        voucherDescription={voucherBadgeSubtitle}
+        onPressVoucher={() => {
+          if (voucherStatus !== 'gray') {
+            // navigate to voucher list
+            NavigationAction.navigate('VoucherCartListView');
+          } else if (voucherStatus === 'gray') {
+            setTimeout(() => {
+              handleParentToast(
+                'Pilih produk sebelum pakai voucher',
+                refFooterHeight.current,
+              );
+            }, 300);
+          }
+        }}
+        onCloseVoucher={
+          voucherStatus === 'green'
+            ? () => {
+                setDeleteVoucher(true);
+                handleResetSelectedVoucher();
+                const carts = reformatCarts();
+                checkSinbadVoucherAction.fetch(
+                  dispatchVoucher,
+                  true,
+                  null,
+                  carts,
+                );
+                setTimeout(() => {
+                  handleParentToast(
+                    'Voucher Berhasil Dihapus',
+                    refFooterHeight.current,
+                  );
+                  setDeleteVoucher(false);
+                }, 300);
+              }
+            : undefined
+        }
+      />
+    );
+  };
 
   /** ==> Main */
   return (
-    <View style={{ justifyContent: 'flex-end' }}>
+    <View
+      style={{ justifyContent: 'flex-end' }}
+      onLayout={(event) => {
+        const { height } = event.nativeEvent.layout;
+        refFooterHeight.current = height;
+      }}>
       {renderFooterContent()}
-      {renderBusinessErrorModal()}
-      <BottomSheetError
-        open={errorModal.isOpen}
-        error={errorModal.errorData}
-        closeAction={() => {
-          errorModal.closeAction();
-        }}
-        retryAction={() => {
-          errorModal.closeAction();
-        }}
-      />
     </View>
   );
 };

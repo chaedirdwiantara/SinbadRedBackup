@@ -3,7 +3,7 @@ import * as types from '../../../types';
 import * as models from '../../../models';
 import simplifyReducer from '../../../../../core/redux/simplifyReducer';
 /** === TYPE HERE === */
-type VoucherCartListInitialProps =
+export type VoucherCartListInitialProps =
   models.DetailItemProps<models.VoucherCartListProps>;
 /** === INITIAL STATE HERE === */
 export const voucherCartListInitialState: VoucherCartListInitialProps = {

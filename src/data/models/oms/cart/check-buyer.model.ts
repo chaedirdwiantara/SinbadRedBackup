@@ -1,15 +1,17 @@
 /**
- * CART BUYER ADDRESS
+ * CHECK BUYER
  */
-export interface CartBuyerAddress {
+export interface CheckBuyer {
   buyerId: number;
   buyerName: string;
   buyerCode: string;
-  userFullName: string;
+  buyerTaxNo: string;
+  userFullname: string;
   userPhoneNumber: string;
   ownerId: number;
-  ownerFullName: string;
+  ownerFullname: string;
   ownerPhoneNumber: string;
+  ownerIdNo: string;
   latitude: string;
   longitude: string;
   province: string;

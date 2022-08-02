@@ -3,7 +3,7 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { View, ScrollView, StatusBar } from 'react-native';
 import {
   SnbContainer,
-  SnbToast,
+  SnbToast2,
   SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 // import { cloneDeep, isEqual } from 'lodash';
@@ -14,6 +14,8 @@ import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShoppingCartProducts } from './shopping-cart-products.view';
 import { ModalRemoveProduct } from './modal-remove-product.view';
 import { ModalCartProfileCompletion } from './modal-cart-profile-completion.view';
+import { ModalErrorCheckVoucher } from './modal-error-check-voucher';
+import ShoppingCartValidation from './shopping-cart-validation.view';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import BottomSheetError from '@core/components/BottomSheetError';
 import LoadingPage from '@core/components/LoadingPage';
@@ -28,11 +30,12 @@ import {
   useCartLocalData,
   useOmsGeneralFailedState,
   useGetTotalCartAction,
-  useCartBuyerAddressAction,
+  useCheckBuyerAction,
   useCancelStockAction,
   useUpdateCartAction,
   useKeyboardFocus,
   goToProfile,
+  useCheckSinbadVoucherAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -40,7 +43,10 @@ import { contexts } from '@contexts';
 import * as models from '@models';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
 import { NavigationAction } from '@core/functions/navigation';
-/** === DUMMIES === */
+import { useCancelVoucherAction } from '@screen/voucher/functions';
+import { useVoucherLocalData } from '@screen/voucher/functions';
+/** === GLOBAL === */
+const screenName = 'keranjangPage';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => STATE */
@@ -58,8 +64,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     mergeCheckSeller,
     mergeCheckStock,
     setInitialLocalData,
+    debouncedValue,
   } = useCartLocalData();
-  const [pageLoading, setPageLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
   const keyboardFocus = useKeyboardFocus();
   const [selectRemoveProduct, setSelectRemoveProduct] =
     useState<models.HandleRemoveProduct | null>(null);
@@ -72,19 +79,25 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => ACTION */
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
+  const { dispatchVoucher } = React.useContext(contexts.VoucherContext);
   const getCartAction = useGetCartAction();
   const checkProductAction = useCheckProductAction();
   const checkSellerAction = useCheckSellerAction();
   const checkStockAction = useCheckStockAction();
   const removeCartProductAction = useRemoveCartProductAction();
   const totalCartActions = useGetTotalCartAction();
-  const cartBuyerAddressAction = useCartBuyerAddressAction();
+  const checkBuyerAction = useCheckBuyerAction();
   const cancelCartAction = useCancelStockAction();
   const updateCartAction = useUpdateCartAction();
+  const cancelVoucherAction = useCancelVoucherAction();
+  const checkSinbadVoucherAction = useCheckSinbadVoucherAction();
+  const { resetSelectedVoucher } = useVoucherLocalData();
 
   /** => MODAL REF */
   const refRemoveProductModal = React.useRef<SnbBottomSheet2Ref>(null);
   const refCartValidationModal = React.useRef<SnbBottomSheet2Ref>(null);
+  const refCartBusinessErrorModal = React.useRef<SnbBottomSheet2Ref>(null);
+  const refVoucherBusinessErrorModal = React.useRef<SnbBottomSheet2Ref>(null);
 
   /** === FUNCTIONS === */
   /** => handle remove product modal */
@@ -110,9 +123,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     checkStockAction.reset(dispatchCart);
     getCartAction.reset(dispatchCart);
     removeCartProductAction.reset(dispatchCart);
-    cartBuyerAddressAction.reset(dispatchCart);
+    checkBuyerAction.reset(dispatchCart);
     updateCartAction.reset(dispatchCart);
     cancelCartAction.reset(dispatchCart);
+    cancelVoucherAction.reset(dispatchVoucher);
+    checkSinbadVoucherAction.reset(dispatchVoucher);
   };
 
   /** => handle cart cycle */
@@ -120,7 +135,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     handleResetContexts();
     setPageLoading(true);
     cancelCartAction.fetch(dispatchCart);
-    cartBuyerAddressAction.fetch(dispatchCart);
+    checkBuyerAction.fetch(dispatchCart);
+    cancelVoucherAction.fetch(dispatchVoucher);
   };
 
   /** => handle update cart */
@@ -166,11 +182,25 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     handleGoBack();
   });
 
+  /** => toast error check voucher */
+  const handleToastErrorCheckVoucher = (message: string, height: number) => {
+    SnbToast2.show(message, 1000, {
+      position: 'bottom',
+      positionValue: height + 25,
+      action: () => {
+        SnbToast2.hide();
+      },
+      actionLabel: 'oke',
+      actionType: 'short',
+    });
+  };
+
   /** === HOOKS === */
   /** => will unmount */
   useEffect(() => {
     return () => {
       handleResetContexts();
+      resetSelectedVoucher();
     };
   }, []);
 
@@ -195,34 +225,35 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => if cancel stock or buyer address failed */
   useEffect(() => {
-    if (!stateCart.cancelStock.loading && !stateCart.buyerAddress.loading) {
+    if (!stateCart.cancelStock.loading && !stateCart.checkBuyer.loading) {
       // check which endpoint fetch was fail
       const isErrorCancelStock = stateCart.cancelStock.error !== null;
-      const isErrorBuyerAddress = stateCart.buyerAddress.error !== null;
+      const isErrorBuyerAddress = stateCart.checkBuyer.error !== null;
       // determine the error data
       let errorData = null;
       if (isErrorCancelStock) {
         errorData = stateCart.cancelStock.error;
       } else {
-        errorData = stateCart.buyerAddress.error;
+        errorData = stateCart.checkBuyer.error;
       }
       if (isErrorCancelStock || isErrorBuyerAddress) {
+        setPageLoading(false);
         errorModal.setCloseAction(() => handleGoBack);
         errorModal.setErrorData(errorData);
         errorModal.setOpen(true);
       }
     }
-  }, [stateCart.cancelStock, stateCart.buyerAddress]);
+  }, [stateCart.cancelStock, stateCart.checkBuyer]);
 
   /** => after success fetch cancelStock & buyerAddress, fetch getCart */
   useEffect(() => {
     if (
       stateCart.cancelStock.data !== null &&
-      stateCart.buyerAddress.data !== null
+      stateCart.checkBuyer.data !== null
     ) {
       getCartAction.fetch(dispatchCart);
     }
-  }, [stateCart.cancelStock.data, stateCart.buyerAddress.data]);
+  }, [stateCart.cancelStock.data, stateCart.checkBuyer.data]);
 
   /** => if get cart failed */
   useEffect(() => {
@@ -241,7 +272,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     if (
       stateCart.get.data !== null &&
       stateCart.get.data.sellers.length > 0 &&
-      stateCart.buyerAddress.data !== null
+      stateCart.checkBuyer.data !== null
     ) {
       setLocalCartMaster({
         id: stateCart.get.data.id,
@@ -260,7 +291,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     ) {
       setPageLoading(false);
     }
-  }, [stateCart.get.data, stateCart.buyerAddress.data]);
+  }, [stateCart.get.data, stateCart.checkBuyer.data]);
 
   /** => if one of the check endpoint fail, show error retry */
   useEffect(() => {
@@ -322,7 +353,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     if (stateCart.remove.data !== null && selectRemoveProduct !== null) {
       removeProduct(selectRemoveProduct);
       totalCartActions.fetch(dispatchCart);
-      SnbToast.show('Produk berhasil dihapus dari keranjang', 2000, {
+      SnbToast2.show('Produk berhasil dihapus dari keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
@@ -330,7 +361,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
     /** error */
     if (stateCart.remove.error !== null) {
-      SnbToast.show('Produk gagal dihapus dari keranjang', 2000, {
+      SnbToast2.show('Produk gagal dihapus dari keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
@@ -341,11 +372,12 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => listen something to be executed after page loaded */
   useEffect(() => {
     if (!pageLoading) {
-      if (stateCart.buyerAddress.data) {
+      /** initial fetch check sinbad voucher */
+      if (stateCart.checkBuyer.data) {
         if (
-          !stateCart.buyerAddress.data.buyerName ||
-          !stateCart.buyerAddress.data.address ||
-          !stateCart.buyerAddress.data.isImageIdOcrValidation
+          !stateCart.checkBuyer.data.buyerName ||
+          !stateCart.checkBuyer.data.address ||
+          !stateCart.checkBuyer.data.isImageIdOcrValidation
         ) {
           refCartValidationModal.current?.open();
         }
@@ -365,8 +397,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         <React.Fragment>
           <ScrollView ref={scrollRef}>
             <View style={{ flex: 1 }}>
-              <ShoppingCartAddress />
+              <ShoppingCartAddress testID={screenName} />
               <ShoppingCartProducts
+                testID={screenName}
                 handleRemoveProductModal={handleRemoveProductModal}
                 unavailableProducts={localCartMaster.unavailable}
                 availableProducts={localCartMaster.sellers}
@@ -381,15 +414,22 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
             </View>
           </ScrollView>
           <ShoppingCartFooter
+            testID={screenName}
             cartData={localCartMaster}
-            countTotalProduct={countTotalProduct}
+            localCartMasterDebouce={debouncedValue!}
             countTotalPrice={countTotalPrice}
+            countTotalProduct={countTotalProduct}
             isCheckoutDisabled={
-              !isAnyActiveProduct() ||
-              countTotalPrice < 100000 ||
-              keyboardFocus.isFocus
+              countTotalProduct === 0 || keyboardFocus.isFocus
             }
-            handleCartCycle={handleCartCyle}
+            handleOpenErrorBusinessModal={() => {
+              refCartBusinessErrorModal.current?.open();
+            }}
+            handleErrorGlobalModalData={errorModal}
+            handleParentToast={handleToastErrorCheckVoucher}
+            handleOpenErrorCheckVoucher={() => {
+              refVoucherBusinessErrorModal.current?.open();
+            }}
           />
         </React.Fragment>
       );
@@ -400,21 +440,41 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => MAIN */
   return (
     <SnbContainer color="grey">
-      <ShoppingCartHeader goBack={handleGoBack} />
+      <ShoppingCartHeader goBack={handleGoBack} testID={screenName} />
       {!pageLoading ? renderContent() : <LoadingPage />}
+      {/* Business Error Modal When Checkout */}
+      <ShoppingCartValidation
+        testID={screenName}
+        closeAction={() => {
+          handleCartCyle();
+          refCartBusinessErrorModal.current?.close();
+        }}
+        parentRef={refCartBusinessErrorModal}
+      />
       {/* Dialog Remove Product */}
       <ModalRemoveProduct
+        testID={screenName}
         parentRef={refRemoveProductModal}
         okAction={() => handleOkActionRemoveProduct()}
         cancelAction={() => refRemoveProductModal.current?.close()}
       />
       {/* Profile Completion Modal */}
       <ModalCartProfileCompletion
+        testID={screenName}
         parentRef={refCartValidationModal}
         handleNavigateToProfile={() => {
           refCartValidationModal.current?.close();
           goToProfile();
         }}
+      />
+      {/* Error Check Voucher */}
+      <ModalErrorCheckVoucher
+        handleClose={() => {
+          handleCartCyle();
+          refVoucherBusinessErrorModal.current?.close();
+        }}
+        parentRef={refVoucherBusinessErrorModal}
+        testID={screenName}
       />
       {/* Error Modal Check Product, Seller & Stock */}
       <BottomSheetError
@@ -429,6 +489,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           errorModal.setOpen(false);
         }}
       />
+      <SnbToast2 testID={screenName} />
     </SnbContainer>
   );
 };

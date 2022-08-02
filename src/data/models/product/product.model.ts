@@ -109,8 +109,6 @@ export interface ProductDetail {
   minQty: number;
   minQtyType: string;
   packagedQty: number;
-  multipleQty: number;
-  multipleQtyType: string;
   brand: string;
   brandId: string;
   subBrand: string;

@@ -51,7 +51,7 @@ const getDetail = (payload: models.DetailProcessProps) => {
     'public',
     `products/${productId}?${qs}`,
     'product',
-    'v1',
+    'v2',
     'DETAIL',
   );
 };

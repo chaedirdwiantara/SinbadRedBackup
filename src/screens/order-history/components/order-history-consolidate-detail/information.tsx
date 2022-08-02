@@ -2,7 +2,6 @@ import React from 'react';
 import {
   colorV2,
   SnbText2,
-  SnbDivider2,
   SnbBadge2,
   Text,
 } from '@sinbad/react-native-sinbad-ui';
@@ -21,13 +20,24 @@ export const Header = (props: HeaderProps) => {
 type DescProps = {
   title: string;
   value: string;
+  voucher?: boolean;
 };
 
 export const Description = (props: DescProps) => {
-  const { value, title } = props;
+  const { value, title, voucher } = props;
   return (
     <View style={styles.desc}>
-      <Text.DetailPrice type="item" label={title} value={value} />
+      {voucher ? (
+        <Text.DetailPrice
+          type="item"
+          label={title}
+          value={value}
+          colorLabel={colorV2.textColor.secondary}
+          colorValue={colorV2.textColor.success}
+        />
+      ) : (
+        <Text.DetailPrice type="item" label={title} value={value} />
+      )}
     </View>
   );
 };

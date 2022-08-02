@@ -18,4 +18,5 @@ export const Images = {
   emptySinbad: require('./empty_sinbad.png'),
   pendingPayment: require('./pending-payment.png'),
   loginSuccess: require('./login_success.png'),
+  voucherNotMatch: require('./voucher_not_match.png'),
 };

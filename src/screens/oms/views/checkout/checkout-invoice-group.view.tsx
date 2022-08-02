@@ -1,27 +1,34 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { CheckoutStyle } from '@screen/oms/styles';
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { View, TouchableOpacity, FlatList } from 'react-native';
-import { SnbText2, colorV2, SnbBottomSheet2Ref } from 'react-native-sinbad-ui';
+import { SnbText2, colorV2 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT === */
 import { CheckoutSKUListView } from './checkout-sku-list.view';
 import { CheckoutShipmentDetailView } from './checkout-shipment-detail.view';
 import { CheckoutPaymentDetailView } from './checkout-payment-detail.view';
 import { CheckoutWarningTime } from './checkout-warning-time';
-import { ModalParcelDetail } from './parcel-detail-modal.view';
 /** === TYPE === */
 import * as models from '@models';
-
+import { testProps } from '@core/functions/global/test-props';
+/** === INTERFACE === */
 interface CheckoutInvoiceGroupViewProps {
   data: models.CheckoutResponse;
+  handleSetParcelDetailData: (
+    data: models.CheckoutCartProduct[],
+    sellerName: string,
+  ) => void;
+  handleOpenModalParcelDetail: () => void;
+  testID: string;
 }
 /** === COMPONENT === */
 export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
   data,
+  handleSetParcelDetailData,
+  handleOpenModalParcelDetail,
+  testID,
 }) => {
   /** === HOOK === */
-
-  const [dataModal, setDataModal]: any = useState([]);
   //get max lead time from product list
   const getMaxLeadTime = (products: models.CheckoutCartProduct[]) => {
     return Math.max.apply(
@@ -32,13 +39,10 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
     );
   };
 
-  /** => MODAL REF */
-  const refParcelDetailModal = React.useRef<SnbBottomSheet2Ref>(null);
-
   return (
     <>
       <View style={CheckoutStyle.invoiceGroupListContainer}>
-        <CheckoutWarningTime />
+        <CheckoutWarningTime testID={testID} />
       </View>
 
       <FlatList
@@ -48,33 +52,40 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
           <>
             <View style={CheckoutStyle.invoiceGroupListField}>
               <View style={CheckoutStyle.headerSection}>
-                <SnbText2.Headline.Small color={colorV2.textColor.default}>
+                <SnbText2.Headline.Small
+                  testID={`sellerName.seller${item.sellerId}.productContainer.${testID}`}
+                  color={colorV2.textColor.default}>
                   {item.sellerName}
                 </SnbText2.Headline.Small>
                 <TouchableOpacity
+                  {...testProps(
+                    `btn-openParcelDetail.seller${item.sellerId}.productContainer.${testID}`,
+                  )}
                   onPress={() => {
-                    refParcelDetailModal.current?.open();
-                    setDataModal(item.products);
+                    handleOpenModalParcelDetail();
+                    handleSetParcelDetailData(item.products, item.sellerName);
                   }}>
-                  <SnbText2.Body.Small color={colorV2.textColor.link}>
+                  <SnbText2.Body.Small
+                    testID={`title.btn-openParcelDetail.seller${item.sellerId}.productContainer.${testID}`}
+                    color={colorV2.textColor.link}>
                     Lihat Detail
                   </SnbText2.Body.Small>
                 </TouchableOpacity>
               </View>
-              <CheckoutSKUListView products={item.products} />
+              <CheckoutSKUListView
+                testID={`seller${item.sellerId}.productContainer.${testID}`}
+                products={item.products}
+              />
               <CheckoutShipmentDetailView
+                testID={`seller${item.sellerId}.productContainer.${testID}`}
                 leadTime={getMaxLeadTime(item.products)}
               />
-              <CheckoutPaymentDetailView products={item.products} />
+              <CheckoutPaymentDetailView
+                testID={`seller${item.sellerId}.productContainer.${testID}`}
+                products={item.products}
+                totalQty={item.totalSellerQtyProduct!}
+              />
             </View>
-            <ModalParcelDetail
-              parentRef={refParcelDetailModal}
-              close={() => {
-                refParcelDetailModal.current?.close();
-              }}
-              data={dataModal}
-              sellerName={item.sellerName}
-            />
           </>
         )}
       />

@@ -12,17 +12,20 @@ import {
 import { contexts } from '@contexts';
 import { ShoppingCartValidationStyles } from '@screen/oms/styles';
 import { Images } from 'src/assets';
+import { testProps } from '@core/functions/global/test-props';
 /** === INTERFACE ===  */
 interface ModalRemoveProductProps {
   okAction: () => void;
   cancelAction: () => void;
   parentRef: Ref<SnbBottomSheet2Ref>;
+  testID: string;
 }
 /** === COMPONENT ===  */
 export const ModalRemoveProduct: FC<ModalRemoveProductProps> = ({
   okAction,
   cancelAction,
   parentRef,
+  testID,
 }) => {
   const { stateCart } = React.useContext(contexts.CartContext);
   /** => content item image */
@@ -30,6 +33,7 @@ export const ModalRemoveProduct: FC<ModalRemoveProductProps> = ({
     return (
       <View style={ShoppingCartValidationStyles.contentImageContainer}>
         <Image
+          {...testProps(`img.content.modalRemoveProduct.${testID}`)}
           source={Images.cartNotFound}
           style={ShoppingCartValidationStyles.image}
         />
@@ -41,6 +45,7 @@ export const ModalRemoveProduct: FC<ModalRemoveProductProps> = ({
     return (
       <View style={ShoppingCartValidationStyles.contentTitleContainer}>
         <SnbText2.Headline.Default
+          testID={`title.content.modalRemoveProduct.${testID}`}
           color={colorV2.textColor.default}
           align={'center'}>
           Hapus Barang dari Keranjang
@@ -53,6 +58,7 @@ export const ModalRemoveProduct: FC<ModalRemoveProductProps> = ({
     return (
       <View style={ShoppingCartValidationStyles.contentMessageContainer}>
         <SnbText2.Paragraph.Default
+          testID={`subTitle.content.modalRemoveProduct.${testID}`}
           color={colorV2.textColor.secondary}
           align={'center'}>
           Apakah Anda yakin untuk menghapus barang ini dari keranjang?
@@ -74,6 +80,7 @@ export const ModalRemoveProduct: FC<ModalRemoveProductProps> = ({
   const button = () => {
     return (
       <FooterButton.Dual
+        testID={`modalRemoveProduct.${testID}`}
         title1={'Hapus'}
         title2={'Batalkan'}
         button1Press={okAction}
