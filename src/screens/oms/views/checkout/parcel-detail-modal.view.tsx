@@ -32,13 +32,9 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
   sellerName,
   testID,
 }) => {
-  if (!data || !sellerName) {
-    return null;
-  }
-
   /** === HOOK === */
   const deliveryFee = 0;
-  const totalProductsPrice = totalBarangPrice(data);
+  const totalProductsPrice = totalBarangPrice(data || []);
 
   const productDetail = () => {
     return (
@@ -50,7 +46,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
             {sellerName}
           </SnbText2.Body.Default>
         </View>
-        {productList(data)}
+        {productList(data || [])}
         <View style={{ marginVertical: 8 }}>
           <SnbDivider2 />
         </View>
@@ -91,10 +87,8 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
 
   const productList = (products: models.CheckoutCartProduct[]) => {
     return products.map((product) => (
-      <>
-        <View
-          style={CheckoutStyle.modalDetailItemContainer}
-          key={product.productId}>
+      <React.Fragment key={product.productId}>
+        <View style={CheckoutStyle.modalDetailItemContainer}>
           <View style={{ width: '50%' }}>
             <SnbText2.Paragraph.Default
               testID={`productName.product${product.productId}.modalParcelDetail.${testID}`}
@@ -111,7 +105,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
             })}
           </SnbText2.Paragraph.Default>
         </View>
-      </>
+      </React.Fragment>
     ));
   };
 

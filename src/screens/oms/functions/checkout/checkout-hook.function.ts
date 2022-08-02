@@ -23,8 +23,7 @@ const useCheckoutAction = () => {
         stateCart.postCheckProduct.data !== null &&
         stateCart.postCheckSeller.data !== null &&
         stateCart.postCheckStock.data !== null &&
-        stateCart.checkBuyer.data !== null &&
-        stateVoucher.checkSinbadVoucher.data !== null
+        stateCart.checkBuyer.data !== null
       ) {
         const cartsTemp: models.CheckoutCartPayload[] = cartMaster.sellers.map(
           (seller) => {
@@ -137,7 +136,8 @@ const useCheckoutAction = () => {
               ownerIdNo: stateCart.checkBuyer.data.ownerIdNo,
               sinbadVoucherId: selectedVoucher?.voucherId || null,
               sinbadVoucherDiscountOrder:
-                stateVoucher.checkSinbadVoucher.data.sinbadVoucherDiscountOrder,
+                stateVoucher.checkSinbadVoucher.data
+                  ?.sinbadVoucherDiscountOrder || 0,
               carts,
             },
           }),

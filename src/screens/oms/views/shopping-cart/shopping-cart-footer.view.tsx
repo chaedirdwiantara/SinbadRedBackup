@@ -113,13 +113,15 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       postCheckProductAction.fetch(dispatchCart, cartData);
       postCheckSellerAction.fetch(dispatchCart, cartData);
       postCheckStockAction.fetch(dispatchCart, cartData);
-      const carts = reformatCarts();
-      checkSinbadVoucherAction.fetch(
-        dispatchVoucher,
-        true,
-        selectedVoucher?.voucherId || null,
-        carts,
-      );
+      if (selectedVoucher !== null) {
+        const carts = reformatCarts();
+        checkSinbadVoucherAction.fetch(
+          dispatchVoucher,
+          true,
+          selectedVoucher?.voucherId || null,
+          carts,
+        );
+      }
       setCheckoutPressed(false);
       setCheckoutBtnLoading(true);
     }
@@ -160,17 +162,19 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         cartData,
       });
 
-      setMatchValid(validationResult);
+      const errorVoucherValidation =
+        selectedVoucher !== null &&
+        stateVoucher.checkSinbadVoucher.error !== null &&
+        stateVoucher.checkSinbadVoucher.error.code === 50170000017;
 
       /** Show business error if and only if the data from those responses doesn't match with Cart Master  */
       if (!validationResult) {
         handleOpenErrorBusinessModal();
-      } else if (
-        stateVoucher.checkSinbadVoucher.error !== null &&
-        stateVoucher.checkSinbadVoucher.error.code === 50170000017
-      ) {
+      } else if (errorVoucherValidation) {
         handleOpenErrorCheckVoucher();
       }
+
+      setMatchValid(validationResult && !errorVoucherValidation);
     }
   }, [
     stateCart.postCheckProduct.data,
