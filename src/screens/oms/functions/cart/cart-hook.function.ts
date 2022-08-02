@@ -426,7 +426,7 @@ const useCheckBuyerAction = () => {
 const useCartLocalData = () => {
   const [localCartMaster, setLocalCartMaster] = useState<models.CartMaster>();
   const [initialCartData, setInitialCartData] = useState<models.CartMaster>();
-  const debouncedValue = useDebounce(localCartMaster);
+  const debouncedValue = useDebounce(localCartMaster, 300);
   return {
     updateQty: ({
       productId,
