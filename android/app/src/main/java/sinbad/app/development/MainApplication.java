@@ -19,6 +19,7 @@ import com.swmansion.reanimated.ReanimatedJSIModulePackage;
 // FOR NEWRELIC
 import com.newrelic.agent.android.NewRelic;
 import newrelic.NewRelicPackage;
+import update.UpdatePackage;
 
 
 public class MainApplication extends MultiDexApplication implements ReactApplication {
@@ -35,6 +36,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
            packages.add(new NewRelicPackage());
+           packages.add(new UpdatePackage());
           return packages;
         }
 

@@ -1,8 +1,10 @@
-/** === THIS FOR INTERNAL USED === */
-/** => change flag rtdb */
-export const CHANGE_FLAG_RTDB = 'ChangeFlagRTDB';
-/** => flag update */
-export const UPDATE_APP = 'UpdateApp';
+/**
+ * ============================================================
+ * REGISTER ALL INTERFACE HERE
+ * ============================================================
+ */
+export * from './update-app-action.model';
+export * from './update-app.model';
 /**
  * ================================================================
  * NOTES
