@@ -191,6 +191,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         SnbToast2.hide();
       },
       actionLabel: 'oke',
+      actionType: 'short',
     });
   };
 
