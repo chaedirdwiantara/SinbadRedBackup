@@ -5,6 +5,7 @@ import { VoucherApi } from '../apis/voucher.api';
 import * as ActionCreators from '@actions';
 import * as types from '@types';
 import * as models from '@models';
+import { DataSuccessUpdateV2Props } from '@models';
 /** === FUNCTION === */
 /** => voucher detail */
 function* voucherDetail(action: models.VoucherDetailProcessAction) {
@@ -78,12 +79,38 @@ function* cancelVoucher(action: Omit<models.DeleteProcessAction, 'id'>) {
     yield put(ActionCreators.cancelVoucherFailed(error as models.ErrorProps));
   }
 }
+/** => update voucher visibility */
+function* updateVisibilityVoucher(
+  action: models.UpdateProcessAction<{ id: string }>,
+) {
+  try {
+    const response: models.UpdateSuccessV3Props<DataSuccessUpdateV2Props> =
+      yield call(() => {
+        return VoucherApi.updateVisibilityVoucher(action.payload.data);
+      });
+    yield action.contextDispatch(
+      ActionCreators.updateVisibilityVoucherSuccess(response),
+    );
+    yield put(ActionCreators.updateVisibilityVoucherSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.updateVisibilityVoucherFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.updateVisibilityVoucherFailed(error as models.ErrorProps),
+    );
+  }
+}
 /** === LISTEN FUNCTION === */
 function* VoucherSaga() {
   yield takeLatest(types.VOUCHER_DETAIL_PROCESS, voucherDetail);
   yield takeLatest(types.VOUCHER_CART_LIST_PROCESS, voucherCartList);
   yield takeLatest(types.CHECK_SINBAD_VOUCHER_PROCESS, checkSinbadVoucher);
   yield takeLatest(types.CANCEL_VOUCHER_PROCESS, cancelVoucher);
+  yield takeLatest(
+    types.UPDATE_VISIBILITY_VOUCHER_PROCESS,
+    updateVisibilityVoucher,
+  );
 }
 
 export default VoucherSaga;

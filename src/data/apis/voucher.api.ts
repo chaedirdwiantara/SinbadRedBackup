@@ -55,10 +55,28 @@ const cancelVoucher = () => {
   );
 };
 
+/** => update voucher visibility */
+const updateVisibilityVoucher = ({
+  id,
+}: models.VoucherUpdateVisibilityProps) => {
+  const path = `sinbad-vouchers/sinbad-voucher-visibility/${id}`;
+  return apiMapping<models.UpdateItemV2Props>(
+    'auth',
+    path,
+    'voucher',
+    'v1',
+    'UPDATE',
+    {
+      isVisible: true,
+    },
+  );
+};
+
 /** === EXPORT FUNCTIONS === */
 export const VoucherApi = {
   voucherCartList,
   voucherDetail,
   checkSinbadVoucher,
   cancelVoucher,
+  updateVisibilityVoucher,
 };
