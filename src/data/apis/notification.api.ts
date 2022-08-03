@@ -1,10 +1,21 @@
 /** === IMPORT EXTERNAL FUNCTION === */
 import apiMapping from '@core/services/apiMapping';
 import * as models from '@models';
+import moment from 'moment';
 /** === FUNCTION === */
 /** => notification list */
-const notificationList = (data: models.ListProcessProps) => {
-  const path = `notifications?limit=${data.limit}&skip=${data.skip}`;
+const notificationList = (
+  data: models.ListProcessV3Props<{ perPage: number }>,
+) => {
+  // only get 30 day
+  //(YYYY-MM-DD)
+  const formatDate = 'YYYY-MM-DD';
+  const day30Before = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30);
+  const startDate = moment().format(formatDate);
+  const endDate = moment(day30Before).format(formatDate);
+
+  const path = `notifications?page=${data.page}&perPage=${data.perPage}&startDate=${startDate}&endDate=${endDate}`;
+
   return apiMapping<models.NotificationListSuccessProps[]>(
     'auth',
     path,
@@ -16,7 +27,7 @@ const notificationList = (data: models.ListProcessProps) => {
 
 /** => notification list */
 const notificationTotal = () => {
-  const path = 'notifications/total';
+  const path = 'notifications/unread';
   return apiMapping<models.NotificationTotalSuccess>(
     'auth',
     path,
@@ -26,8 +37,14 @@ const notificationTotal = () => {
   );
 };
 
+/** => notification mark read */
+const notificationMarkRead = (id: string) => {
+  const path = `notifications/${id}/read`;
+  return apiMapping('auth', path, 'common', 'v1', 'CREATE');
+};
 /** === EXPORT FUNCTIONS === */
 export const NotificationApi = {
   notificationList,
   notificationTotal,
+  notificationMarkRead,
 };

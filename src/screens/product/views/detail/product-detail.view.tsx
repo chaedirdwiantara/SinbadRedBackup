@@ -68,11 +68,9 @@ const testID = 'product-detail';
 /** === COMPONENT === */
 const ProductDetailView: FC = () => {
   /** === HOOKS === */
-  // bentukan data productWhId
-  // productId_warehouseOriginId
   const {
-    params: { id: productWhId },
-  } = NavigationAction.useGetNavParams();
+    params: { id, warehouseId },
+  } = NavigationAction.useGetNavParams<{ id: string; warehouseId: string }>();
   const [isAvailable, setIsAvailable] = useState(true);
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
   const [loadingButton, setLoadingButton] = useState(true);
@@ -257,7 +255,7 @@ const ProductDetailView: FC = () => {
     productDetailActions.reset(dispatchProduct);
     stockValidationActions.reset(dispatchStock);
     // supplierSegmentationAction.reset(dispatchSupplier);
-    productDetailActions.fetch(dispatchProduct, productWhId);
+    productDetailActions.fetch(dispatchProduct, { id, warehouseId });
     if (dataProduct && me.data) {
       stockValidationActions.fetch(dispatchStock, {
         warehouseId: Number(dataProduct.warehouseOriginId) ?? null,
@@ -275,8 +273,8 @@ const ProductDetailView: FC = () => {
   /** => Did Mounted */
   useEffect(() => {
     setLoadingButton(true);
-    productDetailActions.fetch(dispatchProduct, productWhId);
-  }, [productWhId]);
+    productDetailActions.fetch(dispatchProduct, { id, warehouseId });
+  }, [id, warehouseId]);
 
   /** => Listen data product success */
   useEffect(() => {
