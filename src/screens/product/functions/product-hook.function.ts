@@ -25,13 +25,13 @@ const callProcessAction = (
     subModule,
   );
 };
-
 const perPage = 10;
 const page = 1;
 const useProductListActions = (subModule?: models.ProductSubModule) => {
   const dispatch = useDispatch();
-  return {
-    fetch: (
+
+  const fetch = useCallback(
+    (
       contextDispatch: (action: any) => any,
       queryOptions?: models.ProductListQueryOptions,
     ) => {
@@ -47,7 +47,11 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
         ),
       );
     },
-    refresh: (
+    [subModule],
+  );
+
+  const refresh = useCallback(
+    (
       contextDispatch: (action: any) => any,
       queryOptions?: models.ProductListQueryOptions,
     ) => {
@@ -63,7 +67,11 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
         ),
       );
     },
-    loadMore: (
+    [subModule],
+  );
+
+  const loadMore = useCallback(
+    (
       contextDispatch: (action: any) => any,
       state: models.ListItemV3Props<Array<models.ProductList>>,
       queryOptions?: models.ProductListQueryOptions,
@@ -88,9 +96,18 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
         );
       }
     },
-    clearContents: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.productListClearContents());
-    },
+    [subModule],
+  );
+
+  const clearContents = useCallback((contextDispatch: (action: any) => any) => {
+    contextDispatch(Actions.productListClearContents());
+  }, []);
+
+  return {
+    fetch,
+    refresh,
+    loadMore,
+    clearContents,
   };
 };
 

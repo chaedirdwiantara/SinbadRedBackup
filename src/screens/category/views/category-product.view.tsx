@@ -1,10 +1,23 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useCallback } from 'react';
+import React, { FC, memo, useCallback, useEffect } from 'react';
 import { View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 import { RouteProp, useRoute, useFocusEffect } from '@react-navigation/native';
 /** === IMPORT COMPONENT === */
-import ProductList from '@core/components/product/list';
+import { Header } from '../components';
+import {
+  ProductListView,
+  CategoryTabListView,
+  CountProductList,
+  ModalAddToCartView,
+  ModalNeedLoginView,
+  ModalFilterView,
+  ModalNotInUrbanView,
+  ModalErrorStockView,
+  ModalErrorProductDetailView,
+  ProductListProvider,
+  useProductListContext,
+} from '@core/components/product/product-list';
 /** === IMPORT FUNCTIONS === */
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { useProductListActions } from '@screen/product/functions';
@@ -27,72 +40,61 @@ type CategoryProductRouteProps = RouteProp<
   CategoryProductRouteParams,
   'CategoryProduct'
 >;
+/** === CONSTANT */
+const testID = 'category-product';
 /** === COMPONENT === */
 const CategoryProductView: FC = () => {
   /** === HOOKS === */
+  const { setQuery, setCategory } = useProductListContext();
   const {
-    params: {
-      category,
-      categoryFirstLevelIndex,
-      categorySecondLevelIndex,
-      categoryThirdLevelIndex,
-    },
+    params: { category, categoryFirstLevelIndex },
   } = useRoute<CategoryProductRouteProps>();
-  const { fetch, refresh, loadMore, clearContents } = useProductListActions();
-  const {
-    stateProduct: { list: productListState },
-    dispatchProduct,
-  } = useProductContext();
+  const { fetch, clearContents } = useProductListActions();
+  const { dispatchProduct } = useProductContext();
 
   useFocusEffect(
     useCallback(() => {
       fetch(dispatchProduct, { categoryId: category.id });
-
+      setQuery({ categoryId: category.id });
       return () => clearContents(dispatchProduct);
     }, []),
   );
+  // initial set header
+  useEffect(() => {
+    setCategory(category);
+  }, []);
   /** === VIEW === */
   return (
     <SnbContainer color="white">
       <View style={{ flex: 1 }}>
-        <ProductList
-          total={productListState.total}
-          products={productListState.data}
-          activeCategory={category}
-          withCategoryTabs={categoryFirstLevelIndex !== undefined} // Only for 2nd and 3rd level categories
-          categoryTabsConfig={
-            categoryFirstLevelIndex !== undefined
-              ? {
-                  level: categoryThirdLevelIndex === undefined ? '2' : '3',
-                  firstLevelIndex: categoryFirstLevelIndex,
-                  secondLevelIndex: categorySecondLevelIndex,
-                  thirdLevelIndex: categoryThirdLevelIndex,
-                }
-              : undefined
-          }
-          isRefreshing={productListState.refresh}
-          onFetch={(queryOptions) =>
-            fetch(dispatchProduct, {
-              categoryId: category.id,
-              ...queryOptions,
-            })
-          }
-          onRefresh={(queryOptions) =>
-            refresh(dispatchProduct, {
-              categoryId: category.id,
-              ...queryOptions,
-            })
-          }
-          onLoadMore={(queryOptions) =>
-            loadMore(dispatchProduct, productListState, {
-              categoryId: category.id,
-              ...queryOptions,
-            })
-          }
+        <Header />
+        {categoryFirstLevelIndex !== undefined ? (
+          <CategoryTabListView
+            testID={testID}
+            onFetch={(params) => fetch(dispatchProduct, params)}
+          />
+        ) : (
+          <View />
+        )}
+        <CountProductList testID={testID} />
+        <ProductListView testID={testID} />
+        <ModalFilterView
+          testID={testID}
+          onFetch={(params) => fetch(dispatchProduct, params)}
         />
+        <ModalAddToCartView testID={testID} />
+        <ModalNeedLoginView testID={testID} />
+        <ModalNotInUrbanView testID={testID} />
+        <ModalErrorStockView testID={testID} />
+        <ModalErrorProductDetailView testID={testID} />
       </View>
     </SnbContainer>
   );
 };
 
-export default CategoryProductView;
+// export default CategoryProductView;
+export default memo(() => (
+  <ProductListProvider>
+    <CategoryProductView />
+  </ProductListProvider>
+));
