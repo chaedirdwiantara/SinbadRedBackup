@@ -39,6 +39,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
         buttonPress={
           totalPaymentNumber > 999999999 ? pressButton : goToPaymentMethod
         }
+        type={'checkout'}
       />
     </React.Fragment>
   );

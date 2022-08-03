@@ -1,0 +1,4 @@
+Sinbad versi 0.1.11
+
+Peningkatan performa pada aplikasi Sinbad kamu agar pengalaman berbelanja kamu semakin menyenangkan
+Yuk update aplikasi sekarang!
