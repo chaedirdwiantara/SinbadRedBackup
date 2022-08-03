@@ -305,7 +305,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
   /** => listen when something change in products */
   useEffect(() => {
-    if (localCartMasterDebouce) {
+    if (localCartMasterDebouce && !stateVoucher.checkSinbadVoucher.loading) {
       const carts = reformatCarts();
       /** fetch check sinbad voucher */
       checkSinbadVoucherAction.fetch(
