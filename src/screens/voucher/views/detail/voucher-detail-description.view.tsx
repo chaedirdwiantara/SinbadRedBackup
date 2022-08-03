@@ -28,6 +28,9 @@ export const VoucherDetailDescription: FC<VoucherDetailDescriptionProps> = ({
         style={{ marginVertical: 10 }}
       />
       <RenderHTML
+        enableExperimentalBRCollapsing
+        enableExperimentalGhostLinesPrevention
+        enableExperimentalMarginCollapsing
         renderersProps={{
           a: {
             onPress: (event, href) => {
