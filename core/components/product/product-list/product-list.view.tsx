@@ -11,15 +11,6 @@ import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { useProductListContext } from './';
 // types
 import type * as models from '@models';
-// import ProductTagList from '../list/ProductTagList';
-
-// import {
-//   // useBottomAction,
-//   // priceSortOptions,
-//   // useOrderModalVisibility,
-//   useProductTags,
-//   // usePriceRangeFilter,
-// } from '@core/functions/product';
 
 /** => INTERFACE */
 type Props = {
@@ -29,7 +20,7 @@ type Props = {
 const Main: FC<Props> = ({ testID }) => {
   const { state, trigerModal, setSelectProduct } = useProductListContext();
   const { me } = useDataAuth();
-  const { fetch, refresh, loadMore, clearContents } = useProductListActions();
+  const { fetch, loadMore } = useProductListActions();
   const productDetailActions = useProductDetailCartAction();
   const {
     stateProduct: { list: productListState },
@@ -44,12 +35,10 @@ const Main: FC<Props> = ({ testID }) => {
   const handleOrderPress = useCallback(
     (product: models.ProductList) => {
       if (me.data === null) {
-        // setModalNeedToLogin(true);
+        // if user not login/anonim give me.data null
         trigerModal('needLogin', true);
       } else {
         const id = `${product.id}_${product.warehouseOriginId}`;
-        trigerModal('addToCart', true);
-        // setProductSelected(product);
         setSelectProduct(id);
         productDetailActions.fetch(dispatchProduct, id);
       }
@@ -62,10 +51,6 @@ const Main: FC<Props> = ({ testID }) => {
         testID={testID}
         total={productListState.total}
         products={productListState.data}
-        //  withTags={withTags}
-        //  tags={tags}
-        //  onTagPress={handleTagPress}
-        //  onOrderPress={debounce((product) => handleOrderPress(product), 300)}
         onOrderPress={handleOrderPress}
         isRefreshing={productListState.refresh}
         onRefresh={() => fetch(dispatchProduct, state.query)}
@@ -74,7 +59,6 @@ const Main: FC<Props> = ({ testID }) => {
         }
         loading={productListState.loading}
         error={productListState.error}
-        // onFilterPress={() => handleActionClick({ type: 'filter' })}
         onChangeLayoutListPress={() => {}}
         onFilterPress={() => {}}
         onTagPress={() => {}}
