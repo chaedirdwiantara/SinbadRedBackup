@@ -93,7 +93,6 @@ const App: FC<Props> = ({ testID }) => {
       trigerModal('addToCart', true);
     }
   }, [loadingProduct, productDetail, dataStock]);
-  console.log({ dataStock });
   return (
     <>
       <AddToCartModal
