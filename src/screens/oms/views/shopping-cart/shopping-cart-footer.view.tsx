@@ -39,6 +39,7 @@ interface FooterProps {
   handleErrorGlobalModalData: ErrorGlobalModalDataProps;
   handleParentToast: (message: string, height: number) => void;
   handleOpenErrorCheckVoucher: () => void;
+  keyboardFocus: boolean;
   testID: string;
 }
 interface ErrorGlobalModalDataProps {
@@ -65,6 +66,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   handleErrorGlobalModalData,
   handleParentToast,
   handleOpenErrorCheckVoucher,
+  keyboardFocus,
   testID,
 }) => {
   /** === STATES === */
@@ -305,7 +307,11 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
   /** => listen when something change in products */
   useEffect(() => {
-    if (localCartMasterDebouce && !stateVoucher.checkSinbadVoucher.loading) {
+    if (
+      localCartMasterDebouce &&
+      !stateVoucher.checkSinbadVoucher.loading &&
+      !keyboardFocus
+    ) {
       const carts = reformatCarts();
       /** fetch check sinbad voucher */
       checkSinbadVoucherAction.fetch(
