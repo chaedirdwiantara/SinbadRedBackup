@@ -1,8 +1,12 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
-import { Linking, View } from 'react-native';
-import RenderHTML from 'react-native-render-html';
-import { SnbDashedLine, SnbText2, styles } from 'react-native-sinbad-ui';
+import { Dimensions, View } from 'react-native';
+import {
+  SnbDashedLine,
+  SnbHtml2,
+  SnbText2,
+  styles,
+} from 'react-native-sinbad-ui';
 import { VoucherDetailStyles } from '../../styles';
 /** === INTERFACE === */
 interface VoucherDetailDescriptionProps {
@@ -14,6 +18,8 @@ export const VoucherDetailDescription: FC<VoucherDetailDescriptionProps> = ({
   name,
   description,
 }) => {
+  const contentWidth = Dimensions.get('window').width;
+
   return (
     <View
       style={{
@@ -27,21 +33,7 @@ export const VoucherDetailDescription: FC<VoucherDetailDescriptionProps> = ({
         dashLength={8}
         style={{ marginVertical: 10 }}
       />
-      <RenderHTML
-        enableExperimentalBRCollapsing
-        enableExperimentalGhostLinesPrevention
-        enableExperimentalMarginCollapsing
-        renderersProps={{
-          a: {
-            onPress: (event, href) => {
-              Linking.openURL(href);
-            },
-          },
-        }}
-        source={{
-          html: description,
-        }}
-      />
+      <SnbHtml2 contentWidth={contentWidth} value={description} />
       <SnbDashedLine dashGap={5} dashLength={8} />
     </View>
   );

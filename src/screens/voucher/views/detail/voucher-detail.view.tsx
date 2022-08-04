@@ -15,13 +15,15 @@ import {
   goBack,
   useVoucherDetail,
   useVoucherLocalData,
+  useUpdateVisibilityVoucherAction,
 } from '../../functions';
 import { contexts } from '@contexts';
 import { NavigationAction } from '@core/functions/navigation';
 import { VoucherDetailFooter } from './voucher-detail-footer.view';
 /** === INTERFACE === */
 interface NavigationParams {
-  id: number;
+  id: string;
+  sinbadVoucherId: number;
   value: number;
   type: 'eligible' | 'not-eligible';
 }
@@ -32,7 +34,8 @@ const VoucherDetailView: FC = () => {
   const voucherDetailAction = useVoucherDetailAction();
   const { setSelectedVoucher } = useVoucherLocalData();
   const { data, loading, error } = useVoucherDetail();
-  const { id, value, type } =
+  const updateVisibilityVoucherAction = useUpdateVisibilityVoucherAction();
+  const { id, sinbadVoucherId, value, type } =
     NavigationAction.useGetNavParams<NavigationParams>().params;
 
   NavigationAction.useCustomBackHardware(() => {
@@ -49,9 +52,12 @@ const VoucherDetailView: FC = () => {
 
   const onPressHandler = () => {
     setSelectedVoucher({
-      voucherId: id,
+      voucherId: sinbadVoucherId,
       voucherValue: value,
     });
+
+    updateVisibilityVoucherAction.update(dispatchVoucher, id);
+
     NavigationAction.navigate('OmsShoppingCartView');
   };
 

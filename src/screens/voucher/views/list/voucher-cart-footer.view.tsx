@@ -3,7 +3,8 @@ import React, { FC } from 'react';
 import { View } from 'react-native';
 import * as models from '@models';
 import { toCurrency } from '@core/functions/global/currency-format';
-import { goBack, useVoucherLocalData } from '@screen/voucher/functions';
+import { goBack, useUpdateVisibilityVoucherAction, useVoucherLocalData } from '@screen/voucher/functions';
+import { contexts } from '@contexts';
 
 interface VoucherCartFooterProps {
   selectedVoucher: models.EligibleVoucherProps | undefined;
@@ -18,11 +19,13 @@ export const VoucherCartFooter: FC<VoucherCartFooterProps> = ({
   loading = false,
   disabled = false,
 }) => {
+  const { dispatchVoucher } = React.useContext(contexts.VoucherContext);
+  const updateVisibilityVoucherAction = useUpdateVisibilityVoucherAction();
+  const { setSelectedVoucher } = useVoucherLocalData();
+
   const potentialDiscount = toCurrency(selectedVoucher?.sinbadVoucherValue, {
     withFraction: false,
   });
-
-  const { setSelectedVoucher } = useVoucherLocalData();
 
   return (
     <View style={{ justifyContent: 'flex-end' }}>
@@ -39,6 +42,12 @@ export const VoucherCartFooter: FC<VoucherCartFooterProps> = ({
             voucherId: selectedVoucher?.sinbadVoucherId!,
             voucherValue: selectedVoucher?.sinbadVoucherValue!,
           });
+
+          updateVisibilityVoucherAction.update(
+            dispatchVoucher,
+            selectedVoucher?.id!,
+          );
+
           goBack();
         }}
       />
