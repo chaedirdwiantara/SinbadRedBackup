@@ -1,6 +1,10 @@
 import React, { memo, useCallback, useMemo, useEffect, FC } from 'react';
-import { StatusBar } from 'react-native';
-import { SnbToast2 } from 'react-native-sinbad-ui';
+import { StatusBar, View } from 'react-native';
+import {
+  SnbText2,
+  SnbToast2,
+  SnbBottomSheetPart,
+} from 'react-native-sinbad-ui';
 import { AddToCartModal } from '@core/components/modal';
 
 // function
@@ -11,6 +15,7 @@ import {
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
 import { useProductListContext, useProductListFunction } from './';
+import { LoadingLoadMore } from '@core/components/Loading';
 
 type Props = {
   testID: string;
@@ -82,6 +87,13 @@ const App: FC<Props> = ({ testID }) => {
       });
     }
   }, [stateCart.create.data]);
+  // listener modal show when loadingProduct is false and have product detail
+  useEffect(() => {
+    if (!loadingProduct && productDetail && dataStock) {
+      trigerModal('addToCart', true);
+    }
+  }, [loadingProduct, productDetail, dataStock]);
+  console.log({ dataStock });
   return (
     <>
       <AddToCartModal
@@ -102,6 +114,7 @@ const App: FC<Props> = ({ testID }) => {
         }
       />
       <SnbToast2 />
+      {loadingProduct ? <LoadingLoadMore /> : <View />}
     </>
   );
 };
