@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import {
   SnbDashedLine,
   SnbHtml2,
@@ -18,6 +18,8 @@ export const VoucherDetailDescription: FC<VoucherDetailDescriptionProps> = ({
   name,
   description,
 }) => {
+  const contentWidth = Dimensions.get('window').width;
+
   return (
     <View
       style={{
@@ -31,7 +33,7 @@ export const VoucherDetailDescription: FC<VoucherDetailDescriptionProps> = ({
         dashLength={8}
         style={{ marginVertical: 10 }}
       />
-      <SnbHtml2 value={description} />
+      <SnbHtml2 contentWidth={contentWidth} value={description} />
       <SnbDashedLine dashGap={5} dashLength={8} />
     </View>
   );
