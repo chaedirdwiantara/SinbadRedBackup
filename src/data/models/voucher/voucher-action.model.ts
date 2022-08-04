@@ -30,3 +30,7 @@ export interface SaveSelectedVoucherAction {
 export interface ResetSelectedVoucherAction {
   type: string;
 }
+
+export interface VoucherUpdateVisibilityProps {
+  id: string;
+}

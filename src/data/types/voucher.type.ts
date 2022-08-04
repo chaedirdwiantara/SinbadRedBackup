@@ -21,3 +21,10 @@ export const CANCEL_VOUCHER_PROCESS = 'CancelVoucherProcess';
 export const CANCEL_VOUCHER_SUCCESS = 'CancelVoucherSuccess';
 export const CANCEL_VOUCHER_FAILED = 'CancelVoucherFailed';
 export const CANCEL_VOUCHER_RESET = 'CancelVoucherReset';
+// UPDATE VOUCHER VISIBILITY
+export const UPDATE_VISIBILITY_VOUCHER_PROCESS =
+  'UpdateVisibilityVoucherProcess';
+export const UPDATE_VISIBILITY_VOUCHER_SUCCESS =
+  'UpdateVisibilityVoucherSuccess';
+export const UPDATE_VISIBILITY_VOUCHER_FAILED = 'UpdateVisibilityVoucherFailed';
+export const UPDATE_VISIBILITY_VOUCHER_RESET = 'UpdateVisibilityVoucherReset';

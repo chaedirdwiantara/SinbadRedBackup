@@ -62,7 +62,8 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
                     value={voucher?.sinbadVoucherId}
                     onPress={() =>
                       NavigationAction.navigate('VoucherDetailView', {
-                        id: voucher?.sinbadVoucherId,
+                        id: voucher.id,
+                        sinbadVoucherId: voucher?.sinbadVoucherId,
                         value: voucher?.sinbadVoucherValue,
                         type: 'eligible',
                       })
@@ -92,7 +93,8 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
                     value={voucher?.sinbadVoucherId}
                     onPress={() =>
                       NavigationAction.navigate('VoucherDetailView', {
-                        id: voucher?.sinbadVoucherId,
+                        id: voucher.id,
+                        sinbadVoucherId: voucher?.sinbadVoucherId,
                         value: voucher?.sinbadVoucherValue,
                         type: 'not-eligible',
                       })

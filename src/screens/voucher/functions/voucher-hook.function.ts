@@ -10,6 +10,18 @@ import { VoucherListProcessProps } from '@models';
 import { useDataVoucher } from '@core/redux/Data';
 import * as models from '@models';
 /** === FUNCTION === */
+/** => update voucher visibility */
+const useUpdateVisibilityVoucherAction = () => {
+  const dispatch = useDispatch();
+  return {
+    update: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.updateVisibilityVoucherProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.updateVisibilityVoucherReset(contextDispatch));
+    },
+  };
+};
 /** => cancel reserve voucher */
 const useCancelVoucherAction = () => {
   const dispatch = useDispatch();
@@ -137,6 +149,7 @@ const useVoucherLocalData = () => {
 };
 /** === EXPORT === */
 export {
+  useUpdateVisibilityVoucherAction,
   useCancelVoucherAction,
   useVoucherDetailAction,
   useVoucherCartListAction,
