@@ -430,6 +430,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
             handleOpenErrorCheckVoucher={() => {
               refVoucherBusinessErrorModal.current?.open();
             }}
+            keyboardFocus={keyboardFocus.isFocus}
           />
         </React.Fragment>
       );
