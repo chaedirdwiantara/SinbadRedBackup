@@ -472,7 +472,7 @@ const ProductDetailView: FC = () => {
             <ProductDetailSectionItem
               name="Berat"
               // unit will be dynamic
-              value={`${dataProduct?.productWeight} ${dataProduct?.packagedWeightLabel}`}
+              value={`${dataProduct?.packagedWeight} ${dataProduct?.packagedWeightLabel}`}
             />
             <ProductDetailSectionItem
               name="Dimensi per-Dus"
