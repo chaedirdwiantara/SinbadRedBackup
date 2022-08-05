@@ -79,7 +79,7 @@ const VoucherCartListView: FC = () => {
   return (
     <SnbContainer color="grey">
       <VoucherCartHeader goBack={() => goBack()} />
-      <VoucherCartSearch totalOrder={totalOrder ?? 0} />
+      <VoucherCartSearch totalOrder={totalOrder ?? 0} loading={loading} />
       {!empty ? renderListAndFooter() : renderEmpty()}
       {renderErrorModal()}
     </SnbContainer>
