@@ -27,7 +27,8 @@ export const VoucherCartSearch: FC<VoucherCartSearchProps> = ({
   useEffect(() => {
     if (
       (debouncedValue.length >= 3 || debouncedValue.length === 0) &&
-      !loading
+      !loading &&
+      totalOrder !== 0
     ) {
       getVouchersAction.list(dispatchVoucher, {
         totalOrder,

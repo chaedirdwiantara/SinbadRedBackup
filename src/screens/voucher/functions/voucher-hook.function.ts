@@ -106,9 +106,8 @@ const useVoucherList = () => {
   return {
     eligibleVouchers: stateVoucher.voucherCart.list.data?.eligible,
     notEligibleVouchers: stateVoucher.voucherCart.list.data?.notEligible,
-    loading:
-      stateVoucher.voucherCart.list.loading ||
-      stateVoucher.checkSinbadVoucher.loading,
+    loadingList: stateVoucher.voucherCart.list.loading,
+    loadingCheckVoucher: stateVoucher.checkSinbadVoucher.loading,
     changeSelectedVoucher: (voucher: RadioValue) => {
       setSelectedVoucher(voucher as number);
     },
