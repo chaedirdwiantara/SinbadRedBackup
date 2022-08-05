@@ -86,29 +86,7 @@ export const ProductView: FC<ProductViewProps> = ({
     return { displayPrice, lastPrice, priceDifference };
   };
   /** => HANDLE ON BLUR */
-  const handleOnBlur = ({ qty, minQty }: models.updateCartQtyBlur) => {
-    // if the user update qty using keyboard
-    let updatedQty = 1;
-    if (qty && Number.isInteger(qty)) {
-      if (qty <= stock && qty >= minQty) {
-        updatedQty = qty;
-      } else if (qty < minQty) {
-        updatedQty = minQty;
-      } else if (qty > stock) {
-        updatedQty = stock;
-      }
-    }
-
-    if (product.sellerId) {
-      handleUpdateQty({
-        productId: product.productId,
-        sellerId: product.sellerId,
-        warehouseId: product.warehouseId,
-        type: 'onBlur',
-        newQty: updatedQty,
-      });
-    }
-
+  const handleOnBlur = () => {
     keyboardFocus.setFocus(false);
   };
   /** => RENDER UOM INFORMAATION */
@@ -299,10 +277,7 @@ export const ProductView: FC<ProductViewProps> = ({
             value={product.qty}
             maxLength={6}
             onBlur={() => {
-              handleOnBlur({
-                qty: product.qty,
-                minQty: product.minQty,
-              });
+              handleOnBlur();
             }}
             onFocus={() => {
               keyboardFocus.setFocus(true);
