@@ -478,10 +478,18 @@ const useCartLocalData = () => {
             thisProduct.selected = true;
           }
         } else if (type === 'onChange') {
-          thisProduct.qty = newQty ?? 1;
+          let updatedQty = 1;
+          if (newQty && Number.isInteger(newQty)) {
+            if (newQty <= stock && newQty >= thisProduct.minQty) {
+              updatedQty = newQty;
+            } else if (newQty < thisProduct.minQty) {
+              updatedQty = thisProduct.minQty;
+            } else if (newQty > stock) {
+              updatedQty = stock;
+            }
+          }
+          thisProduct.qty = updatedQty;
           thisProduct.selected = true;
-        } else {
-          thisProduct.qty = newQty ?? thisProduct.minQty;
         }
 
         thisProduct.isQtyChanged = true;
