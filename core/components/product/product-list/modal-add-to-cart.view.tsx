@@ -1,17 +1,10 @@
 import React, { memo, useCallback, useMemo, useEffect, FC } from 'react';
 import { StatusBar, View } from 'react-native';
-import {
-  SnbText2,
-  SnbToast2,
-  SnbBottomSheetPart,
-} from 'react-native-sinbad-ui';
+import { SnbToast2 } from 'react-native-sinbad-ui';
 import { AddToCartModal } from '@core/components/modal';
 
 // function
-import {
-  useOrderQuantity,
-  useStockValidationAction,
-} from '@screen/product/functions';
+import { useStockValidationAction } from '@screen/product/functions';
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
 import { useProductListContext, useProductListFunction } from './';
@@ -22,7 +15,7 @@ type Props = {
 };
 
 const App: FC<Props> = ({ testID }) => {
-  const { state, trigerModal } = useProductListContext();
+  const { state, orderQty, onChangeQty, trigerModal } = useProductListContext();
   const {
     // function
     onReset,
@@ -37,10 +30,6 @@ const App: FC<Props> = ({ testID }) => {
 
   const stockValidationActions = useStockValidationAction();
   const { dispatchStock } = useStockContext();
-
-  const { orderQty, onChangeQty } = useOrderQuantity({
-    minQty: productDetail?.minQty ?? 1,
-  });
 
   // Var
   const modalVisible = useMemo(
