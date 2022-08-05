@@ -416,7 +416,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           <ShoppingCartFooter
             testID={screenName}
             cartData={localCartMaster}
-            localCartMasterDebouce={debouncedValue!}
+            localCartMasterDebounce={debouncedValue!}
             countTotalPrice={countTotalPrice}
             countTotalProduct={countTotalProduct}
             isCheckoutDisabled={
@@ -431,6 +431,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               refVoucherBusinessErrorModal.current?.open();
             }}
             keyboardFocus={keyboardFocus.isFocus}
+            isAnyActiveProduct={isAnyActiveProduct()}
           />
         </React.Fragment>
       );

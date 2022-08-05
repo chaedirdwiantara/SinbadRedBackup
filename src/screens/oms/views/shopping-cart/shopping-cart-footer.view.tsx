@@ -31,7 +31,7 @@ import { NavigationAction } from '@core/functions/navigation';
 /** === INTERFACE === */
 interface FooterProps {
   cartData: models.CartMaster;
-  localCartMasterDebouce: models.CartMaster;
+  localCartMasterDebounce: models.CartMaster;
   countTotalProduct: number;
   countTotalPrice: number;
   isCheckoutDisabled: boolean;
@@ -40,6 +40,7 @@ interface FooterProps {
   handleParentToast: (message: string, height: number) => void;
   handleOpenErrorCheckVoucher: () => void;
   keyboardFocus: boolean;
+  isAnyActiveProduct: boolean;
   testID: string;
 }
 interface ErrorGlobalModalDataProps {
@@ -58,7 +59,7 @@ type IVoucherStatus = 'green' | 'yellow' | 'gray' | 'hidden';
 /** === COMPONENT ===  */
 export const ShoppingCartFooter: FC<FooterProps> = ({
   cartData,
-  localCartMasterDebouce,
+  localCartMasterDebounce,
   countTotalProduct,
   countTotalPrice,
   isCheckoutDisabled,
@@ -67,6 +68,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   handleParentToast,
   handleOpenErrorCheckVoucher,
   keyboardFocus,
+  isAnyActiveProduct,
   testID,
 }) => {
   /** === STATES === */
@@ -308,7 +310,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   /** => listen when something change in products */
   useEffect(() => {
     if (
-      localCartMasterDebouce &&
+      localCartMasterDebounce &&
       !stateVoucher.checkSinbadVoucher.loading &&
       !keyboardFocus
     ) {
@@ -321,7 +323,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         carts,
       );
     }
-  }, [localCartMasterDebouce]);
+  }, [localCartMasterDebounce]);
 
   /** => listen relate count total selected product */
   useEffect(() => {
@@ -372,7 +374,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const reformatCarts = () => {
     // format payload from redux master
     const carts: models.CheckSinbadVoucherPayloadCarts[] = [];
-    localCartMasterDebouce.sellers.map((sellerItem) => {
+    cartData.sellers.map((sellerItem) => {
       const products: models.CheckSinbadVoucherPayloadProducts[] = [];
       sellerItem.products.map((productItem) => {
         if (productItem.selected) {
@@ -411,7 +413,11 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     ) {
       voucherStatus = 'yellow';
       voucherBadgeTitle = 'Gunakan voucher untuk dapat diskon';
-    } else if (isSinbadVoucherExist && !isProductSelected) {
+    } else if (
+      isSinbadVoucherExist &&
+      !isProductSelected &&
+      isAnyActiveProduct
+    ) {
       voucherStatus = 'gray';
       voucherBadgeTitle = 'Pilih produk sebelum pakai voucher';
     } else {
