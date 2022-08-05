@@ -11,8 +11,8 @@ const notificationList = (
   //(YYYY-MM-DD)
   const formatDate = 'YYYY-MM-DD';
   const day30Before = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30);
-  const startDate = moment().format(formatDate);
-  const endDate = moment(day30Before).format(formatDate);
+  const startDate = moment(day30Before).format(formatDate);
+  const endDate = moment().format(formatDate);
 
   const path = `notifications?page=${data.page}&perPage=${data.perPage}&startDate=${startDate}&endDate=${endDate}`;
 
