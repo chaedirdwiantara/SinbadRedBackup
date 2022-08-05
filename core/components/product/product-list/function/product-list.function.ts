@@ -1,11 +1,9 @@
 import { useCallback, useContext } from 'react';
-import { SnbToast2 } from 'react-native-sinbad-ui';
 import { ProductListContext } from '../product-list.context';
 import {
   useTagListActions,
   useProductDetailCartAction,
   useStockValidationAction,
-  useOrderQuantity,
 } from '@screen/product/functions';
 import { useAddToCartAction } from '@screen/oms/functions';
 import { useGetTotalCartAction } from '@screen/oms/functions';
@@ -18,7 +16,8 @@ import type * as models from '@models';
 import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
 
 const useProductListContext = () => {
-  const { state, setState } = useContext(ProductListContext);
+  const { state, setState, orderQty, onChangeQty } =
+    useContext(ProductListContext);
 
   const trigerModal = useCallback(
     (
@@ -93,6 +92,8 @@ const useProductListContext = () => {
 
   return {
     state,
+    orderQty,
+    onChangeQty,
     trigerModal,
     setSearch,
     onChangeLayout,
@@ -103,7 +104,7 @@ const useProductListContext = () => {
 };
 
 const useProductListFunction = () => {
-  const { trigerModal, setSelectProduct } = useProductListContext();
+  const { trigerModal, setSelectProduct, orderQty } = useProductListContext();
   const totalCartActions = useGetTotalCartAction();
   const tagActions = useTagListActions();
   const productDetailActions = useProductDetailCartAction();
@@ -128,10 +129,6 @@ const useProductListFunction = () => {
     },
     dispatchProduct,
   } = useProductContext();
-
-  const { orderQty } = useOrderQuantity({
-    minQty: productDetailState?.minQty ?? 1,
-  });
 
   const { isPriceGrosir, bulkPriceAterTax } = useAddToCart(orderQty, false);
 
@@ -197,9 +194,8 @@ const useProductListFunction = () => {
       priceRules,
       selected: true,
     };
-
     addToCartActions.fetch(dispatchCart, params);
-  }, [productDetailState, dataStock, bulkPriceAterTax]);
+  }, [productDetailState, dataStock, bulkPriceAterTax, orderQty]);
   // function success add to cart
   const onSuccessAddToCart = useCallback(() => {
     trigerModal('addToCart', false);

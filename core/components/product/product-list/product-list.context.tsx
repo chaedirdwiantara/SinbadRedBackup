@@ -7,6 +7,9 @@ import React, {
   SetStateAction,
   useState,
 } from 'react';
+// function
+import { useOrderQuantity } from '@screen/product/functions';
+import { useProductListFunction } from './function/product-list.function';
 
 /** => Types */
 import type * as models from '@models';
@@ -36,6 +39,8 @@ type PropValue = {
 
 type PropContext = {
   state: PropValue;
+  orderQty: number;
+  onChangeQty: (val: number) => void;
   setState: Dispatch<SetStateAction<PropValue>>;
 };
 /** => Initial Variable */
@@ -66,13 +71,20 @@ const defaultValue: PropValue = {
 /** Context */
 export const ProductListContext = createContext<PropContext>({
   state: defaultValue,
+  orderQty: 0,
   setState: () => {},
+  onChangeQty: () => {},
 });
 
 const Provider: FC<Props> = ({ children }) => {
   const [state, setState] = useState(defaultValue);
+  const { productDetailState: productDetail } = useProductListFunction();
+  const { orderQty, onChangeQty } = useOrderQuantity({
+    minQty: productDetail?.minQty ?? 1,
+  });
   return (
-    <ProductListContext.Provider value={{ state, setState }}>
+    <ProductListContext.Provider
+      value={{ state, orderQty, setState, onChangeQty }}>
       {children}
     </ProductListContext.Provider>
   );
