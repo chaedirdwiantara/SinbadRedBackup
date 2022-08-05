@@ -1,0 +1,4 @@
+Sinbad versi 0.1.11
+
+Kini Sinbad hadir dengan sistem notifikasi, sekarang tidak perlu khawatir lagi ketinggalan informasi promo dan status pesanan
+Yuk, update aplikasi sekarang!
