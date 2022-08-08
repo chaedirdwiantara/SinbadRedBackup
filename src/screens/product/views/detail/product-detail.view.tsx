@@ -7,10 +7,10 @@ import {
   SnbToast2,
   spacingV2,
   FooterButton,
-  SnbHtml2,
 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
+import Html from '@core/components/HtmlV2';
 import BulkPricingList from '@core/components/product/BulkPricingList';
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
@@ -461,7 +461,7 @@ const ProductDetailView: FC = () => {
           </ProductDetailSection>
           {/* deskripsi harus render html dengan wrap <p></p> */}
           <ProductDetailSection title="Deskripsi Produk">
-            <SnbHtml2 value={dataProduct?.description ?? '-'} />
+            <Html value={dataProduct?.description ?? '-'} fontSize={12} />
           </ProductDetailSection>
           <View style={{ height: 10 }} />
         </ScrollView>
