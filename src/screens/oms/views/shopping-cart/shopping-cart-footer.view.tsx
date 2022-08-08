@@ -41,6 +41,7 @@ interface FooterProps {
   handleOpenErrorCheckVoucher: () => void;
   keyboardFocus: boolean;
   isAnyActiveProduct: boolean;
+  initialCartData: models.CartMaster | undefined;
   testID: string;
 }
 interface ErrorGlobalModalDataProps {
@@ -69,6 +70,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   handleOpenErrorCheckVoucher,
   keyboardFocus,
   isAnyActiveProduct,
+  initialCartData,
   testID,
 }) => {
   /** === STATES === */
@@ -311,9 +313,10 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   useEffect(() => {
     if (
       localCartMasterDebounce &&
-      !stateVoucher.checkSinbadVoucher.loading &&
-      !keyboardFocus
+      !keyboardFocus &&
+      initialCartData !== undefined
     ) {
+      console.log(localCartMasterDebounce, initialCartData);
       const carts = reformatCarts();
       /** fetch check sinbad voucher */
       checkSinbadVoucherAction.fetch(
@@ -378,10 +381,35 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       const products: models.CheckSinbadVoucherPayloadProducts[] = [];
       sellerItem.products.map((productItem) => {
         if (productItem.selected) {
+          let price = 0;
+          // check if price rules
+          if (productItem.priceRules.length > 0) {
+            const priceRulesFirstItem = productItem.priceRules[0];
+            if (productItem.qty < priceRulesFirstItem.minQty) {
+              price = productItem.priceAfterTax;
+            } else {
+              for (let x = 0; x < productItem.priceRules.length; x++) {
+                const isLast = x === productItem.priceRules.length - 1;
+                if (!isLast) {
+                  if (
+                    productItem.qty >= productItem.priceRules[x].minQty &&
+                    productItem.qty < productItem.priceRules[x + 1].minQty
+                  ) {
+                    price = productItem.priceRules[x].priceAfterTax;
+                    break;
+                  }
+                } else {
+                  price = productItem.priceRules[x].priceAfterTax;
+                }
+              }
+            }
+          } else {
+            price = productItem.priceAfterTax;
+          }
           products.push({
             productId: productItem.productId,
             qty: productItem.qty,
-            priceAfterTax: productItem.priceAfterTax,
+            priceAfterTax: price,
           });
         }
       });
