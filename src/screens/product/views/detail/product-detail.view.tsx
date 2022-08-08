@@ -5,57 +5,38 @@ import {
   SnbContainer,
   SnbStatusBar,
   SnbToast2,
-  SnbText2,
   spacingV2,
   FooterButton,
-  colorV2,
+  SnbHtml2,
 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
-import Html from '@core/components/HtmlV2';
 import BulkPricingList from '@core/components/product/BulkPricingList';
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
 import { ProductDetailMainInfo } from './ProductDetailMainInfo';
-// import { ProductDetailSupplierInfo } from './ProductDetailSupplierInfo';
-import { PromoSection } from './PromoSection';
 import { ProductDetailSection } from './ProductDetailSection';
 import { ProductDetailSectionItem } from './ProductDetailSectionItem';
-// import { ActionButton } from './ActionButton';
 import { UnavailableSkuFlag } from './UnavailableSkuFlag';
-// import { PromoModal } from './PromoModal';
 import { ProductDetailSkeleton } from './ProductDetailSkeleton';
-// import { BundleSection } from './BundleSection';
-import {
-  // RegisterSupplierModal,
-  // RejectApprovalModal,
-  WaitingApprovalModal,
-  AddToCartModal,
-} from '@core/components/modal';
+import { WaitingApprovalModal, AddToCartModal } from '@core/components/modal';
 import BottomSheetError from '@core/components/BottomSheetError';
 import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { contexts } from '@contexts';
 import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
-// import { usePotentialPromoProductAction } from '@screen/promo/functions';
-import { goToBundle, goBack } from '../../functions';
+import { goBack } from '../../functions';
 /** === IMPORT HOOKS === */
-import {
-  useCheckDataSupplier,
-  // useSupplierSegmentationDetailAction,
-  // useRegisterSupplierActions,
-} from '@core/functions/supplier';
+import { useCheckDataSupplier } from '@core/functions/supplier';
 import {
   useProductDetailAction,
-  // useAddToCartDetailActions,
   useStockValidationDetailAction,
   useOrderQuantity,
 } from '@screen/product/functions';
 import { useAddToCartAction } from '@screen/oms/functions/cart/cart-hook.function';
 import { useOrderModalVisibility } from '@core/functions/product';
 import { useProductContext } from 'src/data/contexts/product';
-// import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 import { useDataAuth } from '@core/redux/Data';
 import { useGetTotalCartAction } from '@screen/oms/functions';
@@ -136,12 +117,10 @@ const ProductDetailView: FC = () => {
 
   /** => action close modal add to cart */
   const handleCloseModal = () => {
-    // addToCartActions.reset(dispatchShopingCart);
-    // sendDataToSupplierActions.reset(dispatchSupplier);
     setLoadingButton(false);
     setOrderModalVisible(false);
     setModalErrorAddCart(false);
-    // setModalErrorSendDataSupplier(false);
+
     setModalErrorProductDetail(false);
     onFunctionActions({ type: 'close' });
   };
@@ -302,11 +281,6 @@ const ProductDetailView: FC = () => {
   useEffect(() => {
     if (dataProduct !== null) {
       if (!me.data) {
-        // checkUser({
-        //   sinbadStatus: me.data.approvalStatus,
-        //   supplierStatus: null,
-        // });
-
         setTimeout(() => {
           setLoadingButton(false);
         }, 1500);
@@ -378,7 +352,6 @@ const ProductDetailView: FC = () => {
     return () => {
       setModalErrorProductDetail(false);
       productDetailActions.reset(dispatchProduct);
-      // supplierSegmentationAction.reset(dispatchSupplier);
       stockValidationActions.reset(dispatchStock);
       addToCartAction.reset(dispatchCart);
     };
@@ -488,7 +461,7 @@ const ProductDetailView: FC = () => {
           </ProductDetailSection>
           {/* deskripsi harus render html dengan wrap <p></p> */}
           <ProductDetailSection title="Deskripsi Produk">
-            <Html value={dataProduct?.description ?? '-'} fontSize={12} />
+            <SnbHtml2 value={dataProduct?.description ?? '-'} />
           </ProductDetailSection>
           <View style={{ height: 10 }} />
         </ScrollView>
