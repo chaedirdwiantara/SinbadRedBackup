@@ -2,7 +2,7 @@ import { call, debounce, put, takeLatest } from 'redux-saga/effects';
 import * as types from '@types';
 import * as models from '@models';
 import * as ActionCreators from '@actions';
-import { easyRegistrationApi, searchLocationApi } from 'src/data/apis/account';
+import { easyRegistrationApi, ocrImageApi, searchLocationApi } from 'src/data/apis/account';
 
 function* searchLocation(action: models.IAction<models.ISearchLocation>) {
   try {
@@ -100,6 +100,19 @@ function* updateCompleteData(
   }
 }
 
+function* uploadSecureImage(actions: models.IAction<models.IOCRImage>) {
+  try {
+    const response: models.IUploadSecureImage = yield call(() =>
+      easyRegistrationApi.uploadImage(actions.payload.imageUrl),
+    );
+    yield put(
+      ActionCreators.uploadSecureImageSuccess(response),
+    );
+  } catch (error) {
+    yield put(ActionCreators.uploadSecureImageFailed(error));
+  }
+}
+
 function* EasyRegistrationSaga() {
   yield debounce(250, types.SEARCH_LOCATION_PROCESS, searchLocation);
   yield debounce(
@@ -118,6 +131,7 @@ function* EasyRegistrationSaga() {
     types.COMPLETE_DATA_CONFIRMATION_PROCESS,
     completeDataConfirmation,
   );
+  yield takeLatest(types.UPLOAD_SECURE_IMAGE_PROCESS, uploadSecureImage);
 }
 
 export default EasyRegistrationSaga;

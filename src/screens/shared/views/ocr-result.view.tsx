@@ -1,5 +1,6 @@
 import {
   SnbButton2,
+  SnbToast,
   spacingV2 as layout,
 } from '@sinbad/react-native-sinbad-ui';
 import React from 'react';
@@ -9,6 +10,7 @@ import * as models from '@models';
 import { MerchantHookFunc } from '@screen/merchant/function';
 import { contexts } from '@contexts';
 import { useCamera } from '@screen/auth/functions';
+import { useEasyRegistration } from '@screen/account/functions';
 
 interface Props {
   testID?: string;
@@ -20,7 +22,27 @@ const OCRResultView: React.FC<Props> = (props) => {
     contexts.MerchantContext,
   );
   const [value, setValue] = React.useState<models.IOCRResult | any>(null);
-  const { openCameraWithOCR } = useCamera();
+  const { openCamera } = useCamera();
+  const { uploadSecureImage, uploadSecureImageReset, uploadImageSecureState } = useEasyRegistration();
+  const { capturedImage } = useCamera()
+
+  React.useEffect(() => {
+    uploadSecureImageReset()
+    return uploadSecureImageReset
+  }, [])
+  
+  React.useEffect(() => {
+    if (uploadImageSecureState?.data) {
+      const user = {
+        name: value?.nameOnKtp,
+        idNo: value?.idNumber,
+      };
+      editProfile(dispatchSupplier, { data: { user } });
+    }
+    if (uploadImageSecureState?.error) {
+      SnbToast.show('Gagal upload foto KTP', 2000)
+    }
+  }, [uploadImageSecureState])
 
   return (
     <View style={{ flex: 1 }}>
@@ -36,7 +58,7 @@ const OCRResultView: React.FC<Props> = (props) => {
         <View style={{ flex: 1 }}>
           <SnbButton2.Primary
             title={'Ubah Foto'}
-            onPress={() => openCameraWithOCR('ktp')}
+            onPress={() => openCamera('ktp')}
             disabled={stateMerchant.profileEdit.loading}
             size="medium"
             full
@@ -49,20 +71,17 @@ const OCRResultView: React.FC<Props> = (props) => {
           <SnbButton2.Primary
             title={'Simpan'}
             onPress={() => {
-              const user = {
-                name: value.nameOnKtp,
-                idNo: value.idNumber,
-              };
-              editProfile(dispatchSupplier, { data: { user } });
+              uploadSecureImageReset()
+              uploadSecureImage({ imageUrl: capturedImage.data?.url })
             }}
             disabled={
-              value?.idNumber === '' ||
+              value?.idNumber?.length < 16 ||
               value?.nameOnKtp === '' ||
               stateMerchant.profileEdit.loading
             }
             size="medium"
             full
-            loading={stateMerchant.profileEdit.loading}
+            loading={stateMerchant.profileEdit.loading || uploadImageSecureState.loading}
             testID={props.testID}
           />
         </View>

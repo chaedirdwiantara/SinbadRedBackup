@@ -234,8 +234,8 @@ const MerchantEditPhotoView = () => {
                 params?.type === 'selfie'
                   ? 6 / 5
                   : params?.type === 'store'
-                  ? 8 / 7
-                  : 8 / 5,
+                    ? 8 / 7
+                    : 8 / 5,
               marginTop: 24,
             }}
           />
@@ -245,11 +245,7 @@ const MerchantEditPhotoView = () => {
                 size="small"
                 title="Ubah Foto"
                 onPress={() => {
-                  if (params?.type !== 'ktp') {
-                    openCamera(params?.type);
-                  } else {
-                    openCameraWithOCR(params?.type);
-                  }
+                  openCamera(params?.type);
                 }}
                 disabled={false}
                 full
@@ -289,11 +285,11 @@ const MerchantEditPhotoView = () => {
             imgSrc={setImage(params.type)}
             rules={setRules(params.type)}
             action={() => {
-              if (params?.type !== 'ktp') {
-                openCamera(params?.type);
-              } else {
-                openCameraWithOCR(params?.type);
-              }
+              // if (params?.type !== 'ktp') {
+              openCamera(params?.type);
+              // } else {
+              //   openCameraWithOCR(params?.type);
+              // }
             }}
             type="vertical"
             resizeMode={params.type === 'npwp' ? 'contain' : 'cover'}
