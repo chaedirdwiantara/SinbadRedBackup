@@ -90,6 +90,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const { footerData, setFooterData } = useFooterData();
   const refFooterHeight = useRef(0);
   const [isDeleteVoucher, setDeleteVoucher] = useState(false);
+  const [isInitialDebounce, setInitialDebounce] = useState(false);
 
   /** === ACTIONS === */
   const postCheckProductAction = usePostCheckProductAction();
@@ -311,12 +312,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
   /** => listen when something change in products */
   useEffect(() => {
-    if (
-      localCartMasterDebounce &&
-      !keyboardFocus &&
-      initialCartData !== undefined
-    ) {
-      console.log(localCartMasterDebounce, initialCartData);
+    if (localCartMasterDebounce && !keyboardFocus && isInitialDebounce) {
       const carts = reformatCarts();
       /** fetch check sinbad voucher */
       checkSinbadVoucherAction.fetch(
@@ -325,6 +321,8 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         selectedVoucher?.voucherId || null,
         carts,
       );
+    } else {
+      setInitialDebounce(true);
     }
   }, [localCartMasterDebounce]);
 
