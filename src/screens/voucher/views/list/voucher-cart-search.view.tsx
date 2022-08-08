@@ -9,10 +9,12 @@ import { contexts } from '@contexts';
 
 interface VoucherCartSearchProps {
   totalOrder: number;
+  loading: boolean;
 }
 
 export const VoucherCartSearch: FC<VoucherCartSearchProps> = ({
   totalOrder,
+  loading,
 }) => {
   /** === HOOK === */
   /** => contexts */
@@ -23,13 +25,17 @@ export const VoucherCartSearch: FC<VoucherCartSearchProps> = ({
   const { changeKeyword, keyword, debouncedValue } = useSearchKeyword();
   /** => effects */
   useEffect(() => {
-    if (debouncedValue.length >= 3 || debouncedValue.length === 0) {
+    if (
+      (debouncedValue.length >= 3 || debouncedValue.length === 0) &&
+      !loading &&
+      totalOrder !== 0
+    ) {
       getVouchersAction.list(dispatchVoucher, {
         totalOrder,
         ...(debouncedValue && { uniqueCode: debouncedValue }),
       });
     }
-  }, [debouncedValue]);
+  }, [debouncedValue, loading]);
 
   /** === VIEW === */
 

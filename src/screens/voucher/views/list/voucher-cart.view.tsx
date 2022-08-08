@@ -19,7 +19,8 @@ const VoucherCartListView: FC = () => {
   const {
     eligibleVouchers,
     notEligibleVouchers,
-    loading,
+    loadingList,
+    loadingCheckVoucher,
     empty,
     disabled,
     error,
@@ -39,7 +40,7 @@ const VoucherCartListView: FC = () => {
   const renderListAndFooter = () => {
     return (
       <>
-        {!loading ? (
+        {!loadingList && !loadingCheckVoucher ? (
           <VoucherCartList
             onSelectedChange={changeSelectedVoucher}
             eligibleVouchers={eligibleVouchers ?? []}
@@ -52,7 +53,7 @@ const VoucherCartListView: FC = () => {
         <VoucherCartFooter
           selectedVoucher={selectedVoucher}
           total={totalOrder ?? 0}
-          loading={loading}
+          loading={loadingList || loadingCheckVoucher}
           disabled={disabled}
         />
       </>
@@ -79,7 +80,10 @@ const VoucherCartListView: FC = () => {
   return (
     <SnbContainer color="grey">
       <VoucherCartHeader goBack={() => goBack()} />
-      <VoucherCartSearch totalOrder={totalOrder ?? 0} />
+      <VoucherCartSearch
+        totalOrder={totalOrder ?? 0}
+        loading={loadingCheckVoucher}
+      />
       {!empty ? renderListAndFooter() : renderEmpty()}
       {renderErrorModal()}
     </SnbContainer>
