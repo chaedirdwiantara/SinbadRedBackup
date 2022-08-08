@@ -1612,19 +1612,18 @@
   resolved "http://lib.sinbad.web.id/@sinbad%2fimage-editor/-/image-editor-2.3.1.tgz#0b517c411026ed3a015792e6be68646d3ee511c4"
   integrity sha512-KjBqHNalgPXr8DRPqNjWhvVBVWbwzb6SvzHDXu+Rxbyx7rY/XQa+G2s0/VDMLr5SQiJ+CTzZj35P1SCwNLaTUw==
 
-"@sinbad/react-native-sinbad-ui@1.0.85":
-  version "1.0.85"
-  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.85.tgz#3dcd358ce403df7e7d87779865e0713cbd25e1c8"
-  integrity sha512-0ZR/UdXiLYSIu2KVlE0e5LKpM+bET3PWFZIz4/QvulNjtwrYstIJ3ze1cwokV08HBwNJhsrlxuFzo+rHZ33g6A==
+"@sinbad/react-native-sinbad-ui@1.0.78":
+  version "1.0.78"
+  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.78.tgz#704be5162ba11807603af56c5049548de45a1499"
+  integrity sha512-qxGHzR4RtfaL8iwqud7DHu9BI9YO+Y4vgl/btLWY5WZgM43AKydXD1HkNVhcN2/vglkZmebWYV7/sya3gz6HHQ==
   dependencies:
     "@gorhom/bottom-sheet" "4.1.5"
     "@sinbad/design-token" "0.0.1"
-    lodash "4.17.21"
+    lodash "^4.17.21"
     moment "2.29.1"
     react-native-calendars "1.1263.0"
     react-native-modal "11.10.0"
     react-native-progress "5.0.0"
-    react-native-render-html "6.3.4"
     react-native-size-matters "0.4.0"
     react-native-snap-carousel "3.9.1"
     react-native-vector-icons "8.1.0"
@@ -5566,7 +5565,7 @@ lodash.truncate@^4.4.2:
   resolved "https://registry.yarnpkg.com/lodash.truncate/-/lodash.truncate-4.4.2.tgz#5a350da0b1113b837ecfffd5812cbe58d6eae193"
   integrity sha512-jttmRe7bRse52OsWIMDLaXxWqRAmtIUccAQ3garviCqJjafXOfNMO0yMfNpdD6zbGaTU0P5Nz7e7gAT6cKmJRw==
 
-lodash@4.17.21, lodash@^4.17.10, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.21, lodash@^4.7.0:
+lodash@^4.17.10, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.21, lodash@^4.7.0:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==

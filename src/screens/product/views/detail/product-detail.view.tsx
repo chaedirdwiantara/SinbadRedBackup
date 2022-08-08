@@ -7,10 +7,10 @@ import {
   SnbToast2,
   spacingV2,
   FooterButton,
-  SnbHtml2,
 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
+import SnbHtml2 from '@core/components/HtmlComponent';
 import BulkPricingList from '@core/components/product/BulkPricingList';
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
