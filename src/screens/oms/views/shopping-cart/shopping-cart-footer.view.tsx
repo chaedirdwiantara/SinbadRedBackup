@@ -41,7 +41,6 @@ interface FooterProps {
   handleOpenErrorCheckVoucher: () => void;
   keyboardFocus: boolean;
   isAnyActiveProduct: boolean;
-  initialCartData: models.CartMaster | undefined;
   testID: string;
 }
 interface ErrorGlobalModalDataProps {
@@ -70,7 +69,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   handleOpenErrorCheckVoucher,
   keyboardFocus,
   isAnyActiveProduct,
-  initialCartData,
   testID,
 }) => {
   /** === STATES === */

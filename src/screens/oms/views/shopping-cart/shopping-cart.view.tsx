@@ -63,7 +63,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     mergeCheckProduct,
     mergeCheckSeller,
     mergeCheckStock,
-    initialCartData,
     setInitialLocalData,
     debouncedValue,
   } = useCartLocalData();
@@ -433,7 +432,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
             }}
             keyboardFocus={keyboardFocus.isFocus}
             isAnyActiveProduct={isAnyActiveProduct()}
-            initialCartData={initialCartData}
           />
         </React.Fragment>
       );
