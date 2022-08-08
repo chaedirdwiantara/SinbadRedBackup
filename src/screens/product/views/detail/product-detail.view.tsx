@@ -10,7 +10,7 @@ import {
 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
-import Html from '@core/components/HtmlV2';
+import Html from '@core/components/HtmlComponent';
 import BulkPricingList from '@core/components/product/BulkPricingList';
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
@@ -461,7 +461,7 @@ const ProductDetailView: FC = () => {
           </ProductDetailSection>
           {/* deskripsi harus render html dengan wrap <p></p> */}
           <ProductDetailSection title="Deskripsi Produk">
-            <Html value={dataProduct?.description ?? '-'} fontSize={12} />
+            <Html value={dataProduct?.description ?? '-'} />
           </ProductDetailSection>
           <View style={{ height: 10 }} />
         </ScrollView>
