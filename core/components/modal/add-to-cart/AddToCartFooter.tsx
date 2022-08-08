@@ -16,6 +16,7 @@ import { AddToCartModalStyle } from '@core/styles';
 import * as models from '@models';
 /** === TYPE ===  */
 interface AddToCartFooterProps {
+  testID: string;
   onAddToCartPress: () => void;
   isStockEmpty: boolean;
   orderQty: number;
@@ -29,6 +30,7 @@ interface AddToCartFooterProps {
 const { spacing } = spacingV2;
 /** === COMPONENT ===  */
 const AddToCartFooterMemo: FC<AddToCartFooterProps> = ({
+  testID,
   isStockEmpty,
   onAddToCartPress,
   orderQty,
@@ -66,10 +68,10 @@ const AddToCartFooterMemo: FC<AddToCartFooterProps> = ({
           </View>
         </View>
         <SnbButton2.Primary
+          testID={'btn-action-add-to-cart.' + testID}
           disabled={disabled || loading}
           size="medium"
           loading={loading}
-          testID="action-add-to-cart"
           title={titleButton}
           onPress={onAddToCartPress}
         />
