@@ -1,7 +1,4 @@
-import {
-  setErrorMessage,
-  useInputPhone,
-} from '@screen/auth/functions';
+import { setErrorMessage, useInputPhone } from '@screen/auth/functions';
 import { SELF_REGISTRATION_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
 import { View, ScrollView, Image, Keyboard } from 'react-native';
@@ -20,8 +17,9 @@ import { useDataAuth, useDataPermanent } from '@core/redux/Data';
 import { ForceRegistrationModal } from '../shared/index';
 
 const Content: React.FC = () => {
-  const { checkPhoneLogin, resetCheckLoginPhone, resetRequestOTP } = useAuthCoreAction();
-  const { checkPhoneLogin: checkPhoneLoginState } = useDataAuth()
+  const { checkPhoneLogin, resetCheckLoginPhone, resetRequestOTP } =
+    useAuthCoreAction();
+  const { checkPhoneLogin: checkPhoneLoginState } = useDataAuth();
   const phone = useInputPhone();
   const { navigate } = useNavigation();
   const refModalOTP = React.useRef<SnbBottomSheet2Ref>(null);
@@ -31,9 +29,9 @@ const Content: React.FC = () => {
 
   React.useEffect(() => {
     return () => {
-      resetCheckLoginPhone()
-      resetRequestOTP()
-      phone.clearText()
+      resetCheckLoginPhone();
+      resetRequestOTP();
+      phone.clearText();
     };
   }, []);
 
@@ -77,37 +75,41 @@ const Content: React.FC = () => {
       </View>
       <FooterButton.Single
         testID={'01'}
-        title='Selanjutnya'
+        title="Selanjutnya"
         buttonPress={() => {
-          Keyboard.dismiss()
+          Keyboard.dismiss();
           resetCheckLoginPhone();
-          checkPhoneLogin({ mobilePhone: phone.value, identifierDeviceId: advertisingId });
+          checkPhoneLogin({
+            mobilePhone: phone.value,
+            identifierDeviceId:
+              advertisingId === undefined ? null : advertisingId,
+          });
         }}
-        loadingButton={checkPhoneLoginState.loading}
+        textLink={'Daftar'}
+        description={'Belum punya akun Sinbad?'}
+        textLinkPress={() => {
+          phone.clearText();
+          navigate(SELF_REGISTRATION_VIEW);
+        }}
         disabled={
           phone.value === '' ||
           phone.valMsgError !== '' ||
           checkPhoneLoginState.loading
         }
-        textLink="Daftar"
-        textLinkPress={() => {
-          phone.clearText();
-          navigate(SELF_REGISTRATION_VIEW);
-        }}
-        description="Belum punya akun Sinbad?"
+        loadingButton={checkPhoneLoginState.loading}
       />
       <ModalOTPMethod 
         ref={refModalOTP} 
         phone={phone.value} 
-        action="login" 
+        action="login"
         onResetField={phone.clearText}
-      />
+       />
       <ModalSalesman ref={refModalSalesman} />
       <View style={{ flex: 1 }}>
         <ForceRegistrationModal
           ref={refModalForceRegist}
           confirm={() => {
-            phone.clearText()
+            phone.clearText();
             navigate(SELF_REGISTRATION_VIEW);
             refModalForceRegist.current?.close();
           }}
