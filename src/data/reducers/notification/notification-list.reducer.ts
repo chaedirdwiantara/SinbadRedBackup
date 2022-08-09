@@ -3,7 +3,7 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-export type NotificationListInitialProps = models.ListItemProps<
+export type NotificationListInitialProps = models.ListItemV3Props<
   models.NotificationListSuccessProps[]
 >;
 /** === INITIAL STATE HERE */
@@ -13,8 +13,9 @@ export const notificationlistInitialState: NotificationListInitialProps = {
   loading: true,
   loadMore: false,
   refresh: false,
-  total: 0,
-  skip: 0,
+  page: 1,
+  perPage: 10,
+  totalPage: 0,
 };
 /** === FUNCTION HERE === */
 export const notificationListReducer = simplifyReducer(
@@ -24,7 +25,7 @@ export const notificationListReducer = simplifyReducer(
     /** => list process */
     [types.NOTIFICATION_LIST_PROCESS](
       state = notificationlistInitialState,
-      action: models.ListProcessAction,
+      action: models.ListProcessV3Action,
     ) {
       return {
         ...state,
@@ -35,7 +36,7 @@ export const notificationListReducer = simplifyReducer(
     /** => list success */
     [types.NOTIFICATION_LIST_SUCCESS](
       state = notificationlistInitialState,
-      action: models.ListSuccessAction<models.NotificationListSuccessProps[]>,
+      action: models.ListSuccessV3Action<models.NotificationListSuccessProps[]>,
     ) {
       return {
         ...state,
@@ -43,8 +44,9 @@ export const notificationListReducer = simplifyReducer(
         loading: false,
         loadMore: false,
         refresh: false,
-        total: action.payload.meta.total,
-        skip: action.payload.meta.skip,
+        page: action.payload.meta.page,
+        perPage: action.payload.meta.perPage,
+        totalPage: action.payload.meta.totalPage,
       };
     },
     /** => list failed */
