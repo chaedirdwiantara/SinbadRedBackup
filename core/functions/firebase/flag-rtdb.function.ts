@@ -55,7 +55,7 @@ const useCheckBannedAccount = async () => {
   const dispatch = useDispatch();
   React.useEffect(() => {
     database()
-      .ref(`sinbadApp/${uniqueId}/flag/isBanned`)
+      .ref(`sinbadApp/${uniqueId}/userData`)
       .on('value', (data) => {
         dispatch(CoreAction.bannedAccount(data.val()));
       });
