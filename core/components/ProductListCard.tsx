@@ -7,10 +7,9 @@ import { View, TouchableOpacity } from 'react-native';
 import { ProductCard } from '@sinbad/react-native-sinbad-ui';
 /** === IMPORT FUNCTIONS === */
 import { toCurrency } from '@core/functions/global/currency-format';
-/** === IMPORT STYLE === */
-import { ProductListCardStyle } from '../styles';
 /** === TYPE === */
 interface ProductListCardProps {
+  testID: string;
   name: string;
   imageUrl: string;
   qtySoldLabel: string;
@@ -40,7 +39,7 @@ const ProductList: FC<ProductListCardProps> = (props) => {
   }, [props.isExclusive, props.hasBulkPrice]);
   return (
     <ProductCard.List
-      testID={`list-product-${props.name}`}
+      testID={`list-product-${props.name}.${props.testID}`}
       name={props.name}
       imageUrl={props.imageUrl}
       currentPrice={toCurrency(props.priceAfterTax, {
