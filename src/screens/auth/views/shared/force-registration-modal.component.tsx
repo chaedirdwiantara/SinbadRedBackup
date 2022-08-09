@@ -52,6 +52,7 @@ const ForceRegistrationModal: React.FC<dataProps> = React.forwardRef(
                 title={'Daftar'}
                 full
                 size="medium"
+                testID={'04'}
               />
             </View>
           }

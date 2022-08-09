@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   SnbContainer,
   SnbTopNav2,
   SnbButton2,
   spacingV2 as layout,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import {
   Stepper,
@@ -21,11 +22,10 @@ import { useOCR } from '@screen/auth/functions/global-hooks.functions';
 import { DATA_DIRI_STEP_2_VIEW } from '@screen/account/functions/screens_name';
 
 interface Props {
-  openModalBack: boolean;
-  onCloseModalBack: (value: boolean) => void;
+  ref: any;
 }
 
-const Content: React.FC<Props> = (props) => {
+const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
   const { openCameraWithOCR } = useCamera();
   const [value, setValue] = React.useState<models.IOCRResult | any>(null);
   const { ocrImageState, ocrImageReset } = useOCR();
@@ -93,6 +93,7 @@ const Content: React.FC<Props> = (props) => {
           listType="number"
           blurRadius={2.2}
           isTiltImage
+          testID={'07.1'}
         />
       </View>
     );
@@ -118,6 +119,7 @@ const Content: React.FC<Props> = (props) => {
               size="medium"
               full
               outline
+              testID={'07.1'}
             />
           </View>
           <View style={{ marginHorizontal: layout.spacing.sm }} />
@@ -133,6 +135,7 @@ const Content: React.FC<Props> = (props) => {
               loading={updateCompleteDataState.loading}
               size="medium"
               full
+              testID={'07.1'}
             />
           </View>
         </View>
@@ -147,10 +150,7 @@ const Content: React.FC<Props> = (props) => {
     <View style={{ flex: 1 }}>
       {renderIF(isImageAvailable, renderOCRResult(), renderUploadPhotoRules())}
       <ModalBack
-        open={props.openModalBack}
-        closeModal={() => {
-          props.onCloseModalBack(false);
-        }}
+        ref={ref}
         confirm={() => {
           if (value.idNumber === '' || value.nameOnKtp === '') {
             backToDataCompleteness();
@@ -174,18 +174,18 @@ const Content: React.FC<Props> = (props) => {
       />
     </View>
   );
-};
+});
 
 const DataDiriStep1View: React.FC = () => {
-  const [openModalStep, setOpenModalStep] = React.useState(false);
-  const [openModalBack, setOpenModalBack] = React.useState(false);
+  const refModalListOfStep = React.useRef<SnbBottomSheet2Ref>()
   const { completeDataState } = useEasyRegistration();
+  const refModalBack = React.useRef<SnbBottomSheet2Ref>()
 
   const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
-        setOpenModalBack(true);
+        refModalBack.current?.open()
         return true;
       },
     );
@@ -197,23 +197,22 @@ const DataDiriStep1View: React.FC = () => {
   return (
     <SnbContainer color="white">
       <SnbTopNav2.Type3
-        backAction={() => setOpenModalBack(true)}
+        backAction={() => refModalBack.current?.open()}
         title="Foto KTP"
         color="white"
+        testID={'07'}
       />
       <Stepper
         complete={completeDataState?.data?.userProgress?.completed}
         total={completeDataState?.data?.userProgress?.total}
-        onPress={() => setOpenModalStep(true)}
+        onPress={() => refModalListOfStep.current?.open()}
+        testID={'07'}
       />
-      <Content
-        openModalBack={openModalBack}
-        onCloseModalBack={setOpenModalBack}
-      />
+      <Content ref={refModalBack} />
       <ListOfSteps
-        open={openModalStep}
         type="user"
-        closeModal={() => setOpenModalStep(false)}
+        ref={refModalListOfStep}
+        testID={'07.4'}
       />
     </SnbContainer>
   );

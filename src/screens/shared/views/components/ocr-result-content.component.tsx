@@ -16,9 +16,14 @@ import { useEasyRegistration } from '@screen/account/functions';
 interface Props {
   onChangeValue: (result: IOCRResult) => void;
   value: models.IOCRResult | null;
+  testID?: string;
 }
 
-const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
+const OCRResultContent: React.FC<Props> = ({
+  onChangeValue,
+  value,
+  testID,
+}) => {
   const { ocrImageResult, resetOcrDataRtdb } = useOCR(true);
   const nameOnKtp = useInput('');
   const idNumber = useInput('', 'number-only');
@@ -86,6 +91,7 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
         labelText="Nama pada KTP"
         placeholder="Masukkan nama pada KTP"
         maxLength={200}
+        testID={testID}
       />
       <View style={{ padding: layout.spacing.lg }} />
       <SnbTextField2.Text
@@ -108,6 +114,7 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
             idNumber.setMessageError('Nomor KTP harus 16 Digit');
           }
         }}
+        testID={testID}
       />
       <View
         style={{

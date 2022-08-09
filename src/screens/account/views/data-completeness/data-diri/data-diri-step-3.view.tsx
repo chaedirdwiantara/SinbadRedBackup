@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import {
   SnbContainer,
   SnbTopNav2,
-  SnbButton2,
   SnbToast,
   spacingV2 as layout,
+  SnbBottomSheet2Ref,
+  FooterButton,
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler } from 'react-native';
 import {
@@ -22,8 +23,8 @@ import { useEasyRegistration } from '@screen/account/functions';
 import { NavigationAction } from '@navigation';
 
 const DataDiriStep3View: React.FC = () => {
-  const [openModalStep, setOpenModalStep] = useState(false);
-  const [openModalBack, setOpenModalBack] = useState(false);
+  const refModalListOfStep = React.useRef<SnbBottomSheet2Ref>()
+  const refModalBack = React.useRef<SnbBottomSheet2Ref>()
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { upload, save } = useUploadImageAction();
   const { stateGlobal, dispatchGlobal } = React.useContext(
@@ -53,7 +54,7 @@ const DataDiriStep3View: React.FC = () => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
-        setOpenModalBack(true);
+        refModalBack.current?.open()
         return true;
       },
     );
@@ -143,6 +144,7 @@ const DataDiriStep3View: React.FC = () => {
         type="vertical"
         resizeMode="stretch"
         listType="number"
+        testID={'09.1'}
       />
     );
   };
@@ -168,29 +170,15 @@ const DataDiriStep3View: React.FC = () => {
             margin: layout.spacing.lg,
           }}
         />
-        <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
-          <View style={{ flex: 1 }}>
-            <SnbButton2.Primary
-              title="Ubah Foto"
-              onPress={() => openCamera('selfie')}
-              disabled={false}
-              size="medium"
-              full
-              outline
-            />
-          </View>
-          <View style={{ marginHorizontal: layout.spacing.sm }} />
-          <View style={{ flex: 1 }}>
-            <SnbButton2.Primary
-              disabled={stateGlobal.uploadImage.loading}
-              loading={stateGlobal.uploadImage.loading}
-              title={'Lanjutkan'}
-              onPress={() => confirm()}
-              size="medium"
-              full
-            />
-          </View>
-        </View>
+        <FooterButton.Dual
+          title2="Ubah Foto"
+          title1="Lanjutkan"
+          button2Press={() => openCamera('selfie')}
+          button1Press={() => confirm()}
+          disabled={stateGlobal.uploadImage.loading}
+          loadingButton={stateGlobal.uploadImage.loading}
+          testID={'09.3'}
+        />
       </View>
     );
   };
@@ -203,26 +191,27 @@ const DataDiriStep3View: React.FC = () => {
     <SnbContainer color="white">
       <View>
         <SnbTopNav2.Type3
-          backAction={() => setOpenModalBack(true)}
+          backAction={() => refModalBack.current?.open()}
           color="white"
           title="Foto Diri Dengan KTP"
+          testID={'09'}
         />
         <Stepper
           complete={completeDataState?.data?.userProgress?.completed}
           total={completeDataState?.data?.userProgress?.total}
-          onPress={() => setOpenModalStep(true)}
+          onPress={() => refModalListOfStep.current?.open()}
+          testID={'09'}
         />
       </View>
       {isImageAvailable ? renderImagePreview() : renderUploadPhotoRules()}
       <ModalBack
-        open={openModalBack}
-        closeModal={() => setOpenModalBack(false)}
+        ref={refModalBack}
         confirm={() => backSave()}
       />
       <ListOfSteps
-        open={openModalStep}
         type="user"
-        closeModal={() => setOpenModalStep(false)}
+        ref={refModalListOfStep}
+        testID={'09.4'}
       />
     </SnbContainer>
   );
