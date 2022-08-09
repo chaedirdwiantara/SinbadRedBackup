@@ -1,7 +1,7 @@
 import React, { FC, memo, useCallback, useMemo, useRef, useState } from 'react';
 import Action from '@core/components/modal-actions';
 import ActionSheet from '../ActionSheet';
-import { useProductListContext } from './';
+import { useProductListContext } from './function/product-list.util';
 
 type Props = {
   onFetch: (params: { minPrice: number; maxPrice: number }) => void;
@@ -81,4 +81,6 @@ Main.defaultProps = {
   onFetch: () => {},
 };
 
-export const ModalFilterView = memo(Main);
+const ModalFilterView = memo(Main);
+
+export default ModalFilterView;

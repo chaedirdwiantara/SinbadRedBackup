@@ -10,7 +10,7 @@ import {
 } from '@core/functions/product';
 import { useDataAuth } from '@core/redux/Data';
 import { contexts } from '@contexts';
-import { useProductListContext } from '@core/components/product/product-list';
+import { useProductListContext } from '@core/components/product/product-list/function/product-list.util';
 /** === IMPORT TYPE === */
 /** === TYPE === */
 interface NavigationHeaderProps {}

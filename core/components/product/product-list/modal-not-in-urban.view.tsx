@@ -30,4 +30,6 @@ const Main: FC<Props> = ({ testID }) => {
   );
 };
 
-export const ModalNotInUrbanView = memo(Main);
+const ModalNotInUrbanView = memo(Main);
+
+export default ModalNotInUrbanView;
