@@ -16,6 +16,7 @@ import { AddToCartModalStyle } from '@core/styles';
 import { ProductDetail } from '@model/product';
 /** === TYPES === */
 interface Props {
+  testID: string;
   isFromProductDetail?: boolean;
   orderQty: number;
   bulkPriceAterTax: number;

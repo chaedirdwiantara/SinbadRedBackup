@@ -135,10 +135,20 @@ export interface ProductDetail {
   thumbnailImageUrl: string;
   warehouseOriginId?: number | null;
   taxPrice: number;
+  packagedWeightLabel: string;
+  packagedDimensionLength: number;
+  packagedDimensionWidth: number;
+  packagedDimensionHeight: number;
+  packagedDimensionLabel: string;
 }
 
 export type ProductSubModule = 'recommendations' | undefined;
 
 export interface ProductListProcessAction extends models.ListProcessV3Action {
   subModule?: ProductSubModule;
+}
+
+export interface DetailProductProcess {
+  id: string;
+  warehouseId: string;
 }
