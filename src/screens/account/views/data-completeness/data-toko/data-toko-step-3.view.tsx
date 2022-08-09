@@ -23,6 +23,7 @@ import {
   colorV2,
   spacingV2 as layout,
   SnbBottomSheet2Ref,
+  FooterButton,
 } from 'react-native-sinbad-ui';
 import { ListOfSteps, ModalBack, ModalSelection, Stepper } from '../../shared';
 import * as models from '@models';
@@ -100,6 +101,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref) => {
     refetchCompleteData,
     backToDataCompleteness,
   } = useEasyRegistration();
+  const [modalSelectionTestId, setModalSelectionTestId] = React.useState('')
 
   React.useEffect(() => {
     resetUpdateCompleteData();
@@ -275,6 +277,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref) => {
               onPress={() => {
                 setType('listVehicleAccess');
                 getSelection({ type: 'listVehicleAccess' });
+                setModalSelectionTestId('13.3.1')
                 if (vehicleAccessibility) {
                   onSelectedItem({
                     item: vehicleAccessibility,
@@ -302,6 +305,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref) => {
               onPress={() => {
                 setType('listVehicleAccessAmount');
                 getSelection({ type: 'listVehicleAccessAmount' });
+                setModalSelectionTestId('13.3.2')
                 if (vehicleAccessibilityAmount) {
                   onSelectedItem({
                     item: vehicleAccessibilityAmount,
@@ -317,31 +321,28 @@ const Content: React.FC<Props> = React.forwardRef((_, ref) => {
           </View>
         </ScrollView>
       </View>
-      <View style={{ padding: layout.spacing.lg }}>
-        <SnbButton2.Primary
-          title="Simpan"
-          onPress={() => {
-            updateCompleteData({
-              buyer: {
-                address: address.value,
-                noteAddress: noteAddress.value,
-                vehicleAccessibilityAmount: vehicleAccessibilityAmount?.id,
-                vehicleAccessibilityId: vehicleAccessibility?.id,
-                locationId,
-                ...latLng,
-              },
-            });
-          }}
-          loading={updateCompleteDataState.loading}
-          disabled={
-            handleDisableSaveButton() || updateCompleteDataState.loading
-          }
-          full
-          size="medium"
-          testID={'13.2'}
-        />
-      </View>
+      <FooterButton.Single
+        title="Simpan"
+        buttonPress={() => {
+          updateCompleteData({
+            buyer: {
+              address: address.value,
+              noteAddress: noteAddress.value,
+              vehicleAccessibilityAmount: vehicleAccessibilityAmount?.id,
+              vehicleAccessibilityId: vehicleAccessibility?.id,
+              locationId,
+              ...latLng,
+            },
+          });
+        }}
+        loadingButton={updateCompleteDataState.loading}
+        disabled={
+          handleDisableSaveButton() || updateCompleteDataState.loading
+        }
+        testID={'13.2'}
+      />
       <ModalSelection
+        testID={modalSelectionTestId}
         type={type}
         ref={refModalSelection}
         onCloseModalSelection={(result: any) => {

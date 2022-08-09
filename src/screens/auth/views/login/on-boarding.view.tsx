@@ -59,6 +59,14 @@ const OnBoardingView: React.FC<Props> = () => {
       <View style={styles.container}>
         <View />
         <OnBoardSlider data={data} />
+        {button()}
+      </View>
+    );
+  };
+
+  const button = () => {
+    return (
+      <View>
         <FooterButton.Dual
           testID={'01'}
           title2="Masuk"
@@ -73,7 +81,7 @@ const OnBoardingView: React.FC<Props> = () => {
           title="Dengan daftar atau masuk, Anda menyetujui Syarat & Ketentuan serta
           Kebijakan Privasi kami"
           color="blue"
-          align='center'
+          align="center"
         />
       </View>
     );

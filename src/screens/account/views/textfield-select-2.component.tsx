@@ -1,4 +1,6 @@
 /** === IMPORT LIB HERE === */
+import { camelize } from '@core/functions/global/camelize';
+import { testProps } from '@core/functions/global/test-props';
 import { colorV2, SnbIcon, SnbText2 } from '@sinbad/react-native-sinbad-ui';
 import React, { FC, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -131,9 +133,10 @@ const TextFieldSelect: FC<Props> = (props) => {
   };
   /** => main view */
   return (
-    <View testID={props.testID}>
+    <View {...testProps(props.testID)}>
       {labelText()}
       <TouchableOpacity
+        {...testProps(`btn-${camelize(props.labelText || 'textFieldSelect')}.${props.testID}`)}
         onPress={props.onPress}
         style={[
           styles.mainContainer,
@@ -144,21 +147,30 @@ const TextFieldSelect: FC<Props> = (props) => {
           },
         ]}>
         {props.value ? (
-          <SnbText2.Paragraph.Default color={textIconColor}>
+          <SnbText2.Paragraph.Default
+            testID={`textFieldSelect.value.${props.testID}`}
+            color={textIconColor}
+          >
             {props.value}
           </SnbText2.Paragraph.Default>
         ) : (
-          <SnbText2.Paragraph.Default color={colorV2.textColor.placeholder}>
+          <SnbText2.Paragraph.Default
+            testID={`textFieldSelect.placeholder.${props.testID}`}
+            color={colorV2.textColor.placeholder}
+          >
             {props.placeholder}
           </SnbText2.Paragraph.Default>
         )}
         <View style={{ justifyContent: 'flex-end' }}>
           {props.rightType === 'text' && props.rightText ? (
-            <SnbText2.Paragraph.Default color={colorV2.textColor.placeholder}>
+            <SnbText2.Paragraph.Default
+              testID={`textFieldSelect.rightText.${props.testID}`}
+              color={colorV2.textColor.placeholder}>
               {props.rightText}
             </SnbText2.Paragraph.Default>
           ) : props.rightType === 'icon' && props.rightIcon ? (
             <SnbIcon
+              testID={`textFieldSelect.icon.${props.testID}`}
               color={colorV2.iconColor.dark}
               name={props.rightIcon}
               size={18}
