@@ -5,20 +5,18 @@ import { SnbContainer } from 'react-native-sinbad-ui';
 import { RouteProp, useRoute, useFocusEffect } from '@react-navigation/native';
 /** === IMPORT COMPONENT === */
 import { Header } from '../components';
-import {
-  ProductListView,
-  CategoryTabListView,
-  CountProductList,
-  ModalAddToCartView,
-  ModalNeedLoginView,
-  ModalFilterView,
-  ModalNotInUrbanView,
-  ModalErrorStockView,
-  ModalErrorProductDetailView,
-  ProductListProvider,
-  useProductListContext,
-} from '@core/components/product/product-list';
+import ProductListView from '@core/components/product/product-list/product-list.view';
+import CountProductList from '@core/components/product/product-list/count-product-list.view';
+import ModalAddToCartView from '@core/components/product/product-list/modal-add-to-cart.view';
+import ModalNeedLoginView from '@core/components/product/product-list/modal-need-login.view';
+import ModalFilterView from '@core/components/product/product-list/modal-filter.view';
+import ModalNotInUrbanView from '@core/components/product/product-list/modal-not-in-urban.view';
+import ModalErrorStockView from '@core/components/product/product-list/modal-error-stock.view';
+import ModalErrorProductDetailView from '@core/components/product/product-list/modal-error-product-detail.view';
+import CategoryTabListView from '@core/components/product/product-list/category-tab-list.view';
+import { ProductListProvider } from '@core/components/product/product-list/product-list.context';
 /** === IMPORT FUNCTIONS === */
+import { useProductListContext } from '@core/components/product/product-list/function/product-list.util';
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { useProductListActions } from '@screen/product/functions';
 /** === IMPORT TYPE === */
@@ -52,16 +50,13 @@ const CategoryProductView: FC = () => {
   const { fetch, clearContents } = useProductListActions();
   const { dispatchProduct } = useProductContext();
 
-  useFocusEffect(
-    useCallback(() => {
-      fetch(dispatchProduct, { categoryId: category.id });
-      setQuery({ categoryId: category.id });
-      return () => clearContents(dispatchProduct);
-    }, []),
-  );
-  // initial set header
+  // initial get
   useEffect(() => {
+    fetch(dispatchProduct, { categoryId: category.id });
+    setQuery({ categoryId: category.id });
     setCategory(category);
+
+    return () => clearContents(dispatchProduct);
   }, []);
   /** === VIEW === */
   return (

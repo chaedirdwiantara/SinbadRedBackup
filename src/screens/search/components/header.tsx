@@ -16,7 +16,7 @@ import {
   goToShoppingCart,
   backToLogin,
 } from '@core/functions/product';
-import { ProductListContext } from '@core/components/product/product-list';
+import { ProductListContext } from '@core/components/product/product-list/product-list.context';
 import { useDataAuth } from '@core/redux/Data';
 import { useRecentSearch } from '@screen/search/functions';
 /** === IMPORT TYPE === */

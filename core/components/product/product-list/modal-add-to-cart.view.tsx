@@ -7,7 +7,8 @@ import { AddToCartModal } from '@core/components/modal';
 import { useStockValidationAction } from '@screen/product/functions';
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
-import { useProductListContext, useProductListFunction } from './';
+import { useProductListFunction } from './function/product-list.function';
+import { useProductListContext } from './function/product-list.util';
 import { LoadingLoadMore } from '@core/components/Loading';
 
 type Props = {
@@ -107,4 +108,6 @@ const App: FC<Props> = ({ testID }) => {
   );
 };
 
-export const ModalAddToCartView = memo(App);
+const ModalAddToCartView = memo(App);
+
+export default ModalAddToCartView;

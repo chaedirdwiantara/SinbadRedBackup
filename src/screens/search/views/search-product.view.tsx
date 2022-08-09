@@ -4,18 +4,17 @@ import { View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 import { RouteProp, useRoute } from '@react-navigation/native';
 /** === IMPORT COMPONENT === */
-import {
-  ProductListView,
-  CountProductList,
-  ModalAddToCartView,
-  ModalNeedLoginView,
-  ModalFilterView,
-  ModalNotInUrbanView,
-  ModalErrorStockView,
-  ModalErrorProductDetailView,
-  ProductListProvider,
-  useProductListContext,
-} from '@core/components/product/product-list';
+import ProductListView from '@core/components/product/product-list/product-list.view';
+import CountProductList from '@core/components/product/product-list/count-product-list.view';
+import ModalAddToCartView from '@core/components/product/product-list/modal-add-to-cart.view';
+import ModalNeedLoginView from '@core/components/product/product-list/modal-need-login.view';
+import ModalFilterView from '@core/components/product/product-list/modal-filter.view';
+import ModalNotInUrbanView from '@core/components/product/product-list/modal-not-in-urban.view';
+import ModalErrorStockView from '@core/components/product/product-list/modal-error-stock.view';
+import ModalErrorProductDetailView from '@core/components/product/product-list/modal-error-product-detail.view';
+import { ProductListProvider } from '@core/components/product/product-list/product-list.context';
+import { useProductListContext } from '@core/components/product/product-list/function/product-list.util';
+
 import { Header } from '../components';
 /** === IMPORT FUNCTIONS === */
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
@@ -48,6 +47,7 @@ const SearchProductView: FC = () => {
     setSearch(keyword);
     return () => {
       clearContents(dispatchProduct);
+      setSearch(undefined);
     };
   }, []);
   /** === VIEW pdp list search === */

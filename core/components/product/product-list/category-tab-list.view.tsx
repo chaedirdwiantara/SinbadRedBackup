@@ -12,7 +12,7 @@ import { SnbTabs2 } from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTION ===  */
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { useCategoryContext } from 'src/data/contexts/category/useCategoryContext';
-import { useProductListContext } from './';
+import { useProductListContext } from './function/product-list.util';
 /** === IMPORT TYPES ===  */
 import * as models from '@models';
 /** === TYPES === */
@@ -186,4 +186,6 @@ const App: FC<CategoryTabListProps> = ({ onFetch }) => {
   );
 };
 
-export const CategoryTabListView = memo(App);
+const CategoryTabListView = memo(App);
+
+export default CategoryTabListView;
