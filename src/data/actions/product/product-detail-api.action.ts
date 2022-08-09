@@ -5,7 +5,7 @@ import * as types from '@types';
 /** => Process */
 export const productDetailProcess = (
   contextDispatch: (action: any) => any,
-  payload: models.DetailProcessProps,
+  payload: models.DetailProductProcess,
 ): models.DetailProcessAction => {
   contextDispatch({ type: types.PRODUCT_DETAIL_PROCESS, payload });
   return {

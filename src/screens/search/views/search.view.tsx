@@ -36,6 +36,14 @@ const SearchView: FC = () => {
       goToShoppingCart();
     }
   }, [me.data]);
+
+  const onEnter = useCallback(() => {
+    if (/^\s*$/.test(inputText)) return handleTextChange('');
+    clearText();
+    addKeyword(inputText);
+    goToProduct(inputText);
+  }, [inputText]);
+
   /** === VIEW === */
   return (
     <SnbContainer color="white">
@@ -51,11 +59,7 @@ const SearchView: FC = () => {
         backAction={goBack}
         onChangeText={handleTextChange}
         onClearText={clearText}
-        onEnter={() => {
-          clearText();
-          addKeyword(inputText);
-          goToProduct(inputText);
-        }}
+        onEnter={onEnter}
       />
       <View style={{ flex: 1 }}>
         <RecentSearch
