@@ -1,5 +1,4 @@
 import { useCallback, useContext } from 'react';
-// cycle
 import { ProductListContext } from '../product-list.context';
 
 import type * as models from '@models';
