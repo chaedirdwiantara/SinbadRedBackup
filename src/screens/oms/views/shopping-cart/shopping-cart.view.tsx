@@ -147,7 +147,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   };
 
   /** => handle merge check data */
-  const handleMergeCheckData = async ({
+  const handleMergeCheckData = ({
     checkProductData,
     checkSellerData,
     checkStockData,
