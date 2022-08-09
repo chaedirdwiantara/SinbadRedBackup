@@ -37,14 +37,18 @@ const PaymentMethodBody: FC<PaymentMethodBodyProps> = ({
 
   return (
     <>
-      <View style={PaymentMethodStyle.mainBodyContainer}>
-        <SnbText.B2>Transfer Bank (Cek Otomatis)</SnbText.B2>
-        <PaymentMethodListView
-          payMethod={data[0]?.paymentMethods}
-          onSelectMethod={handleSelect}
-          dataChoosen={handleDataChoosen}
-        />
-      </View>
+      {data?.map((i) => (
+        <View style={PaymentMethodStyle.mainBodyContainer}>
+          <SnbText.B2>{i?.displayLabel}</SnbText.B2>
+          <PaymentMethodListView
+            payMethod={i?.paymentMethods}
+            onSelectMethod={handleSelect}
+            dataChoosen={handleDataChoosen}
+            dataSelected={dataSelected?.displayLabel || ''}
+          />
+        </View>
+      ))}
+
       <PaymentMethodDetail
         dataFromCheckout={dataFromCheckout}
         dataChoose={dataSelected}

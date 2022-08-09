@@ -22,7 +22,7 @@ export const PaymentMethodStyle = StyleSheet.create({
     width: 55,
   },
   listName: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginLeft: 16,
   },
   detailContainer: {
