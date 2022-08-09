@@ -30,12 +30,13 @@ const OCRResultView: React.FC<Props> = (props) => {
     uploadSecureImageReset()
     return uploadSecureImageReset
   }, [])
-  
+
   React.useEffect(() => {
     if (uploadImageSecureState?.data) {
       const user = {
         name: value?.nameOnKtp,
-        idNo: value?.idNumber,
+        idNo: value?.idNumber?.replace(/[^0-9]/g, ''),
+        imageId: uploadImageSecureState?.data?.data?.id
       };
       editProfile(dispatchSupplier, { data: { user } });
     }
@@ -77,7 +78,8 @@ const OCRResultView: React.FC<Props> = (props) => {
             disabled={
               value?.idNumber?.length < 16 ||
               value?.nameOnKtp === '' ||
-              stateMerchant.profileEdit.loading
+              stateMerchant.profileEdit.loading ||
+              uploadImageSecureState.loading
             }
             size="medium"
             full

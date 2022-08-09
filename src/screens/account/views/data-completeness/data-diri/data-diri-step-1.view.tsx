@@ -5,6 +5,7 @@ import {
   SnbButton2,
   spacingV2 as layout,
   SnbBottomSheet2Ref,
+  SnbToast,
 } from 'react-native-sinbad-ui';
 import {
   Stepper,
@@ -18,7 +19,6 @@ import { useEasyRegistration } from '@screen/account/functions';
 import { renderIF, useCamera } from '@screen/auth/functions';
 import { OCRResultContent } from '@screen/shared/views/components';
 import * as models from '@models';
-import { useOCR } from '@screen/auth/functions/global-hooks.functions';
 import { DATA_DIRI_STEP_2_VIEW } from '@screen/account/functions/screens_name';
 
 interface Props {
@@ -26,9 +26,8 @@ interface Props {
 }
 
 const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
-  const { openCameraWithOCR } = useCamera();
+  const { capturedImage, openCamera } = useCamera();
   const [value, setValue] = React.useState<models.IOCRResult | any>(null);
-  const { ocrImageState, ocrImageReset } = useOCR();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -36,6 +35,9 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
     refetchCompleteData,
     backToDataCompleteness,
     completeDataState,
+    uploadImageSecureState,
+    uploadSecureImageReset,
+    uploadSecureImage
   } = useEasyRegistration();
   const [backHandle, setBackHandle] = React.useState(false);
   const { navigate } = useNavigation();
@@ -45,14 +47,15 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
     if (userData) {
       setValue({ idNumber: userData?.idNo, nameOnKtp: userData?.fullName });
     }
-    return ocrImageReset;
+    uploadSecureImageReset()
+    return uploadSecureImageReset;
   }, []);
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
       refetchCompleteData();
       resetUpdateCompleteData();
-      ocrImageReset();
+      uploadSecureImageReset();
       if (backHandle) {
         backToDataCompleteness();
       } else {
@@ -61,14 +64,27 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
     }
   }, [updateCompleteDataState]);
 
+  React.useEffect(() => {
+    if (uploadImageSecureState?.data) {
+      const user = {
+        name: value?.nameOnKtp,
+        idNo: value?.idNumber?.replace(/[^0-9]/g, ''),
+        imageId: uploadImageSecureState?.data?.data?.id
+      };
+      updateCompleteData({ user });
+    }
+    if (uploadImageSecureState?.error) {
+      SnbToast.show('Gagal upload foto KTP', 2000)
+    }
+  }, [uploadImageSecureState])
+
   function handleSubmit() {
     if (
       value.idNumber !== userData.idNo ||
       value.nameOnKtp !== userData.fullName
     ) {
-      updateCompleteData({
-        user: { idNo: value.idNumber, name: value.nameOnKtp },
-      });
+      uploadSecureImageReset()
+      uploadSecureImage({ imageUrl: capturedImage.data?.url })
     } else {
       navigate(DATA_DIRI_STEP_2_VIEW);
     }
@@ -87,7 +103,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
             'Pastikan informasi KTP bisa terbaca dengan jelas',
             'Hindari tangan menutup KTP',
           ]}
-          action={() => openCameraWithOCR('ktp')}
+          action={() => openCamera('ktp')}
           type="vertical"
           resizeMode="contain"
           listType="number"
@@ -114,7 +130,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               title={'Ubah Foto'}
-              onPress={() => openCameraWithOCR('ktp')}
+              onPress={() => openCamera('ktp')}
               disabled={false}
               size="medium"
               full
@@ -130,9 +146,10 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
               disabled={
                 value?.idNumber === '' ||
                 value?.nameOnKtp === '' ||
-                updateCompleteDataState.loading
+                updateCompleteDataState.loading ||
+                uploadImageSecureState.loading
               }
-              loading={updateCompleteDataState.loading}
+              loading={updateCompleteDataState.loading || uploadImageSecureState.loading}
               size="medium"
               full
               testID={'07.1'}
@@ -143,8 +160,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
     );
   }
   const isImageAvailable =
-    ocrImageState.data !== null ||
-    completeDataState.data?.userData?.imageId !== null;
+    capturedImage?.data?.type === 'ktp' || completeDataState.data?.userData?.imageId !== null;
 
   return (
     <View style={{ flex: 1 }}>

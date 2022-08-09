@@ -266,31 +266,57 @@ export const useLocations = () => {
   };
 };
 
-export const useInputFormat = (format: 'npwp' | 'ktp' | 'email') => {
-  const [value, setValue] = useState('');
+export const useInputFormat = (
+  initialState: string = '',
+  fieldType: 'string-only' | 'number-only' | 'default' = 'default',
+  format: 'npwp' | 'ktp' | 'email' = 'ktp'
+) => {
+  const [value, setValue] = useState(initialState);
   const [valMsgError, setValMsgError] = useState('');
-  const [type, setType] = useState('default');
+  const [type, setType] = useState<FieldType>('default');
 
-  React.useEffect(() => {}, [valMsgError]);
+  React.useEffect(() => {
+    if (format === 'npwp') {
+      setValue(formatter(handleFieldType(initialState), [2, 5, 8, 9, 12, 15], '.'))
+    } else if (format === 'ktp') {
+      setValue(formatter(handleFieldType(initialState), [6, 12], '-'))
+    }
+  }, []);
+
+  function handleFieldType(text: string) {
+    if (fieldType == 'number-only') {
+      text = text?.replace(/[^0-9]/g, '');
+    } else if (fieldType == 'string-only') {
+      text = text?.replace(/[0-9]/g, '');
+    }
+    return text
+  }
 
   const onChangeText = (text: string) => {
     let formatted = '';
+    text = handleFieldType(text)
     switch (format) {
       case 'ktp': {
-        text = text.substr(0, 16);
+        text = text.substring(0, 16);
         formatted = formatter(text, [6, 12], '-');
+        if (formatted.length === 18) {
+          setType('default');
+          setValMsgError('');
+        } else {
+          setType('error')
+          setValMsgError('Nomor KTP harus 16 Digit');
+        }
         break;
       }
       case 'npwp': {
-        text = text.substr(0, 15);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        text = text.substring(0, 15);
         formatted = formatter(text, [2, 5, 8, 9, 12, 15], '.');
         break;
       }
       default:
         break;
     }
-    setValue(text);
+    setValue(formatted);
   };
 
   const clearText = () => {
@@ -305,6 +331,7 @@ export const useInputFormat = (format: 'npwp' | 'ktp' | 'email') => {
     onChangeText,
     clearText,
     valMsgError,
+    setValue
   };
 };
 

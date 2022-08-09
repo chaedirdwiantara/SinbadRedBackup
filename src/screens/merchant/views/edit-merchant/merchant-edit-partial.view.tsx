@@ -23,6 +23,7 @@ import { useQuestTaskAction } from '../../../quest/function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 import { TextFieldSelect } from '@screen/account/views';
 import { toastOptions } from '@screen/auth/functions/auth-utils.functions';
+import { useInputFormat } from '@screen/auth/functions';
 
 interface Props {
   type: any;
@@ -52,7 +53,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const ownerName = useInput(ownerData?.name || null);
   const ownerEmail = useInput(ownerData?.email || null);
   const noKtp = useInput(ownerData?.idNo || null);
-  const noNPWP = useInput(ownerData?.taxNo || null);
+  const noNPWP = useInputFormat(ownerData?.taxNo, 'number-only', 'npwp');
   const mobilePhone = useInput(ownerData?.mobilePhone || null);
   const [emailIsNotValid, setEmailIsNotValid] = useState(false);
   const [errorIdNumber, setErrorIdNumber] = useState(false);
@@ -245,14 +246,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     }
   };
   /** === CHECK TAX NUMBER FORMAT === */
-  const checkTaxNoFormat = (taxNumber: any) => {
-    noNPWP.setValue(taxNumber);
-    if (taxNumber === '' || taxNumber.length === 15) {
-      setErrorTaxNumber(false);
-    } else {
-      setErrorTaxNumber(true);
-    }
-  };
+  // const checkTaxNoFormat = (taxNumber: any) => {
+  //   noNPWP.setValue(taxNumber);
+  //   if (taxNumber === '' || taxNumber.length === 15) {
+  //     setErrorTaxNumber(false);
+  //   } else {
+  //     setErrorTaxNumber(true);
+  //   }
+  // };
   //checkbutton
   /** === CHECK BUTTON (CHECK BUTTON SAVE DISBALE OR NOT) === */
   const checkButton = () => {
@@ -411,18 +412,10 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     return (
       <View style={styles.textFieldContainer}>
         <SnbTextField2.Text
+          {...noNPWP}
           labelText={'Nomor Pokok Wajib Pajak (NPWP) Pemilik'}
           placeholder={'Masukkan Nomor NPWP maks.15 Digit'}
-          type={errorTaxNumber ? 'error' : 'default'}
-          value={noNPWP.value ? noNPWP.value : ''}
-          onChangeText={(text) => {
-            const cleanNumber = text.replace(/[^0-9]/g, '');
-            checkTaxNoFormat(cleanNumber);
-          }}
-          onClearText={() => noNPWP.setValue('')}
-          valMsgError={'Pastikan Nomor NPWP 15 Digit'}
-          maxLength={15}
-          keyboardType={'number-pad'}
+          keyboardType="number-pad"
         />
       </View>
     );
