@@ -8,6 +8,7 @@ import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
 import { setFlagByDeviceId, useCheckBannedAccount } from '@core/functions/firebase/flag-rtdb.function';
 import { NavigationAction } from '@navigation';
 import { useOTP } from '@screen/auth/functions';
+import { useIsFocused } from '@react-navigation/native';
 import {
   useCheckForceUpdateVersion,
   useCheckMaintenance,
@@ -15,6 +16,7 @@ import {
 import { useSetUpdateAvailable } from '../functions';
 /** === COMPONENT === */
 const IntroSplashView: React.FC = () => {
+  const isFocused = useIsFocused();
   const { meV2, me } = useDataAuth();
   const { maintenance, userBanned } = useDataPermanent();
   const { getLocationPermissions } = useOTP();
@@ -44,35 +46,33 @@ const IntroSplashView: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    if (maintenance) {
+    if ((me.data?.user.id === userBanned?.userId) && userBanned?.isBanned) {
       setTimeout(() => {
-        NavigationAction.resetToMaintenance();
-        SplashScreen.hide();
-      }, 100);
-    } else {
-      if ((me.data?.user.id === userBanned?.userId) && userBanned?.isBanned) {
+        NavigationAction.resetToBannedAccount()
+        SplashScreen.hide()
+      }, 100)
+    } else if (meV2.data && !meV2.loading) {
+      if (meV2.data?.data?.isBuyerCategoryCompleted) {
         setTimeout(() => {
-          NavigationAction.resetToBannedAccount()
-          SplashScreen.hide()
-        }, 100)
-      } else if (meV2.data && !meV2.loading) {
-        if (meV2.data?.data?.isBuyerCategoryCompleted) {
-          setTimeout(() => {
+          if (isFocused) {
             NavigationAction.resetToHome();
-            SplashScreen.hide();
-          }, 100);
-        } else {
-          getLocationPermissions();
-          setTimeout(() => {
-            SplashScreen.hide();
-          }, 100);
-        }
-      } else if ((!meV2.data || meV2.error) && !meV2.loading) {
+          }
+          SplashScreen.hide();
+        }, 100);
+      } else {
+        getLocationPermissions();
         setTimeout(() => {
           NavigationAction.resetToIntroSinbad();
           SplashScreen.hide();
         }, 100);
       }
+    } else if ((!meV2.data || meV2.error) && !meV2.loading) {
+      setTimeout(() => {
+        if (isFocused) {
+          NavigationAction.resetToIntroSinbad();
+        }
+        SplashScreen.hide();
+      }, 100);
     }
   }, [meV2, maintenance, me]);
   /** === VIEW === */
