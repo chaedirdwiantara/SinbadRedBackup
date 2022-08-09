@@ -177,9 +177,9 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         handleOpenErrorBusinessModal();
       } else if (errorVoucherValidation) {
         handleOpenErrorCheckVoucher();
+      } else {
+        setMatchValid(validationResult && !errorVoucherValidation);
       }
-
-      setMatchValid(validationResult && !errorVoucherValidation);
     }
   }, [
     stateCart.postCheckProduct.data,
