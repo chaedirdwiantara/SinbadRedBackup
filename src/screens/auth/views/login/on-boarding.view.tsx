@@ -7,6 +7,7 @@ import {
   borderV2,
   FooterButton,
   SnbInfoBox2,
+  spacingV2,
 } from 'react-native-sinbad-ui';
 import OnBoardSlider from '@core/components/OnBoardSlider';
 import {
@@ -59,14 +60,6 @@ const OnBoardingView: React.FC<Props> = () => {
       <View style={styles.container}>
         <View />
         <OnBoardSlider data={data} />
-        {button()}
-      </View>
-    );
-  };
-
-  const button = () => {
-    return (
-      <View>
         <FooterButton.Dual
           testID={'01'}
           title2="Masuk"
