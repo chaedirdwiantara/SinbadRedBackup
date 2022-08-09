@@ -1,5 +1,7 @@
 export interface ThankYouOrderDetailProps {
   id: string;
+  orderCode: string;
+  deliveryEstDate: string;
   orderStatus: string;
   paymentMethodId: string;
   expiredDate: string;
@@ -8,6 +10,7 @@ export interface ThankYouOrderDetailProps {
   paymentServiceFeeDeduct: number;
   paymentIsServiceFeeFree: boolean;
   totalOrderPriceAfterTax: number;
+  totalOrderAmount: string;
   sellers: OrderSeller[];
   buyerAddress: string;
   buyerAddressProvince: string;
@@ -18,6 +21,7 @@ export interface ThankYouOrderDetailProps {
   buyerAddressNoteAddress: string;
   createdAt: string;
   updatedAt: string;
+  useCollection: boolean;
 }
 
 export interface OrderSeller {
