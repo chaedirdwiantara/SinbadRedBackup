@@ -16,7 +16,7 @@ interface ListOfStepsProps {
 }
 
 const ModalBack: FC<ListOfStepsProps> = React.forwardRef((props, ref: any) => {
-  const { updateCompleteDataState } = useEasyRegistration();
+  const { updateCompleteDataState, uploadImageSecureState } = useEasyRegistration();
   const [contentHeight, setContentHeight] = React.useState(0);
 
   const renderContent = () => {
@@ -67,8 +67,8 @@ const ModalBack: FC<ListOfStepsProps> = React.forwardRef((props, ref: any) => {
                   props.confirm();
                 }}
                 title="Ya, Keluar"
-                disabled={updateCompleteDataState.loading}
-                loading={updateCompleteDataState.loading}
+                disabled={updateCompleteDataState.loading || uploadImageSecureState.loading}
+                loading={updateCompleteDataState.loading || uploadImageSecureState.loading}
                 size="medium"
                 full
                 testID={'06.3'}

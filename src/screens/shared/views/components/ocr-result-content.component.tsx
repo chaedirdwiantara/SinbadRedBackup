@@ -57,9 +57,7 @@ const OCRResultContent: React.FC<Props> = ({
     source = { uri: capturedImage?.data?.url }
   } else {
     source = {
-      uri: `${apiHost.base}/common/api/v1/shared/public/secure-files/${'ocrImageResult?.imageUid' ||
-        completeDataState.data?.userData?.imageId
-        }`,
+      uri: `${apiHost.base}/common/api/v1/shared/public/secure-files/${completeDataState.data?.userData?.imageId}`,
       headers: { 'x-platform': 'sinbad-app' },
     }
   }

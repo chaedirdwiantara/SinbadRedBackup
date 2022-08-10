@@ -16,7 +16,7 @@ import {
 import { View, BackHandler, ScrollView } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/core';
 import { useEasyRegistration } from '@screen/account/functions';
-import { renderIF, useCamera } from '@screen/auth/functions';
+import { formatter, renderIF, useCamera } from '@screen/auth/functions';
 import { OCRResultContent } from '@screen/shared/views/components';
 import * as models from '@models';
 import { DATA_DIRI_STEP_2_VIEW } from '@screen/account/functions/screens_name';
@@ -45,7 +45,10 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
 
   React.useEffect(() => {
     if (userData) {
-      setValue({ idNumber: userData?.idNo, nameOnKtp: userData?.fullName });
+      setValue({
+        idNumber: formatter(userData?.idNo, [6, 12], '-'),
+        nameOnKtp: userData?.fullName
+      });
     }
     uploadSecureImageReset()
     return uploadSecureImageReset;
@@ -66,11 +69,13 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
 
   React.useEffect(() => {
     if (uploadImageSecureState?.data) {
-      const user = {
-        name: value?.nameOnKtp,
-        idNo: value?.idNumber?.replace(/[^0-9]/g, ''),
+      const idNumberIsChanged = value.idNumber !== '' && value.idNumber.replace(/[^0-9]/g, '') !== userData.idNo
+      const nameIsChanged = value.nameOnKtp !== '' && value.nameOnKtp !== userData.fullName
+      const user: any = {
         imageId: uploadImageSecureState?.data?.data?.id
       };
+      nameIsChanged && (user.name = value?.nameOnKtp)
+      idNumberIsChanged && (user.idNo = value?.idNumber?.replace(/[^0-9]/g, ''))
       updateCompleteData({ user });
     }
     if (uploadImageSecureState?.error) {
@@ -78,15 +83,21 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
     }
   }, [uploadImageSecureState])
 
-  function handleSubmit() {
-    if (
-      value.idNumber !== userData.idNo ||
-      value.nameOnKtp !== userData.fullName
-    ) {
+  function handleSave(actionFrom: 'simpan' | 'back') {
+    const idNumberIsChanged = value.idNumber !== '' && value.idNumber.replace(/[^0-9]/g, '') !== userData.idNo
+    const nameIsChanged = value.nameOnKtp !== '' && value.nameOnKtp !== userData.fullName
+    actionFrom === 'back' && setBackHandle(true)
+
+    if (capturedImage?.data?.type === 'ktp') {
       uploadSecureImageReset()
       uploadSecureImage({ imageUrl: capturedImage.data?.url })
+    } else if (idNumberIsChanged || nameIsChanged) {
+      const user: any = {}
+      nameIsChanged && (user.name = value.nameOnKtp)
+      idNumberIsChanged && (user.idNo = value?.idNumber?.replace(/[^0-9]/g, ''))
+      updateCompleteData({ user });
     } else {
-      navigate(DATA_DIRI_STEP_2_VIEW);
+      actionFrom === 'back' ? backToDataCompleteness() : navigate(DATA_DIRI_STEP_2_VIEW);
     }
   }
 
@@ -142,9 +153,10 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               title={'Simpan'}
-              onPress={handleSubmit}
+              onPress={() => handleSave('simpan')}
               disabled={
                 value?.idNumber === '' ||
+                value?.idNumber?.length < 18 ||
                 value?.nameOnKtp === '' ||
                 updateCompleteDataState.loading ||
                 uploadImageSecureState.loading
@@ -167,26 +179,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
       {renderIF(isImageAvailable, renderOCRResult(), renderUploadPhotoRules())}
       <ModalBack
         ref={ref}
-        confirm={() => {
-          if (value.idNumber === '' || value.nameOnKtp === '') {
-            backToDataCompleteness();
-          } else {
-            if (
-              value.idNumber !== userData.idNo ||
-              value.nameOnKtp !== userData.fullName
-            ) {
-              updateCompleteData({
-                user: {
-                  name: value.nameOnKtp,
-                  idNo: value.idNo,
-                },
-              });
-              setBackHandle(true);
-            } else {
-              backToDataCompleteness();
-            }
-          }
-        }}
+        confirm={() => handleSave('back')}
       />
     </View>
   );
