@@ -23,6 +23,8 @@ import {
   styles,
   FooterButton,
   SnbTopNav2,
+  Content,
+  WaitingPayment,
 } from '@sinbad/react-native-sinbad-ui';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import {
@@ -174,11 +176,13 @@ const OmsThankYouPageView: FC = () => {
 
   /** => render coundownCOD */
   const renderCountDownCod = () => {
-    <Content.Illustration
-      image={require('../../../../assets/images/cod.png')}
-      title="Pesanan Anda akan segera diproses"
-      testID="cntIllustration.ThankyouPage"
-    />;
+    return (
+      <Content.Illustration
+        image={require('../../../../assets/images/cod.png')}
+        title="Pesanan Anda akan segera diproses"
+        testID="cntIllustration.ThankyouPage"
+      />
+    );
   };
 
   /** => Payment Total */
@@ -328,6 +332,29 @@ const OmsThankYouPageView: FC = () => {
       </ThankYouPageCard>
     );
   };
+
+  /** => Payment Detail COD */
+  const paymentDetailCod = () => {
+    return (
+      <WaitingPayment.DetailPembayaranCod
+        title="Detail Pembayaran"
+        linkTitle="Lihat Detail"
+        testID="DetailPembayaran.ThankYouPage"
+        linkOnPress={handleThankYouPageOrderDetail}
+        paymethodTitle="Metode Pembayaran"
+        paymethodType="Bayar di Tempat (COD)"
+        totalTitle="Total"
+        totalValue={toCurrency(
+          Number(thankYouPageData?.totalOrderPriceAfterTax) ?? 0,
+          {
+            withFraction: false,
+          },
+        )}
+        iconUri={`${thankYouPageData?.paymentIconUrl}`}
+      />
+    );
+  };
+
   const generatePaymentGuideListData = (data: PaymentGuideListItem[]) => {
     return data.map((item: PaymentGuideListItem) => {
       return {
@@ -400,10 +427,12 @@ const OmsThankYouPageView: FC = () => {
   const renderThankYouPageContent = () => (
     <ScrollView>
       <>
-        {renderCountDown()}
-        {renderPaymentDetailV2()}
-        {/* {renderPaymentDetail()}
-        {renderPaymentTotal()} */}
+        {thankYouPageData?.useCollection !== true
+          ? renderCountDown()
+          : renderCountDownCod()}
+        {thankYouPageData?.useCollection !== true
+          ? renderPaymentDetailV2()
+          : paymentDetailCod()}
         {renderPaymentGuide()}
         {renderOrderNotes()}
       </>
@@ -475,7 +504,7 @@ const OmsThankYouPageView: FC = () => {
           title1={'Cek Pesanan'}
           button1Press={() =>
             NavigationAction.navigate(
-              thankYouPageData?.useCollection == false
+              thankYouPageData?.useCollection !== true
                 ? 'HistoryListView'
                 : 'OrderHistoryConsolidateDetailView',
               {
