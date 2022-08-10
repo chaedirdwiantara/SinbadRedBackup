@@ -4,6 +4,9 @@ import { useDispatch } from 'react-redux';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
 import * as models from '@models';
+
+/** === TYPES === */
+type ProductDetailId = { id: string; warehouseId: string };
 /** === FUNCTIONS === */
 /** === Fetch Product Related === */
 const callProcessAction = (
@@ -25,13 +28,13 @@ const callProcessAction = (
     subModule,
   );
 };
-
 const perPage = 10;
 const page = 1;
 const useProductListActions = (subModule?: models.ProductSubModule) => {
   const dispatch = useDispatch();
-  return {
-    fetch: (
+
+  const fetch = useCallback(
+    (
       contextDispatch: (action: any) => any,
       queryOptions?: models.ProductListQueryOptions,
     ) => {
@@ -47,7 +50,11 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
         ),
       );
     },
-    refresh: (
+    [subModule],
+  );
+
+  const refresh = useCallback(
+    (
       contextDispatch: (action: any) => any,
       queryOptions?: models.ProductListQueryOptions,
     ) => {
@@ -63,7 +70,11 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
         ),
       );
     },
-    loadMore: (
+    [subModule],
+  );
+
+  const loadMore = useCallback(
+    (
       contextDispatch: (action: any) => any,
       state: models.ListItemV3Props<Array<models.ProductList>>,
       queryOptions?: models.ProductListQueryOptions,
@@ -88,9 +99,18 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
         );
       }
     },
-    clearContents: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.productListClearContents());
-    },
+    [subModule],
+  );
+
+  const clearContents = useCallback((contextDispatch: (action: any) => any) => {
+    contextDispatch(Actions.productListClearContents());
+  }, []);
+
+  return {
+    fetch,
+    refresh,
+    loadMore,
+    clearContents,
   };
 };
 
@@ -98,12 +118,22 @@ const useProductDetailAction = () => {
   const dispatch = useDispatch();
 
   return {
-    fetch: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.productDetailProcess(contextDispatch, { id }));
+    fetch: (
+      contextDispatch: (action: any) => any,
+      { id, warehouseId }: ProductDetailId,
+    ) => {
+      dispatch(
+        Actions.productDetailProcess(contextDispatch, { id, warehouseId }),
+      );
     },
-    refresh: (contextDispatch: (action: any) => any, id: string) => {
+    refresh: (
+      contextDispatch: (action: any) => any,
+      { id, warehouseId }: ProductDetailId,
+    ) => {
       contextDispatch(Actions.productDetailRefresh());
-      dispatch(Actions.productDetailProcess(contextDispatch, { id }));
+      dispatch(
+        Actions.productDetailProcess(contextDispatch, { id, warehouseId }),
+      );
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.productDetailReset(contextDispatch));

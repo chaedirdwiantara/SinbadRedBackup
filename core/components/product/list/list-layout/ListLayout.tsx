@@ -20,6 +20,7 @@ const { spacing } = spacingV2;
 
 /** === COMPONENT === */
 const ListLayout: FC<ProductLayoutProps> = ({
+  testID,
   products,
   withTags = true,
   tags,
@@ -58,6 +59,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
           marginBottom: spacing.xl,
         }}>
         <ProductListCard
+          testID={testID}
           name={item.name}
           imageUrl={item.thumbnail}
           priceAfterTax={item.priceAfterTax}
@@ -65,7 +67,10 @@ const ListLayout: FC<ProductLayoutProps> = ({
           qtySoldLabel={item.qtySoldValue ? `Terjual ${item.qtySoldLabel}` : ''}
           isExclusive={item.isExclusive}
           onCardPress={() => {
-            goToProductDetail(`${item.id}_${item.warehouseOriginId}`);
+            goToProductDetail({
+              id: item.id,
+              warehouseId: item.warehouseOriginId,
+            });
           }}
           withOrderButton={true}
           onOrderPress={() => onOrderPress(item)}

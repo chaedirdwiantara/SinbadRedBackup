@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import {
   SnbContainer,
   SnbTopNav2,
-  SnbButton2,
   SnbToast,
   spacingV2 as layout,
   SnbBottomSheet2Ref,
+  FooterButton,
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler } from 'react-native';
 import {
@@ -170,31 +170,15 @@ const DataDiriStep3View: React.FC = () => {
             margin: layout.spacing.lg,
           }}
         />
-        <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
-          <View style={{ flex: 1 }}>
-            <SnbButton2.Primary
-              title="Ubah Foto"
-              onPress={() => openCamera('selfie')}
-              disabled={false}
-              size="medium"
-              full
-              outline
-              testID={'09.3'}
-            />
-          </View>
-          <View style={{ marginHorizontal: layout.spacing.sm }} />
-          <View style={{ flex: 1 }}>
-            <SnbButton2.Primary
-              disabled={stateGlobal.uploadImage.loading}
-              loading={stateGlobal.uploadImage.loading}
-              title={'Lanjutkan'}
-              onPress={() => confirm()}
-              size="medium"
-              full
-              testID={'09.3'}
-            />
-          </View>
-        </View>
+        <FooterButton.Dual
+          title2="Ubah Foto"
+          title1="Lanjutkan"
+          button2Press={() => openCamera('selfie')}
+          button1Press={() => confirm()}
+          disabled={stateGlobal.uploadImage.loading}
+          loadingButton={stateGlobal.uploadImage.loading}
+          testID={'09.3'}
+        />
       </View>
     );
   };

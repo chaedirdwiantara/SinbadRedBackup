@@ -5,9 +5,9 @@ import { View, ScrollView } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav2,
-  SnbButton2,
   SnbText2,
   spacingV2 as layout,
+  FooterButton,
 } from 'react-native-sinbad-ui';
 import { DATA_COMPLETENESS_VIEW } from '@screen/account/functions/screens_name';
 
@@ -69,16 +69,11 @@ const Content: React.FC = () => {
           </View>
         </ScrollView>
       </View>
-      <View style={{ padding: layout.spacing.lg }}>
-        <SnbButton2.Primary
-          title="Lengkapi Data Sekarang"
-          onPress={() => navigate(DATA_COMPLETENESS_VIEW)}
-          disabled={false}
-          size="medium"
-          full
-          testID={'06.1'}
-        />
-      </View>
+      <FooterButton.Single
+        title="Lengkapi Data Sekarang"
+        buttonPress={() => navigate(DATA_COMPLETENESS_VIEW)}
+        testID={'06.1'}
+      />
     </View>
   );
 };

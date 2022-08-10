@@ -14,9 +14,14 @@ const sinbadCry = require('@image/sinbad_image/cry_sinbad.png');
 interface NeedLoginModalProps {
   visible: boolean;
   onClose: () => void;
+  testID: string;
 }
 /** === COMPONENT === */
-const NeedLoginModal: FC<NeedLoginModalProps> = ({ visible, onClose }) => (
+const NeedLoginModal: FC<NeedLoginModalProps> = ({
+  visible,
+  onClose,
+  testID,
+}) => (
   <SnbBottomSheet
     open={visible}
     title={' '}
@@ -42,6 +47,7 @@ const NeedLoginModal: FC<NeedLoginModalProps> = ({ visible, onClose }) => (
         </View>
         <View style={{ marginTop: 32, height: 80 }}>
           <SnbButton.Single
+            testID={'btn-need-login.' + testID}
             type="primary"
             title="Masuk dengan akun Anda"
             onPress={() => {

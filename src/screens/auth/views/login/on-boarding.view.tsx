@@ -7,6 +7,7 @@ import {
   borderV2,
   FooterButton,
   SnbInfoBox2,
+  spacingV2,
 } from 'react-native-sinbad-ui';
 import OnBoardSlider from '@core/components/OnBoardSlider';
 import {

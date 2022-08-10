@@ -11,10 +11,10 @@ import {
 import { Brightness } from 'react-native-color-matrix-image-filters';
 import {
   colorV2,
-  SnbButton2,
   SnbText2,
   borderV2,
   spacingV2 as layout,
+  FooterButton,
 } from '@sinbad/react-native-sinbad-ui';
 import Svg from '@svg';
 
@@ -47,6 +47,7 @@ const UploadPhotoRules: React.FC<Props> = (props) => {
     type,
     isTiltImage,
     brightnessAmount,
+    testID
   } = props;
   const source = typeof imgSrc === 'string' ? { uri: imgSrc } : imgSrc;
 
@@ -175,16 +176,11 @@ const UploadPhotoRules: React.FC<Props> = (props) => {
           </View>
         </View>
       </ScrollView>
-      <View style={{ padding: layout.spacing.lg }}>
-        <SnbButton2.Primary
-          title={buttonLabel || ''}
-          disabled={false}
-          onPress={action}
-          size="medium"
-          full
-          testID={props.testID}
-        />
-      </View>
+      <FooterButton.Single
+        title={buttonLabel || ''}
+        buttonPress={action}
+        testID={testID}
+      />
     </View>
   );
 };

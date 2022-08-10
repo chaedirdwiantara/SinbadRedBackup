@@ -1,9 +1,9 @@
 import React from 'react';
 import {
   colorV2,
+  FooterButton,
   SnbBottomSheet2,
   SnbBottomSheetPart,
-  SnbButton2,
   SnbIcon,
   SnbProgress,
   SnbText2,
@@ -14,11 +14,14 @@ import * as models from '@models';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import { IRadioButton } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/RadioButtonTypes';
 import ErrorContent from './error-content.component';
+import { testProps } from '@core/functions/global/test-props';
+import { camelize } from '@core/functions/global/camelize';
 interface Props {
   ref: any;
   type: models.ITypeList;
   onCloseModalSelection: (result?: any) => void;
   params?: string;
+  testID?: string
 }
 
 function setTitle(type: models.ITypeList) {
@@ -112,6 +115,7 @@ const ModalSelection: React.FC<Props> = React.forwardRef(({
   type,
   onCloseModalSelection,
   params,
+  testID
 }, ref: any) => {
   const { listSelection, selectedItem, loadMoreSelection, getSelection } =
     useTextFieldSelect();
@@ -159,18 +163,15 @@ const ModalSelection: React.FC<Props> = React.forwardRef(({
         setTempSelectedItem(null);
       }}
       button={
-        <View style={{ padding: layout.spacing.lg }}>
-          <SnbButton2.Primary
-            title={setTitle(type)}
-            onPress={() => {
-              onCloseModalSelection(tempSelectedItem);
-              setTempSelectedItem(null);
-            }}
-            disabled={tempSelectedItem === null || listSelection.data === null}
-            full
-            size="medium"
-          />
-        </View>
+        <FooterButton.Single
+          testID={testID}
+          title={setTitle(type)}
+          buttonPress={() => {
+            onCloseModalSelection(tempSelectedItem);
+            setTempSelectedItem(null);
+          }}
+          disabled={tempSelectedItem === null || listSelection.data === null}
+        />
       }
       content={
         <View style={{ flex: 1 }}>
@@ -216,6 +217,7 @@ const ModalSelection: React.FC<Props> = React.forwardRef(({
                 );
                 return (
                   <TouchableOpacity
+                    {...testProps(`btn-${camelize(label)}.${testID}`)}
                     onPress={() => setTempSelectedItem({ item, type })}
                     style={{
                       paddingVertical: layout.spacing.lg,

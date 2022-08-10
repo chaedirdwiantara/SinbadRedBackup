@@ -23,6 +23,11 @@ interface BottomActionItem {
   dotShow?: boolean;
 }
 
+interface ProductDetailParams {
+  id: string;
+  warehouseId: string;
+}
+
 interface BuildBottomActionHandlerParams {
   onActionPress: BottomActionPressHandler;
   actionNames: Array<BottomActionType>;
@@ -98,8 +103,8 @@ export const goToShoppingCart = () => {
   NavigationAction.navigate('OmsShoppingCartView');
 };
 
-export const goToProductDetail = (id: string) => {
-  NavigationAction.navigate('ProductDetailView', { id });
+export const goToProductDetail = ({ id, warehouseId }: ProductDetailParams) => {
+  NavigationAction.navigate('ProductDetailView', { id, warehouseId });
 };
 
 export const backToLogin = () => {
