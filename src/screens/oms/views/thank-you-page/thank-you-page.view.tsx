@@ -171,6 +171,16 @@ const OmsThankYouPageView: FC = () => {
       );
     }
   };
+
+  /** => render coundownCOD */
+  const renderCountDownCod = () => {
+    <Content.Illustration
+      image={require('../../../../assets/images/cod.png')}
+      title="Pesanan Anda akan segera diproses"
+      testID="cntIllustration.ThankyouPage"
+    />;
+  };
+
   /** => Payment Total */
   const renderPaymentTotal = () => {
     if (thankYouPageData === null || thankYouPageData === undefined) {
