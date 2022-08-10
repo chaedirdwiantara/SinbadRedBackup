@@ -72,7 +72,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
       const idNumberIsChanged = value.idNumber !== '' && value.idNumber.replace(/[^0-9]/g, '') !== userData.idNo
       const nameIsChanged = value.nameOnKtp !== '' && value.nameOnKtp !== userData.fullName
       const user: any = {
-        imageId: uploadImageSecureState?.data?.data?.id
+        // imageId: uploadImageSecureState?.data?.data?.id
       };
       nameIsChanged && (user.name = value?.nameOnKtp)
       idNumberIsChanged && (user.idNo = value?.idNumber?.replace(/[^0-9]/g, ''))
