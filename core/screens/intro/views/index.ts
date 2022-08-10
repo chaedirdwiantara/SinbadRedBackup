@@ -1,8 +1,7 @@
 /** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
 import IntroSplashView from './intro-splash.view';
-import IntroSinbadView from './intro-sinbad.view';
 /** === EXPORT ALL === */
-export { IntroSplashView, IntroSinbadView };
+export { IntroSplashView };
 /**
  * ================================================================
  * NOTES

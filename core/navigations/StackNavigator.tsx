@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import Navigations from '../../src/navigations';
 import TabNavigator from './TabNavigator';
 /** => for intro view */
-import { IntroSplashView, IntroSinbadView } from '../screens/intro/views';
+import { IntroSplashView } from '../screens/intro/views';
 import { ForceUpdateView, MaintenanceView } from '../screens/extra/views';
 
 const { Navigator, Screen } = createNativeStackNavigator();
@@ -37,16 +37,6 @@ const StackNavigator: React.FC = () => {
       <Screen
         name="Splash"
         component={IntroSplashView}
-        options={{ headerShown: false, screenOrientation: 'portrait' }}
-      />
-    );
-  };
-  /** => this for intro sinbad */
-  const IntroSinbadNav = () => {
-    return (
-      <Screen
-        name="IntroSinbad"
-        component={IntroSinbadView}
         options={{ headerShown: false, screenOrientation: 'portrait' }}
       />
     );
@@ -88,7 +78,6 @@ const StackNavigator: React.FC = () => {
       {MaintenanceNav()}
       {ForceUpdateNav()}
       {IntroSplashNav()}
-      {IntroSinbadNav()}
       {tabNav()}
       {projectNav()}
     </Navigator>

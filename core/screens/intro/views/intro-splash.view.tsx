@@ -54,10 +54,7 @@ const IntroSplashView: React.FC = () => {
         }, 100);
       } else {
         getLocationPermissions();
-        setTimeout(() => {
-          NavigationAction.resetToIntroSinbad();
-          SplashScreen.hide();
-        }, 100);
+        SplashScreen.hide();
       }
     } else if ((!meV2.data || meV2.error) && !meV2.loading) {
       setTimeout(() => {

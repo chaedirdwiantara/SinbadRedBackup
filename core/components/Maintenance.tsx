@@ -3,6 +3,7 @@ import React from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { useDataPermanent } from '@core/redux/Data';
 import { NavigationAction } from '@navigation';
+import { usePrevious } from '@core/functions/hook/prev-value';
 /** === INTERFACE === */
 interface RemoteMessage {
   payload: string;
@@ -12,14 +13,17 @@ interface RemoteMessage {
 const Maintenance = () => {
   /** === HOOK === */
   const data = useDataPermanent();
+  const prevOffsetWidth = usePrevious(data.maintenance);
   /** === EFFECT === */
   React.useEffect(() => {
     if (data.maintenance) {
       SplashScreen.hide();
       NavigationAction.resetToMaintenance();
     } else {
-      SplashScreen.hide();
-      NavigationAction.restartApp();
+      if (prevOffsetWidth) {
+        SplashScreen.hide();
+        NavigationAction.restartApp();
+      }
     }
   }, [data.maintenance]);
 
