@@ -285,11 +285,7 @@ const MerchantEditPhotoView = () => {
             imgSrc={setImage(params.type)}
             rules={setRules(params.type)}
             action={() => {
-              // if (params?.type !== 'ktp') {
               openCamera(params?.type);
-              // } else {
-              //   openCameraWithOCR(params?.type);
-              // }
             }}
             type="vertical"
             resizeMode={params.type === 'npwp' ? 'contain' : 'cover'}
