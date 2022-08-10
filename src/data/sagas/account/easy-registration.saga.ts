@@ -2,7 +2,7 @@ import { call, debounce, put, takeLatest } from 'redux-saga/effects';
 import * as types from '@types';
 import * as models from '@models';
 import * as ActionCreators from '@actions';
-import { easyRegistrationApi, ocrImageApi, searchLocationApi } from 'src/data/apis/account';
+import { easyRegistrationApi, searchLocationApi } from 'src/data/apis/account';
 
 function* searchLocation(action: models.IAction<models.ISearchLocation>) {
   try {
