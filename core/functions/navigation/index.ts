@@ -9,7 +9,8 @@ import {
   resetToIntroSinbad,
   resetToForceUpdate,
   resetToMaintenance,
-  restartApp
+  getRoutes,
+  restartApp,
 } from '../../navigations/RootNavigation';
 import {
   useGetNavParams,
@@ -27,10 +28,11 @@ export const NavigationAction = {
   resetToIntroSinbad,
   resetToForceUpdate,
   resetToMaintenance,
+  getRoutes,
   useGetNavParams,
   useCustomBackHardware,
   useFocusEffect,
-  restartApp
+  restartApp,
 };
 /**
  * ================================================================
