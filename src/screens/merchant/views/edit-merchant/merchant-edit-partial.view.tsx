@@ -246,14 +246,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     }
   };
   /** === CHECK TAX NUMBER FORMAT === */
-  // const checkTaxNoFormat = (taxNumber: any) => {
-  //   noNPWP.setValue(taxNumber);
-  //   if (taxNumber === '' || taxNumber.length === 15) {
-  //     setErrorTaxNumber(false);
-  //   } else {
-  //     setErrorTaxNumber(true);
-  //   }
-  // };
+  const checkTaxNoFormat = (taxNumber: any) => {
+    noNPWP.setValue(taxNumber);
+    if (taxNumber === '' || taxNumber.length === 15) {
+      setErrorTaxNumber(false);
+    } else {
+      setErrorTaxNumber(true);
+    }
+  };
   //checkbutton
   /** === CHECK BUTTON (CHECK BUTTON SAVE DISBALE OR NOT) === */
   const checkButton = () => {
