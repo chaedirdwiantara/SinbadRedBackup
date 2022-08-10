@@ -83,3 +83,7 @@ export const restartApp = () => {
     }),
   );
 };
+/** => history routes stack */
+export const getRoutes = () => {
+  return navigationRef.current?.getRootState().routes;
+};
