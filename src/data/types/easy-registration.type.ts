@@ -56,3 +56,8 @@ export const OCR_IMAGE_PROCESS = 'OcrImageProcess';
 export const OCR_IMAGE_SUCCESS = 'OcrImageSuccess';
 export const OCR_IMAGE_FAILED = 'OcrImageFailed';
 export const OCR_IMAGE_RESET = 'OcrImageReset';
+
+export const UPLOAD_SECURE_IMAGE_PROCESS = 'UploadSecureImageProcess';
+export const UPLOAD_SECURE_IMAGE_SUCCESS = 'UploadSecureImageSuccess';
+export const UPLOAD_SECURE_IMAGE_FAILED = 'UploadSecureImageFailed';
+export const UPLOAD_SECURE_IMAGE_RESET = 'UploadSecureImageReset';
