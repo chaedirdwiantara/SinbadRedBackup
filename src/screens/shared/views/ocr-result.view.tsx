@@ -9,7 +9,7 @@ import { OCRResultContent } from './components';
 import * as models from '@models';
 import { MerchantHookFunc } from '@screen/merchant/function';
 import { contexts } from '@contexts';
-import { useCamera } from '@screen/auth/functions';
+import { formatter, useCamera } from '@screen/auth/functions';
 import { useEasyRegistration } from '@screen/account/functions';
 
 interface Props {
@@ -25,8 +25,16 @@ const OCRResultView: React.FC<Props> = (props) => {
   const { openCamera } = useCamera();
   const { uploadSecureImage, uploadSecureImageReset, uploadImageSecureState } = useEasyRegistration();
   const { capturedImage } = useCamera()
+  const { stateUser } = React.useContext(contexts.UserContext);
+  const ownerData = stateUser.detail.data?.ownerData?.profile;
 
   React.useEffect(() => {
+    if (ownerData) {
+      setValue({
+        idNumber: formatter(ownerData?.idNo, [6, 12], '-'),
+        nameOnKtp: ownerData?.name
+      });
+    }
     uploadSecureImageReset()
     return uploadSecureImageReset
   }, [])
@@ -76,7 +84,8 @@ const OCRResultView: React.FC<Props> = (props) => {
               uploadSecureImage({ imageUrl: capturedImage.data?.url })
             }}
             disabled={
-              value?.idNumber?.length < 16 ||
+              value?.idNumber === '' ||
+              value?.idNumber?.length < 18 ||
               value?.nameOnKtp === '' ||
               stateMerchant.profileEdit.loading ||
               uploadImageSecureState.loading
