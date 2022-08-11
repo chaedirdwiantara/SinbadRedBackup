@@ -317,6 +317,9 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
             sellerAdminEmail: sellers.sellerAdminEmail || '',
             sellerAdminId: sellers.sellerAdminId?.toString() || '',
             sellerAdminFullname: sellers.sellerAdminName || '',
+            fullSellerAddress: sellers.fullSellerAddress,
+            sellerTaxNo: sellers.sellerTaxNo,
+            sinbadVoucherDiscountParcel: sellers.sinbadVoucherDiscountParcel,
             products: updatedProductsAttributes,
           };
         },
@@ -353,6 +356,11 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
           selectedPaymentMethodData.isServiceFeeFree,
         paymentMethodIconUrl: selectedPaymentMethodData.iconUrl,
         reservedAt: checkoutContextData.createdAt,
+        sinbadVoucherDiscountOrder:
+          checkoutContextData.sinbadVoucherDiscountOrder,
+        sinbadVoucherId: checkoutContextData.sinbadVoucherId,
+        ownerIdNo: checkoutContextData.ownerIdNo,
+        buyerTaxNo: checkoutContextData.buyerTaxNo,
       };
 
       paymentMethodCreateOrder.fetch(dispatchPaymentMethod, params);
