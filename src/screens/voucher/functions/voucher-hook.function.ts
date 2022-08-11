@@ -39,7 +39,7 @@ const useCancelVoucherAction = () => {
 const useVoucherDetailAction = () => {
   const dispatch = useDispatch();
   return {
-    detail: (contextDispatch: (action: any) => any, id: string) => {
+    detail: (contextDispatch: (action: any) => any, id: number) => {
       dispatch(Actions.voucherDetailProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {
