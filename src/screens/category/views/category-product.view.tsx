@@ -1,8 +1,8 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, memo, useCallback, useEffect } from 'react';
+import React, { FC, memo, useEffect } from 'react';
 import { View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
-import { RouteProp, useRoute, useFocusEffect } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 /** === IMPORT COMPONENT === */
 import { Header } from '../components';
 import ProductListView from '@core/components/product/product-list/product-list.view';
@@ -43,7 +43,7 @@ const testID = 'category-product';
 /** === COMPONENT === */
 const CategoryProductView: FC = () => {
   /** === HOOKS === */
-  const { setQuery, setCategory } = useProductListContext();
+  const { setQuery, setCategory, setSearch } = useProductListContext();
   const {
     params: { category, categoryFirstLevelIndex },
   } = useRoute<CategoryProductRouteProps>();
@@ -55,7 +55,8 @@ const CategoryProductView: FC = () => {
     fetch(dispatchProduct, { categoryId: category.id });
     setQuery({ categoryId: category.id });
     setCategory(category);
-
+    // clean keyword search
+    setSearch(undefined);
     return () => clearContents(dispatchProduct);
   }, []);
   /** === VIEW === */

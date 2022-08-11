@@ -54,6 +54,7 @@ const useProductListContext = () => {
       setState((prev) => {
         const value = { ...prev };
         const category = payload;
+        value.query.categoryId = category?.id;
         value.category = category;
 
         return value;
