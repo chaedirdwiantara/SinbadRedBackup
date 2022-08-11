@@ -1,7 +1,7 @@
 import { DetailProcessAction, SaveSelectedVoucher } from '..';
 
 export interface VoucherDetailProcessProps {
-  id: string;
+  id: number;
 }
 export interface VoucherDetailProcessAction {
   type: string;

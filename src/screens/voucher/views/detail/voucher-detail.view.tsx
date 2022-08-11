@@ -44,7 +44,7 @@ const VoucherDetailView: FC = () => {
 
   /** => effect */
   React.useEffect(() => {
-    voucherDetailAction.detail(dispatchVoucher, id);
+    voucherDetailAction.detail(dispatchVoucher, sinbadVoucherId);
     return () => {
       voucherDetailAction.reset(dispatchVoucher);
     };
