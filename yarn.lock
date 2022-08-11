@@ -6877,6 +6877,11 @@ react-native-blob-util@0.13.17:
     base-64 "0.1.0"
     glob "^7.1.6"
 
+react-native-caches@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-caches/-/react-native-caches-1.2.0.tgz#ea71d1873bb7deb04c5a2fb2e1863ded09e9ac43"
+  integrity sha512-RkoqwCkXggwNN739nQctxiILVaicSo/pFkChESRRGOmK2EyuKiPeFZ73BTeLm3hpDFfT4TBYtiZ5iu9H3Qeacg==
+
 react-native-calendars@1.1263.0:
   version "1.1263.0"
   resolved "https://registry.yarnpkg.com/react-native-calendars/-/react-native-calendars-1.1263.0.tgz#f69f1696629fd9b7c0222ecd1e5a6647041616e3"
