@@ -27,7 +27,7 @@ const FirstLoad = () => {
         NavigationAction.restartApp();
       }
     }
-  }, [data.forceUpdateVersion, data.maintenance, dataUpdateApp]);
+  }, [data.forceUpdateVersion, data.maintenance]);
   /** === VIEW === */
   return null;
 };
