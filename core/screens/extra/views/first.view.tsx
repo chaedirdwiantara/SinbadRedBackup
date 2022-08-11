@@ -1,26 +1,27 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React from 'react';
-import SplashScreen from 'react-native-splash-screen';
 /** === IMPORT EXTERNAL FUNCTION === */
 import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
 import {
   useCheckForceUpdateVersion,
   useCheckMaintenance,
+  setFlagByDeviceId,
 } from '@core/functions/firebase/flag-rtdb.function';
+import { useSetUpdateAvailable } from '../../intro/functions';
+
 /** === COMPONENT === */
 const FirstView: React.FC = () => {
   /** === HOOK === */
+  /** ==> set deviceId to RTDB firebase */
+  setFlagByDeviceId();
+  /** ==> set if update available */
+  useSetUpdateAvailable().setUpdateAvailable();
   /** ==> save fcm to firestore */
   useGetTokenNotLogin();
   /** ==> listen version of force update */
   useCheckForceUpdateVersion();
   /** => listen for maintenance */
   useCheckMaintenance();
-  /** === EFFECT === */
-  React.useEffect(() => {
-    SplashScreen.hide();
-    console.log('ini pertama yang di load');
-  }, []);
   /** === VIEW === */
   /** => main */
   return null;

@@ -4,36 +4,20 @@ import SplashScreen from 'react-native-splash-screen';
 /** === IMPORT EXTERNAL FUNCTION === */
 import { useDataAuth, useDataPermanent } from '@core/redux/Data';
 import { useAuthCoreAction, useAdsID } from '@core/functions/auth';
-import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
-import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
 import { NavigationAction } from '@navigation';
 import { useOTP } from '@screen/auth/functions';
 import { useIsFocused } from '@react-navigation/native';
-import {
-  useCheckForceUpdateVersion,
-  useCheckMaintenance,
-} from '@core/functions/firebase/flag-rtdb.function';
-import { useSetUpdateAvailable } from '../functions';
 /** === COMPONENT === */
 const IntroSplashView: React.FC = () => {
   const isFocused = useIsFocused();
   const { meV2 } = useDataAuth();
   const { maintenance } = useDataPermanent();
   const { getLocationPermissions } = useOTP();
-  const { setUpdateAvailable } = useSetUpdateAvailable();
   /** === HOOK === */
-  /** => this for save versionCode force update */
-  useCheckForceUpdateVersion();
-  /** => this for check maintenance */
-  useCheckMaintenance();
-  /** => this for save update availabale */
-  setUpdateAvailable();
   const authCoreAction = useAuthCoreAction();
   // this for google ads ID
   const useAdsIDAction = useAdsID();
   /** === EFFECT === */
-  useGetTokenNotLogin();
-  setFlagByDeviceId();
   /** => get auth me */
   React.useEffect(() => {
     if (!maintenance) {
