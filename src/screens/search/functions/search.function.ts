@@ -4,25 +4,49 @@ import { NavigationAction } from '@navigation';
 import {
   recordSearch,
   recordSearchResultPage,
+  recordSearchBack,
 } from '@core/report/moengage/action';
 /** === FUNCTIONS === */
-const goBack = () => {
-  NavigationAction.back();
+
+const screenName = () => {
+  const screen = NavigationAction.getRoutes();
+  return screen?.map((i) => i.name) ?? [];
 };
 
 const prevLastScreen = () => {
-  const routes = NavigationAction.getRoutes() ?? [];
-  const prevScreen = routes[routes.length - 2]?.name ?? '';
-  const lastScreen = routes[routes.length - 1]?.name ?? '';
+  const routes = screenName();
+  const fromScreen = routes[routes.length - 2] ?? '';
+  const toScreen = routes[routes.length - 1] ?? '';
 
-  return { prevScreen, lastScreen };
+  return { fromScreen, toScreen };
 };
+
+const reverseScreen = () => {
+  const routes = screenName();
+  const fromScreen = routes[routes.length - 1] ?? '';
+  const toScreen = routes[routes.length - 2] ?? '';
+
+  return { fromScreen, toScreen };
+};
+
+const goBack = () => {
+  const { fromScreen, toScreen } = reverseScreen();
+  const payload = {
+    screen_from: fromScreen,
+    screen_to: toScreen,
+    device_id: deviceId,
+  };
+
+  NavigationAction.back();
+  recordSearchBack(payload);
+};
+
 // send moengage report from search event
 const searchEventMoengage = (method: 'Keyword' | 'Historical') => {
-  const { prevScreen, lastScreen } = prevLastScreen();
+  const { fromScreen, toScreen } = prevLastScreen();
   const payload = {
-    screen_from: prevScreen,
-    screen_to: lastScreen,
+    screen_from: fromScreen,
+    screen_to: toScreen,
     device_id: deviceId,
     search_method: method,
   };
@@ -33,14 +57,14 @@ const searchResultPageEventMoengage = (
   keyword: string,
   isKeywordFound: boolean,
 ) => {
-  const { prevScreen, lastScreen } = prevLastScreen();
+  const { fromScreen, toScreen } = prevLastScreen();
 
   const payload = {
     device_id: deviceId,
     is_keyword_found: isKeywordFound,
     keyword,
-    screen_to: lastScreen,
-    screen_from: prevScreen,
+    screen_to: toScreen,
+    screen_from: fromScreen,
   };
 
   recordSearchResultPage(payload);
@@ -51,4 +75,32 @@ const goToProduct = (keyword: string, method: 'Keyword' | 'Historical') => {
   searchEventMoengage(method);
 };
 
-export { goBack, goToProduct, searchResultPageEventMoengage };
+const goToHome = () => {
+  const { fromScreen, toScreen } = reverseScreen();
+  const payload = {
+    device_id: deviceId,
+    screen_to: toScreen,
+    screen_from: fromScreen,
+  };
+  NavigationAction.navigate('HomeView');
+  recordSearchBack(payload);
+};
+
+const goToShoppingCart = () => {
+  NavigationAction.navigate('OmsShoppingCartView');
+  const { fromScreen, toScreen } = prevLastScreen();
+  const payload = {
+    device_id: deviceId,
+    screen_to: toScreen,
+    screen_from: fromScreen,
+  };
+  recordSearchBack(payload);
+};
+
+export {
+  goBack,
+  goToProduct,
+  searchResultPageEventMoengage,
+  goToHome,
+  goToShoppingCart,
+};

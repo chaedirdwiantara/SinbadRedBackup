@@ -6,18 +6,15 @@ import { SnbContainer, SnbTopNav2 } from 'react-native-sinbad-ui';
 import RecentSearch from './RecentSearch';
 /** === IMPORT FUNCTION === */
 import { useDataAuth } from '@core/redux/Data';
-import {
-  goToHome,
-  goToSearch,
-  goToShoppingCart,
-  backToLogin,
-} from '@core/functions/product';
+import { backToLogin } from '@core/functions/product';
 import { contexts } from '@contexts';
 import {
   goBack,
   goToProduct,
   useInputText,
   useRecentSearch,
+  goToHome,
+  goToShoppingCart,
 } from '../functions';
 /** === COMPONENT === */
 const SearchView: FC = () => {
