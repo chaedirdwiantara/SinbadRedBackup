@@ -85,6 +85,8 @@ const BannedACcountView: React.FC = () => {
                     mobilePhone:
                       stateUser.detail.data?.ownerData?.profile?.mobilePhone,
                   });
+                } else {
+                  NavigationAction.resetToIntroSinbad()
                 }
               }}
             />

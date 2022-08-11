@@ -15,6 +15,7 @@ import { ModalOTPMethod, ModalSalesman } from '../shared';
 import { useAuthCoreAction } from '@core/functions/auth';
 import { useDataAuth, useDataPermanent } from '@core/redux/Data';
 import { ForceRegistrationModal } from '../shared/index';
+import { NavigationAction } from '@core/functions/navigation';
 
 const Content: React.FC = () => {
   const { checkPhoneLogin, resetCheckLoginPhone, resetRequestOTP } =
@@ -50,7 +51,11 @@ const Content: React.FC = () => {
       }
     }
     if (checkPhoneLoginState.error !== null) {
-      phone.setMessageError(setErrorMessage(checkPhoneLoginState.error.code));
+      if (checkPhoneLoginState.error.code === 40010000084) {
+        NavigationAction.resetToBannedAccount()
+      } else {
+        phone.setMessageError(setErrorMessage(checkPhoneLoginState.error.code));
+      }
     }
   }, [checkPhoneLoginState]);
 

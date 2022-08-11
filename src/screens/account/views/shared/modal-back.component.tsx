@@ -3,7 +3,8 @@ import {
   SnbBottomSheet2,
   Content,
   SnbBottomSheetPart,
-  FooterButton,
+  spacingV2 as layout,
+  SnbButton2,
 } from '@sinbad/react-native-sinbad-ui';
 import { View } from 'react-native';
 import { useEasyRegistration } from '@screen/account/functions';
@@ -41,15 +42,39 @@ const ModalBack: FC<ListOfStepsProps> = React.forwardRef((props, ref: any) => {
         snap={false}
         contentHeight={contentHeight + 100}
         button={
-          <FooterButton.Dual
-            title1="Ya, Keluar"
-            title2="Batal"
-            button1Press={() => props.confirm()}
-            button2Press={() => ref.current?.close()}
-            testID={'06.3'}
-            disabled={updateCompleteDataState.loading || uploadImageSecureState.loading}
-            loadingButton={updateCompleteDataState.loading || uploadImageSecureState.loading}
-          />
+          <View
+            style={{
+              flexDirection: 'row',
+              padding: layout.spacing.lg,
+            }}>
+            <View style={{ flex: 1 }}>
+              <SnbButton2.Primary
+                onPress={() => {
+                  ref.current?.close()
+                }}
+                title="Batal"
+                disabled={false}
+                size="medium"
+                full
+                outline
+                testID={'06.3'}
+              />
+            </View>
+            <View style={{ marginHorizontal: layout.spacing.sm }} />
+            <View style={{ flex: 1 }}>
+              <SnbButton2.Primary
+                onPress={() => {
+                  props.confirm();
+                }}
+                title="Ya, Keluar"
+                disabled={updateCompleteDataState.loading || uploadImageSecureState.loading}
+                loading={updateCompleteDataState.loading || uploadImageSecureState.loading}
+                size="medium"
+                full
+                testID={'06.3'}
+              />
+            </View>
+          </View>
         }
       />
     </View>
