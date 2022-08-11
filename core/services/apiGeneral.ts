@@ -59,7 +59,7 @@ const apiGeneral = async <T>(
       if (response.headers.map['content-type'] === 'text/html') {
         if (response.status === 401) {
           await Caches.runClearCache()
-          SnbToast.show('Sesi anda telah habis', 2000)
+          SnbToast.show('Sesi Anda telah berakhir', 2000)
           NavigationAction.resetToIntroSinbad()
         }
         throwError(response);
