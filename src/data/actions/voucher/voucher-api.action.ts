@@ -9,7 +9,9 @@ export const voucherDetailProcess = (
   contextDispatch({ type: types.VOUCHER_DETAIL_PROCESS, payload: data });
   return {
     type: types.VOUCHER_DETAIL_PROCESS,
-    payload: data,
+    payload: {
+      id: data.id.toString(),
+    },
     contextDispatch,
   };
 };
