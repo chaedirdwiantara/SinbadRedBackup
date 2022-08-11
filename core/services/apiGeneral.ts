@@ -110,7 +110,8 @@ const apiGeneral = async <T>(
   };
   /** === MAIN FUNCTION === */
   return fetch(
-    `${apiHost.base}/${module}/api/${version}/sinbad-app/${access === 'public' ? 'public/' : ''
+    `${apiHost.base}/${module}/api/${version}/sinbad-app/${
+      access === 'public' ? 'public/' : ''
     }${path}`,
     reqBody,
   )
