@@ -13,20 +13,18 @@ import { ThankYouPageStyle } from '@screen/oms/styles/thank-you-page/thank-you-p
 import {
   color,
   colorV2,
-  SnbButton,
   SnbButton2,
   SnbContainer,
   SnbText,
   SnbText2,
   SnbToast,
-  SnbTopNav,
   styles,
   FooterButton,
   SnbTopNav2,
   Content,
   WaitingPayment,
 } from '@sinbad/react-native-sinbad-ui';
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
   ScrollView,
   View,
@@ -530,7 +528,14 @@ const OmsThankYouPageView: FC = () => {
               backAction={NavigationAction.back}
             />
           ) : (
-            <SnbTopNav2.Type1 color="white" title={'Menunggu Pembayaran'} />
+            <SnbTopNav2.Type1
+              color="white"
+              title={
+                thankYouPageData?.useCollection !== true
+                  ? 'Menunggu Pembayaran'
+                  : 'Terima Kasih'
+              }
+            />
           )}
 
           {renderContent()}
