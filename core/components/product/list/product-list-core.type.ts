@@ -1,6 +1,7 @@
 import * as models from '@models';
 
 export interface ProductLayoutProps {
+  testID: string;
   products: Array<models.ProductList>;
   withTags?: boolean;
   tags: Array<ITag>;
