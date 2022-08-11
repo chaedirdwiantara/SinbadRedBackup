@@ -18,7 +18,7 @@ import { useSetUpdateAvailable } from '../functions';
 const IntroSplashView: React.FC = () => {
   const isFocused = useIsFocused();
   const { meV2, me } = useDataAuth();
-  const { maintenance, isBanned } = useDataPermanent();
+  const { maintenance, userBanned } = useDataPermanent();
   const { getLocationPermissions } = useOTP();
   const { setUpdateAvailable } = useSetUpdateAvailable();
   /** === HOOK === */
@@ -46,7 +46,7 @@ const IntroSplashView: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    if (me.data && isBanned) {
+    if ((me.data?.user.id === userBanned?.userId) && userBanned?.isBanned) {
       setTimeout(() => {
         NavigationAction.resetToBannedAccount()
         SplashScreen.hide()

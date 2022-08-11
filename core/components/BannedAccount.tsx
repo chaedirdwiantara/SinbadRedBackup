@@ -3,14 +3,14 @@ import { useDataAuth, useDataPermanent } from '@core/redux/Data';
 import { NavigationAction } from '@navigation';
 
 const BannedAccount = () => {
-  const data = useDataPermanent();
+  const { userBanned } = useDataPermanent();
   const { me } = useDataAuth()
 
   React.useEffect(() => {
-    if (me.data && data.isBanned) {
+    if ((me.data?.user.id === userBanned?.userId) && userBanned?.isBanned) {
       NavigationAction.resetToBannedAccount();
     }
-  }, [data.isBanned, me.data]);
+  }, [userBanned, me.data]);
 
   return null;
 };
