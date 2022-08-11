@@ -1,8 +1,9 @@
 /** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
 import ForceUpdateView from './force-update.view';
 import MaintenanceView from './maintenance.view';
+import FirstView from './first.view';
 /** === EXPORT ALL === */
-export { ForceUpdateView, MaintenanceView };
+export { FirstView, ForceUpdateView, MaintenanceView };
 /**
  * ================================================================
  * NOTES

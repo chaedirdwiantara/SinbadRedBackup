@@ -5,7 +5,11 @@ import Navigations from '../../src/navigations';
 import TabNavigator from './TabNavigator';
 /** => for intro view */
 import { IntroSplashView } from '../screens/intro/views';
-import { ForceUpdateView, MaintenanceView } from '../screens/extra/views';
+import {
+  FirstView,
+  ForceUpdateView,
+  MaintenanceView,
+} from '../screens/extra/views';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 enableScreens();
@@ -37,6 +41,16 @@ const StackNavigator: React.FC = () => {
       <Screen
         name="Splash"
         component={IntroSplashView}
+        options={{ headerShown: false, screenOrientation: 'portrait' }}
+      />
+    );
+  };
+  /** => this for first view */
+  const FirstNav = () => {
+    return (
+      <Screen
+        name="First"
+        component={FirstView}
         options={{ headerShown: false, screenOrientation: 'portrait' }}
       />
     );
@@ -74,7 +88,8 @@ const StackNavigator: React.FC = () => {
   };
 
   return (
-    <Navigator initialRouteName={'Splash'}>
+    <Navigator initialRouteName={'First'}>
+      {FirstNav()}
       {MaintenanceNav()}
       {ForceUpdateNav()}
       {IntroSplashNav()}
