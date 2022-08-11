@@ -528,14 +528,7 @@ const OmsThankYouPageView: FC = () => {
               backAction={NavigationAction.back}
             />
           ) : (
-            <SnbTopNav2.Type1
-              color="white"
-              title={
-                thankYouPageData?.useCollection !== true
-                  ? 'Menunggu Pembayaran'
-                  : 'Terima Kasih'
-              }
-            />
+            <SnbTopNav2.Type1 color="white" title={'Terima Kasih'} />
           )}
 
           {renderContent()}
