@@ -4,10 +4,10 @@ import { View, Image, BackHandler } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav2,
-  SnbButton2,
   SnbToast,
   spacingV2 as layout,
   SnbBottomSheet2Ref,
+  FooterButton,
 } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
@@ -90,24 +90,22 @@ const Content: React.FC<Props> = React.forwardRef((_, ref) => {
   const renderUploadPhotoRules = () => {
     return (
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>
-          <UploadPhotoRules
-            rulesTitle="Pastikan Foto Toko Anda Sesuai Ketentuan"
-            imgSrc={require('@image/store_image.png')}
-            buttonLabel="Ambil Foto"
-            rules={[
-              'Pastikan foto toko terlihat dengan jelas',
-              'Foto Tidak silau dan tidak buram',
-              'Pastikan foto fokus keseluruhan toko',
-            ]}
-            action={() => openCamera('store')}
-            type="vertical"
-            resizeMode="stretch"
-            blurRadius={2}
-            listType="number"
-            testID={'12.1'}
-          />
-        </View>
+        <UploadPhotoRules
+          rulesTitle="Pastikan Foto Toko Anda Sesuai Ketentuan"
+          imgSrc={require('@image/store_image.png')}
+          buttonLabel="Ambil Foto"
+          rules={[
+            'Pastikan foto toko terlihat dengan jelas',
+            'Foto Tidak silau dan tidak buram',
+            'Pastikan foto fokus keseluruhan toko',
+          ]}
+          action={() => openCamera('store')}
+          type="vertical"
+          resizeMode="stretch"
+          blurRadius={2}
+          listType="number"
+          testID={'12.1'}
+        />
       </View>
     );
   };
@@ -126,42 +124,27 @@ const Content: React.FC<Props> = React.forwardRef((_, ref) => {
             margin: layout.spacing.lg,
           }}
         />
-        <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
-          <View style={{ flex: 1 }}>
-            <SnbButton2.Primary
-              title={capturedImage?.data?.url ? 'Ulangi' : 'Ubah Foto'}
-              onPress={() => openCamera('store')}
-              disabled={stateGlobal.uploadImage.loading}
-              size="medium"
-              full
-              outline
-            />
-          </View>
-          <View style={{ marginHorizontal: layout.spacing.sm }} />
-          <View style={{ flex: 1 }}>
-            <SnbButton2.Primary
-              title={'Lanjutkan'}
-              onPress={() => {
-                if (capturedImage?.data?.url) {
-                  upload(dispatchGlobal, capturedImage.data.url);
-                } else {
-                  const { latitude, longitude } =
-                    completeDataState.data?.buyerData || {};
-                  if (latitude !== null && longitude !== null) {
-                    navigate(DATA_TOKO_STEP_3_VIEW);
-                  } else {
-                    navigate(MAPS_VIEW_TYPE_2);
-                  }
-                }
-              }}
-              disabled={stateGlobal.uploadImage.loading}
-              loading={stateGlobal.uploadImage.loading}
-              size="medium"
-              full
-              testID={'12.3'}
-            />
-          </View>
-        </View>
+        <FooterButton.Dual
+          title2={capturedImage?.data?.url ? 'Ulangi' : 'Ubah Foto'}
+          button2Press={() => openCamera('store')}
+          disabled={stateGlobal.uploadImage.loading}
+          title1={'Lanjutkan'}
+          button1Press={() => {
+            if (capturedImage?.data?.url) {
+              upload(dispatchGlobal, capturedImage.data.url);
+            } else {
+              const { latitude, longitude } =
+                completeDataState.data?.buyerData || {};
+              if (latitude !== null && longitude !== null) {
+                navigate(DATA_TOKO_STEP_3_VIEW);
+              } else {
+                navigate(MAPS_VIEW_TYPE_2);
+              }
+            }
+          }}
+          loadingButton={stateGlobal.uploadImage.loading}
+          testID={'12.3'}
+        />
       </View>
     );
   };

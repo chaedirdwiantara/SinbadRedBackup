@@ -3,6 +3,7 @@ import {
   borderV2,
   colorV2,
   Content,
+  FooterButton,
   SnbBottomSheet2,
   SnbBottomSheet2Ref,
   SnbBottomSheetPart,
@@ -13,7 +14,7 @@ import {
   SnbText2,
   spacingV2 as layout,
 } from '@sinbad/react-native-sinbad-ui';
-import MapView, { LatLng, Marker } from 'react-native-maps';
+import MapView, { LatLng } from 'react-native-maps';
 import {
   Image,
   LogBox,
@@ -229,7 +230,7 @@ const MapsViewType2: React.FC = () => {
           ref={refMaps}
           onRegionChangeComplete={handleOnChangeRegionComplete}
           style={{ flex: 1 }}
-          testID={testID ? testID : ''}
+          testID={'13.1.1'}
         />
         <View style={styles.markerFixed}>
           <Image style={styles.marker} source={require('@image/pin_point.png')} />
@@ -258,6 +259,7 @@ const MapsViewType2: React.FC = () => {
               justifyContent: 'space-between',
               flexDirection: 'row',
               alignItems: 'center',
+              marginBottom: layout.spacing.md
             }}>
             <View style={{ flex: 1 }}>
               {renderIF(
@@ -282,13 +284,13 @@ const MapsViewType2: React.FC = () => {
                 ),
               )}
             </View>
-            <View style={{ marginRight: -layout.spacing.md }}>
+            <View>
               <SnbButton2.Link
                 title="Cari Lokasi"
                 onPress={() => navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW)}
                 disabled={false}
                 size="small"
-                testID={testID ? testID : ''}
+                testID={'13.1.1'}
               />
             </View>
           </View>
@@ -308,39 +310,35 @@ const MapsViewType2: React.FC = () => {
               <SnbText2.Paragraph.Small
                 align="justify"
                 color={colorV2.textColor.secondary}
-                testID={testID ? testID : ''}>
+                testID={'13.1.1'}>
                 {addressResult[0]?.formatted_address}
               </SnbText2.Paragraph.Small>,
               <SnbText2.Paragraph.Small
                 color={colorV2.textColor.secondary}
-                testID={testID ? testID : ''}>
+                testID={'13.1.1'}>
                 Alamat tidak ditemukan
               </SnbText2.Paragraph.Small>,
             ),
           )}
         </View>
-        <View style={{ padding: layout.spacing.lg }}>
-          <SnbButton2.Primary
-            title="Pilih Lokasi ini"
-            disabled={loadingGetAddress || locations.loading}
-            loading={locations.loading}
-            onPress={() => {
-              if (addressResult.length === 0) {
-                bottomSheetRef.current?.open();
-              } else {
-                const address = extractAddress(
-                  addressResult[0]?.address_components,
-                );
-                getLocation({
-                  params: `province=${address.province}&city=${address.city}&district=${address.district}&urban=${address.urban}`,
-                });
-              }
-            }}
-            full
-            size="medium"
-            testID={testID ? testID : ''}
-          />
-        </View>
+        <FooterButton.Single
+          title="Pilih Lokasi ini"
+          disabled={loadingGetAddress || locations.loading}
+          loadingButton={locations.loading}
+          buttonPress={() => {
+            if (addressResult.length === 0) {
+              bottomSheetRef.current?.open();
+            } else {
+              const address = extractAddress(
+                addressResult[0]?.address_components,
+              );
+              getLocation({
+                params: `province=${address.province}&city=${address.city}&district=${address.district}&urban=${address.urban}`,
+              });
+            }
+          }}
+          testID={'13.1.1'}
+        />
       </View>
       <SnbBottomSheet2
         ref={bottomSheetRef}
@@ -366,21 +364,14 @@ const MapsViewType2: React.FC = () => {
           </View>
         }
         button={
-          <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
-            <View style={{ flex: 1 }}>
-              <SnbButton2.Primary
-                onPress={() => {
-                  bottomSheetRef.current?.close();
-                  navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW);
-                }}
-                title="Masukkan Lokasi Manual"
-                disabled={false}
-                full
-                size="medium"
-                testID={testID ? testID : ''}
-              />
-            </View>
-          </View>
+          <FooterButton.Single
+            buttonPress={() => {
+              bottomSheetRef.current?.close();
+              navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW);
+            }}
+            title="Masukkan Lokasi Manual"
+            testID={'13.1.1'}
+          />
         }
       />
     </SnbContainer>

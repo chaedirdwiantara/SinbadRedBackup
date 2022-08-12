@@ -44,9 +44,11 @@ function* productDetail(action: models.DetailProcessAction) {
 /** => Cart */
 function* productDetailCart(action: models.DetailProcessAction) {
   try {
+    // split string to get id & warehouseId
+    const [id, warehouseId] = action.payload.id.split('_');
     const response: models.DetailSuccessProps<models.ProductDetail> =
       yield call(() => {
-        return ProductApi.getDetail(action.payload);
+        return ProductApi.getDetail({ id, warehouseId });
       });
     yield action.contextDispatch(
       ActionCreators.productDetailCartSuccess(response),

@@ -53,6 +53,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
         buttonPress={
           totalPaymentNumber > 999999999 ? pressButton : goToPaymentMethod
         }
+        type={'checkout'}
       />
       <ModalValidationLimit
         parentRef={refValidationLimitModal}
