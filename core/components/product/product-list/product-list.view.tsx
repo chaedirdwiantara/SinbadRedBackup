@@ -11,6 +11,7 @@ import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { useProductListContext } from './function/product-list.util';
 // types
 import type * as models from '@models';
+import { searchClickProductEventMoengage } from '@screen/search/functions/search.function';
 
 /** => INTERFACE */
 type Props = {
@@ -40,11 +41,16 @@ const Main: FC<Props> = ({ testID }) => {
       } else {
         const id = `${product.id}_${product.warehouseOriginId}`;
         setSelectProduct(id);
+        searchClickProductEventMoengage();
         productDetailActions.fetch(dispatchProduct, id);
       }
     },
     [me.data],
   );
+
+  const onCardPress = useCallback(() => {
+    searchClickProductEventMoengage();
+  }, []);
   return (
     <View style={{ flex: 1 }}>
       <ProductCard
@@ -63,6 +69,7 @@ const Main: FC<Props> = ({ testID }) => {
         onFilterPress={() => {}}
         onTagPress={() => {}}
         tags={[]}
+        onCardPress={onCardPress}
       />
       {productListState.loadMore ? <LoadingLoadMore /> : <View />}
     </View>
