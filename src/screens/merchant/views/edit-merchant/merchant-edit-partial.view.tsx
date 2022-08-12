@@ -153,7 +153,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       case 'merchantOwnerTaxNo': {
         data = {
           user: {
-            taxNo: noNPWP.value,
+            taxNo: noNPWP.value?.replace(/[^0-9]/g, ''),
           },
         };
         editProfileAction.editProfile(dispatchSupplier, {
