@@ -24,6 +24,7 @@ import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
 import { useNavigation } from '@react-navigation/core';
+import { formatter } from '@screen/auth/functions';
 
 const MerchantDetailProfileView: FC = () => {
   /** === HOOK === */
@@ -231,7 +232,7 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Nomor Induk Kependudukan (NIK)',
-          value: ownerData?.profile.idNo,
+          value: formatter(ownerData?.profile.idNo, [6, 12], '-'),
           type: 'merchantOwnerIdNo',
           title: ownerData?.profile.idNo ? 'Ubah KTP' : 'Tambah KTP',
         })}
@@ -255,7 +256,9 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Nomor Pokok Wajib Pajak (NPWP)',
-          value: ownerData?.profile.taxNo ? ownerData?.profile.taxNo : '-',
+          value: ownerData?.profile.taxNo ?
+            formatter(ownerData?.profile.taxNo, [2, 5, 8, 9, 12, 15], '.')
+            : '-',
           action: ownerData?.profile.taxNo ? 'ubah' : 'tambah',
           type: 'merchantOwnerTaxNo',
           title: ownerData?.profile.taxNo ? 'Ubah NPWP' : 'Tambah NPWP',
