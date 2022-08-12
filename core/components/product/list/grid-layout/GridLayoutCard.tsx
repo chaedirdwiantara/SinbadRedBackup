@@ -15,6 +15,7 @@ interface GridLayoutCardProps {
   product: models.ProductList;
   index: number;
   onOrderPress: (item: models.ProductList) => void;
+  onCardPress: () => void;
 }
 // var
 const { spacing } = spacingV2;
@@ -24,6 +25,7 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
   product,
   index,
   onOrderPress,
+  onCardPress,
 }) => {
   const imageKitWidth = isTab ? 300 : 250;
   return (
@@ -51,6 +53,7 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
             id: product.id,
             warehouseId: product.warehouseOriginId,
           });
+          onCardPress();
         }}
         withOrderButton={true}
         onOrderPress={() => onOrderPress(product)}

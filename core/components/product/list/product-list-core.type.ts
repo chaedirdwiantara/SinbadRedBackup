@@ -16,6 +16,7 @@ export interface ProductLayoutProps {
   onChangeLayoutListPress?: (layout: 'list' | 'grid') => void;
   onSortPress?: () => void;
   onFilterPress: () => void;
+  onCardPress: () => void;
 }
 
 export type ProductHeaderType = 'default' | 'search';
