@@ -5,6 +5,7 @@ import {
   recordSearch,
   recordSearchResultPage,
   recordSearchBack,
+  recordSearchClick,
 } from '@core/report/moengage/action';
 /** === FUNCTIONS === */
 
@@ -69,6 +70,17 @@ const searchResultPageEventMoengage = (
 
   recordSearchResultPage(payload);
 };
+// search click product event moengage
+const searchClickProductEventMoengage = () => {
+  const { fromScreen, toScreen } = prevLastScreen();
+  const payload = {
+    screen_from: fromScreen,
+    screen_to: toScreen,
+    device_id: deviceId,
+  };
+
+  recordSearchClick(payload);
+};
 
 const goToProduct = (keyword: string, method: 'Keyword' | 'Historical') => {
   NavigationAction.navigate('SearchProductView', { keyword });
@@ -103,4 +115,5 @@ export {
   searchResultPageEventMoengage,
   goToHome,
   goToShoppingCart,
+  searchClickProductEventMoengage,
 };
