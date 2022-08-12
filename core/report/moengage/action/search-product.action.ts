@@ -15,6 +15,15 @@ export function recordSearch(data: SearchPayload) {
 
   Search.search(props);
 }
+// record from search page back, to cart, to home
+export function recordSearchBack(data: Omit<SearchPayload, 'search_method'>) {
+  const props = {
+    eventName: EventName.SEARCH,
+    data,
+  };
+
+  Search.searchBack(props);
+}
 // record if success get search product list
 export function recordSearchResultPage(data: SearchResultPageSuccess) {
   const props = {
