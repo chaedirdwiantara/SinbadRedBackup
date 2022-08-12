@@ -1,6 +1,3 @@
 Sinbad versi 0.1.13
 
-- Kini Sinbad hadir dengan sistem notifikasi, sekarang tidak perlu khawatir lagi ketinggalan informasi promo dan status pesanan
-Yuk, update aplikasi sekarang!
-- Peningkatan performa pada aplikasi Sinbad kamu agar pengalaman berbelanja kamu semakin menyenangkan
-Yuk update aplikasi sekarang!
+bug fixing
