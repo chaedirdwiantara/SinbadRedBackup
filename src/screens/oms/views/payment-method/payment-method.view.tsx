@@ -361,6 +361,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
         sinbadVoucherId: checkoutContextData.sinbadVoucherId,
         ownerIdNo: checkoutContextData.ownerIdNo,
         buyerTaxNo: checkoutContextData.buyerTaxNo,
+        paymentMethodCollection: selectedPaymentMethodData.collection,
       };
 
       paymentMethodCreateOrder.fetch(dispatchPaymentMethod, params);
