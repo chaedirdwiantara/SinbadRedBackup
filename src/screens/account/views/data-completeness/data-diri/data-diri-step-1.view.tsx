@@ -37,7 +37,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
     completeDataState,
     uploadImageSecureState,
     uploadSecureImageReset,
-    uploadSecureImage
+    uploadSecureImage,
   } = useEasyRegistration();
   const [backHandle, setBackHandle] = React.useState(false);
   const { navigate } = useNavigation();
@@ -47,10 +47,10 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
     if (userData) {
       setValue({
         idNumber: formatter(userData?.idNo, [6, 12], '-'),
-        nameOnKtp: userData?.fullName
+        nameOnKtp: userData?.fullName,
       });
     }
-    uploadSecureImageReset()
+    uploadSecureImageReset();
     return uploadSecureImageReset;
   }, []);
 
@@ -69,35 +69,45 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
 
   React.useEffect(() => {
     if (uploadImageSecureState?.data) {
-      const idNumberIsChanged = value.idNumber !== '' && value.idNumber.replace(/[^0-9]/g, '') !== userData.idNo
-      const nameIsChanged = value.nameOnKtp !== '' && value.nameOnKtp !== userData.fullName
+      const idNumberIsChanged =
+        value.idNumber !== '' &&
+        value.idNumber.replace(/[^0-9]/g, '') !== userData.idNo;
+      const nameIsChanged =
+        value.nameOnKtp !== '' && value.nameOnKtp !== userData.fullName;
       const user: any = {
-        // imageId: uploadImageSecureState?.data?.data?.id
+        imageId: uploadImageSecureState?.data?.data?.id,
       };
-      nameIsChanged && (user.name = value?.nameOnKtp)
-      idNumberIsChanged && (user.idNo = value?.idNumber?.replace(/[^0-9]/g, ''))
+      nameIsChanged && (user.name = value?.nameOnKtp);
+      idNumberIsChanged &&
+        (user.idNo = value?.idNumber?.replace(/[^0-9]/g, ''));
       updateCompleteData({ user });
     }
     if (uploadImageSecureState?.error) {
-      SnbToast.show('Gagal upload foto KTP', 2000)
+      SnbToast.show('Gagal upload foto KTP', 2000);
     }
-  }, [uploadImageSecureState])
+  }, [uploadImageSecureState]);
 
   function handleSave(actionFrom: 'simpan' | 'back') {
-    const idNumberIsChanged = value.idNumber !== '' && value.idNumber.replace(/[^0-9]/g, '') !== userData.idNo
-    const nameIsChanged = value.nameOnKtp !== '' && value.nameOnKtp !== userData.fullName
-    actionFrom === 'back' && setBackHandle(true)
+    const idNumberIsChanged =
+      value.idNumber !== '' &&
+      value.idNumber.replace(/[^0-9]/g, '') !== userData.idNo;
+    const nameIsChanged =
+      value.nameOnKtp !== '' && value.nameOnKtp !== userData.fullName;
+    actionFrom === 'back' && setBackHandle(true);
 
     if (capturedImage?.data?.type === 'ktp') {
-      uploadSecureImageReset()
-      uploadSecureImage({ imageUrl: capturedImage.data?.url })
+      uploadSecureImageReset();
+      uploadSecureImage({ imageUrl: capturedImage.data?.url });
     } else if (idNumberIsChanged || nameIsChanged) {
-      const user: any = {}
-      nameIsChanged && (user.name = value.nameOnKtp)
-      idNumberIsChanged && (user.idNo = value?.idNumber?.replace(/[^0-9]/g, ''))
+      const user: any = {};
+      nameIsChanged && (user.name = value.nameOnKtp);
+      idNumberIsChanged &&
+        (user.idNo = value?.idNumber?.replace(/[^0-9]/g, ''));
       updateCompleteData({ user });
     } else {
-      actionFrom === 'back' ? backToDataCompleteness() : navigate(DATA_DIRI_STEP_2_VIEW);
+      actionFrom === 'back'
+        ? backToDataCompleteness()
+        : navigate(DATA_DIRI_STEP_2_VIEW);
     }
   }
 
@@ -161,7 +171,10 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
                 updateCompleteDataState.loading ||
                 uploadImageSecureState.loading
               }
-              loading={updateCompleteDataState.loading || uploadImageSecureState.loading}
+              loading={
+                updateCompleteDataState.loading ||
+                uploadImageSecureState.loading
+              }
               size="medium"
               full
               testID={'07.1'}
@@ -172,29 +185,27 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
     );
   }
   const isImageAvailable =
-    capturedImage?.data?.type === 'ktp' || completeDataState.data?.userData?.imageId !== null;
+    capturedImage?.data?.type === 'ktp' ||
+    completeDataState.data?.userData?.imageId !== null;
 
   return (
     <View style={{ flex: 1 }}>
       {renderIF(isImageAvailable, renderOCRResult(), renderUploadPhotoRules())}
-      <ModalBack
-        ref={ref}
-        confirm={() => handleSave('back')}
-      />
+      <ModalBack ref={ref} confirm={() => handleSave('back')} />
     </View>
   );
 });
 
 const DataDiriStep1View: React.FC = () => {
-  const refModalListOfStep = React.useRef<SnbBottomSheet2Ref>()
+  const refModalListOfStep = React.useRef<SnbBottomSheet2Ref>();
   const { completeDataState } = useEasyRegistration();
-  const refModalBack = React.useRef<SnbBottomSheet2Ref>()
+  const refModalBack = React.useRef<SnbBottomSheet2Ref>();
 
   const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
-        refModalBack.current?.open()
+        refModalBack.current?.open();
         return true;
       },
     );
@@ -218,11 +229,7 @@ const DataDiriStep1View: React.FC = () => {
         testID={'07'}
       />
       <Content ref={refModalBack} />
-      <ListOfSteps
-        type="user"
-        ref={refModalListOfStep}
-        testID={'07.4'}
-      />
+      <ListOfSteps type="user" ref={refModalListOfStep} testID={'07.4'} />
     </SnbContainer>
   );
 };
