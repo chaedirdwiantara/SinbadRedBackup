@@ -42,7 +42,7 @@ const UserView: FC = ({ start }: any) => {
   /** === HOOK === */
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
-  const refModalLogout = React.useRef<SnbBottomSheet2Ref>(null);
+  const refModalLogout = React.useRef<SnbBottomSheet2Ref>(null)
   const { coachmarkState } = useCoachmark();
   const { width } = Dimensions.get('window');
   const [activeIndex, setActiveIndex] = React.useState(0);
@@ -56,7 +56,7 @@ const UserView: FC = ({ start }: any) => {
       subTitle: 'Tim kami sedang memproses upgrade akun Anda.',
       icon: 'shield',
       type: 'upgradeVipProcess',
-      status: stateUser.detail?.data?.vipStatus === 'in review' ? false : true,
+      status: false,
     },
     {
       id: 2,
@@ -64,7 +64,7 @@ const UserView: FC = ({ start }: any) => {
       subTitle: 'Akun Anda telah berhasil menjadi akun VIP.',
       icon: 'shield_blue',
       type: 'upgradeVipSuccess',
-      status: stateUser.detail?.data?.vipStatus === 'accept' ? false : true,
+      status: false,
     },
     {
       id: 3,
@@ -72,7 +72,7 @@ const UserView: FC = ({ start }: any) => {
       subTitle: 'Silakan cek kembali kelengkapan profil anda.',
       icon: 'error',
       type: 'upgradeVipFailed',
-      status: stateUser.detail?.data?.vipStatus === 'reject' ? false : true,
+      status: false,
     },
     {
       id: 4,
@@ -335,16 +335,14 @@ const UserView: FC = ({ start }: any) => {
         </LinearGradient>
         <View>
           {!ownerData?.info.isImageIdOcrValidate ||
-          buyerData?.buyerInformation.buyerAccount.name === null ||
-          buyerData?.buyerAddress.address === null
+            buyerData?.buyerInformation.buyerAccount.name === null ||
+            buyerData?.buyerAddress.address === null
             ? pagination()
             : null}
         </View>
       </View>
     );
   };
-  console.log('datah:', stateUser.detail?.data?.vipStatus);
-
   const renderUserInformation = () => {
     const data = stateUser.detail.data?.progress;
     const ownerData = stateUser.detail.data?.ownerData;
@@ -402,7 +400,7 @@ const UserView: FC = ({ start }: any) => {
                     background
                   />
                 )}
-                {!ownerData?.info.isTaxNo && (
+                {true && (
                   <Content.MenuList
                     title="Upload Foto NPWP"
                     iconComponent={
@@ -420,7 +418,7 @@ const UserView: FC = ({ start }: any) => {
                     background
                   />
                 )}
-                {!ownerData?.info.isSelfieImageUrl && (
+                {true && (
                   <Content.MenuList
                     title="Upload Foto Selfie + KTP"
                     iconComponent={
