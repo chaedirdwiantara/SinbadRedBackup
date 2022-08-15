@@ -1,9 +1,7 @@
-import { View, Text } from 'react-native';
-import React, { FC, useEffect, useState } from 'react';
-import { method } from 'lodash';
+import { View } from 'react-native';
+import React, { FC, useState } from 'react';
 import { PaymentMethodStyle } from '@screen/oms/styles';
 import { SnbText, Payment } from '@sinbad/react-native-sinbad-ui';
-import PaymentMethodListView from './payment-method-list.view';
 import PaymentMethodDetail from './payment-method-detail.view';
 import * as models from '@models';
 interface PaymentMethodBodyProps {
@@ -40,12 +38,7 @@ const PaymentMethodBody: FC<PaymentMethodBodyProps> = ({
       {data?.map((i) => (
         <View style={PaymentMethodStyle.mainBodyContainer}>
           <SnbText.B2>{i?.displayLabel}</SnbText.B2>
-          {/* <PaymentMethodListView
-            payMethod={i?.paymentMethods}
-            onSelectMethod={handleSelect}
-            dataChoosen={handleDataChoosen}
-            dataSelected={dataSelected?.displayLabel || ''}
-          /> */}
+
           <Payment.PaymentOption
             payMethod={i?.paymentMethods}
             onSelectMethod={handleSelect}
@@ -57,11 +50,11 @@ const PaymentMethodBody: FC<PaymentMethodBodyProps> = ({
         </View>
       ))}
 
-      {/* <PaymentMethodDetail
+      <PaymentMethodDetail
         dataFromCheckout={dataFromCheckout}
         dataChoose={dataSelected}
         isSelected={isSelected}
-      /> */}
+      />
     </>
   );
 };
