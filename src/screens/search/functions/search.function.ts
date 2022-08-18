@@ -1,5 +1,5 @@
 /** === IMPORT FUNCTION === */
-import { deviceId } from '@core/functions/global/device-data';
+import { uniqueId } from '@core/functions/global/device-data';
 import { NavigationAction } from '@navigation';
 import {
   recordSearch,
@@ -35,7 +35,7 @@ const goBack = () => {
   const payload = {
     screen_from: fromScreen,
     screen_to: toScreen,
-    device_id: deviceId,
+    device_id: uniqueId,
   };
 
   NavigationAction.back();
@@ -48,7 +48,7 @@ const searchEventMoengage = (method: 'Keyword' | 'Historical') => {
   const payload = {
     screen_from: fromScreen,
     screen_to: toScreen,
-    device_id: deviceId,
+    device_id: uniqueId,
     search_method: method,
   };
   recordSearch(payload);
@@ -61,7 +61,7 @@ const searchResultPageEventMoengage = (
   const { fromScreen, toScreen } = prevLastScreen();
 
   const payload = {
-    device_id: deviceId,
+    device_id: uniqueId,
     is_keyword_found: isKeywordFound,
     keyword,
     screen_to: toScreen,
@@ -76,7 +76,7 @@ const searchClickProductEventMoengage = () => {
   const payload = {
     screen_from: fromScreen,
     screen_to: toScreen,
-    device_id: deviceId,
+    device_id: uniqueId,
   };
 
   recordSearchClick(payload);
@@ -90,7 +90,7 @@ const goToProduct = (keyword: string, method: 'Keyword' | 'Historical') => {
 const goToHome = () => {
   const { fromScreen, toScreen } = reverseScreen();
   const payload = {
-    device_id: deviceId,
+    device_id: uniqueId,
     screen_to: toScreen,
     screen_from: fromScreen,
   };
@@ -102,7 +102,7 @@ const goToShoppingCart = () => {
   NavigationAction.navigate('OmsShoppingCartView');
   const { fromScreen, toScreen } = prevLastScreen();
   const payload = {
-    device_id: deviceId,
+    device_id: uniqueId,
     screen_to: toScreen,
     screen_from: fromScreen,
   };
