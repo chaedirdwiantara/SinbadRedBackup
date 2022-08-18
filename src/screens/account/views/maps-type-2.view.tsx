@@ -43,6 +43,8 @@ import {
   REGION_OPTIONS,
 } from '@screen/auth/functions/auth-utils.functions';
 import { debounce } from 'lodash';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+
 
 interface IconButtonProps {
   icon: string;
@@ -164,7 +166,7 @@ const MapsViewType2: React.FC = () => {
         setLoadingGetAddress(false);
         setAddressResult(results);
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async function getUserLocation() {
@@ -213,7 +215,7 @@ const MapsViewType2: React.FC = () => {
       } else {
         getUserLocation();
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   LogBox.ignoreLogs(['Non-serializable values were found in the navigation state.'])
@@ -221,6 +223,36 @@ const MapsViewType2: React.FC = () => {
   return (
     <SnbContainer color="white">
       <View style={{ flex: 0.7 }}>
+        <GooglePlacesAutocomplete
+          placeholder='Cari Alamat'
+          fetchDetails
+          minLength={3}
+          debounce={750}
+          GooglePlacesDetailsQuery={{ fields: "geometry" }}
+          onPress={(_, details = null) => {
+            if (details?.geometry?.location) {
+              refMaps.current?.animateToRegion({
+                latitude: details?.geometry?.location.lat,
+                longitude: details?.geometry?.location.lng,
+                ...REGION_OPTIONS,
+              });
+            }
+          }}
+          query={{
+            key: 'AIzaSyD8nOqG0A3t9Ja7fCM4SdLhTdI4BExQy6E',
+            language: 'id',
+          }}
+          styles={{
+            container: {
+              position: 'absolute',
+              zIndex: 999,
+              left: 0,
+              right: 0,
+              marginTop: layout.spacing['3xl'],
+              marginHorizontal: layout.spacing.lg
+            }
+          }}
+        />
         <MapView
           initialRegion={{
             ...latLng,
