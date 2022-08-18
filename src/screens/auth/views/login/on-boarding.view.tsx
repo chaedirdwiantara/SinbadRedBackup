@@ -15,6 +15,7 @@ import {
 } from '@screen/auth/functions/screens_name';
 import { useNavigation } from '@react-navigation/core';
 import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
+import { useAuthCoreAction } from '@core/functions/auth';
 
 interface Props {
   testID?: string;
@@ -22,6 +23,7 @@ interface Props {
 
 const OnBoardingView: React.FC<Props> = () => {
   const { navigate, reset } = useNavigation();
+  const { meReset, meV2Reset } = useAuthCoreAction()
   const [data] = useState([
     {
       id: 1,
@@ -53,6 +55,10 @@ const OnBoardingView: React.FC<Props> = () => {
   ]);
 
   setFlagByDeviceId();
+  React.useEffect(() => {
+    meReset()
+    meV2Reset()
+  }, [])
 
   const slideOnBoard = () => {
     return (

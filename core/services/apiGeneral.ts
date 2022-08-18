@@ -5,8 +5,11 @@ import apiHost from './apiHost';
 import { NavigationAction } from '@navigation';
 import { uniqueId } from '@core/functions/global/device-data';
 import { sentryServiceGeneralError } from '@core/report/sentry/sentry-send';
+import Caches from 'react-native-caches'
+
 /** === IMPORT MODEL === */
 import { ErrorProps } from '@models';
+import { SnbToast } from '@sinbad/react-native-sinbad-ui';
 /** === FUNCTION === */
 const apiGeneral = async <T>(
   access: 'public' | 'auth',
@@ -49,12 +52,15 @@ const apiGeneral = async <T>(
   const handleSuccess = (response: any) => {
     return response.json().then((data: T) => data);
   };
+
   /** === HANDLE ERROR RESPONSE === */
-  const handleErrors = (response: any) => {
+  const handleErrors = async (response: any) => {
     if (!response.ok) {
       if (response.headers.map['content-type'] === 'text/html') {
         if (response.status === 401) {
-          NavigationAction.navigate('LoginPhoneView');
+          await Caches.runClearCache()
+          SnbToast.show('Sesi Anda telah berakhir', 2000)
+          NavigationAction.resetToIntroSinbad()
         }
         throwError(response);
       }
