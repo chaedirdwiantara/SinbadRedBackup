@@ -311,6 +311,13 @@ export const useInputFormat = (
       case 'npwp': {
         text = text.substring(0, 15);
         formatted = formatter(text, [2, 5, 8, 9, 12, 15], '.');
+        if (formatted.length === 20) {
+          setType('default');
+          setValMsgError('');
+        } else {
+          setType('error')
+          setValMsgError('Nomor NPWP harus 15 Digit');
+        }
         break;
       }
       default:
