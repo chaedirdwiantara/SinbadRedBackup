@@ -34,6 +34,7 @@
     "react-native": "0.64.0",
     "react-native-advertising-id": "1.0.11",
     "react-native-blob-util": "0.13.17",
+    "react-native-caches": "1.2.0",
     "react-native-camera": "3.44.1",
     "react-native-color-matrix-image-filters": "5.2.10",
     "react-native-config": "1.4.5",
