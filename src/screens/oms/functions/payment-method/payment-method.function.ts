@@ -10,4 +10,12 @@ const findIsSelected = (data: any) => {
   return selected;
 };
 
-export { findIsSelected };
+const findIdSeller = (data: any) => {
+  let selected = '';
+  for (let i = 0; i < data?.length; i++) {
+    selected += `&sellerIds[]=${data[i].sellerId}`;
+  }
+  return selected;
+};
+
+export { findIsSelected, findIdSeller };
