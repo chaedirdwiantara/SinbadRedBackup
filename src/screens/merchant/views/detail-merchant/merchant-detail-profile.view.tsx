@@ -258,8 +258,8 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Nomor Pokok Wajib Pajak (NPWP)',
-          value: ownerData?.profile.taxNo ?
-            formatter(ownerData?.profile.taxNo, [2, 5, 8, 9, 12, 15], '.')
+          value: ownerData?.profile.taxNo
+            ? formatter(ownerData?.profile.taxNo, [2, 5, 8, 9, 12, 15], '.')
             : '-',
           action: ownerData?.profile.taxNo ? 'ubah' : 'tambah',
           type: 'merchantOwnerTaxNo',
