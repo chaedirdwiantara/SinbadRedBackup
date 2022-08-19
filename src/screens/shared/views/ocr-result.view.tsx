@@ -44,7 +44,7 @@ const OCRResultView: React.FC<Props> = (props) => {
       const user = {
         name: value?.nameOnKtp,
         idNo: value?.idNumber?.replace(/[^0-9]/g, ''),
-        // imageId: uploadImageSecureState?.data?.data?.id
+        imageId: uploadImageSecureState?.data?.data?.id
       };
       editProfile(dispatchSupplier, { data: { user } });
     }
