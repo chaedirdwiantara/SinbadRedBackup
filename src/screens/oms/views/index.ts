@@ -3,12 +3,14 @@ import OmsShoppingCartView from './shopping-cart/shopping-cart.view';
 import OmsCheckoutView from './checkout/checkout.view';
 import OmsThankYouPageView from './thank-you-page/thank-you-page.view';
 import OmsPaymentMethod from './payment-method/payment-method.view';
+import InvoiceView from './invoice/views';
 /** === EXPORT ALL === */
 export {
   OmsShoppingCartView,
   OmsCheckoutView,
   OmsThankYouPageView,
   OmsPaymentMethod,
+  InvoiceView,
 };
 /**
  * ================================================================

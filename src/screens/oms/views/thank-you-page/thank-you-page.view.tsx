@@ -42,7 +42,7 @@ import moment from 'moment';
 import { CountDownTimer } from '@screen/oms/components/thank-you-page-count-down-timer.component';
 import { NavigationAction } from '@core/functions/navigation';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import BottomSheetConfirmationV2 from '@core/components/BottomSheetConfirmationV2'; // BottomSheetTransactionRef,
+import BottomSheetConfirmationV2 from '@core/components/BottomSheetConfirmationV2';
 import ThankYouPageCustomAccordion from '@screen/oms/components/thank-you-page-custom-accordion.component';
 
 type ThankYouPageParamList = {
@@ -77,9 +77,6 @@ const OmsThankYouPageView: FC = () => {
     },
     dispatchThankYouPage,
   } = useThankYouPageContext();
-  // const thankYouPageDataDummy = {
-  //       "expiredDate": "2022-06-06T19:19:15Z",
-  //   }
 
   //hardware back handler
   useEffect(() => {
@@ -148,7 +145,7 @@ const OmsThankYouPageView: FC = () => {
             <SnbText2.Headline.Default
               align="center"
               color={colorV2.textColor.default}>
-              Silahkan Lakukan Pembayaran dalam Waktu
+              Silakan lakukan pembayaran dalam waktu
             </SnbText2.Headline.Default>
             <View style={{ alignItems: 'center', marginVertical: 8 }}>
               <CountDownTimer
@@ -330,7 +327,7 @@ const OmsThankYouPageView: FC = () => {
       </ThankYouPageCard>
     );
   };
-
+  
   /** => Payment Detail COD */
   const paymentDetailCod = () => {
     return (
@@ -352,7 +349,7 @@ const OmsThankYouPageView: FC = () => {
       />
     );
   };
-
+  
   const generatePaymentGuideListData = (data: PaymentGuideListItem[]) => {
     return data.map((item: PaymentGuideListItem) => {
       return {
@@ -378,6 +375,48 @@ const OmsThankYouPageView: FC = () => {
       </ThankYouPageCard>
     );
   };
+
+  /** => Invoice Information */
+  const [toInvoice, setToInvoice] = useState(false);
+
+  useEffect(() => {
+    toInvoice == true
+      ? (setToInvoice(false),
+        NavigationAction.navigate('InvoiceView', {
+          id: thankYouPageData?.id,
+          type: 'thankyoupage-Invoice',
+        }))
+      : null;
+  }, [toInvoice]);
+
+  const handleInvoice = () => {
+    setToInvoice(true);
+  };
+  const invoiceInformation = () => {
+    if (thankYouPageData != null) {
+      return (
+        <ThankYouPageCard
+          title="Informasi Invoice"
+          headerButton={true}
+          headerButtonTitle="Lihat Invoice"
+          headerButtonAction={handleInvoice}>
+          <ThankYouPageCardItem
+            title="Order ID"
+            value={thankYouPageData?.orderCode}
+          />
+          <ThankYouPageCardItem
+            title="Tanggal Pemesanan"
+            value={
+              thankYouPageData?.createdAt
+                ? toLocalDateTime(thankYouPageData?.createdAt)
+                : '-'
+            }
+          />
+        </ThankYouPageCard>
+      );
+    }
+  };
+
   /** => batalkan pesanan */
   const handleCancelOrder = () => {
     // confirmModalRef.current?.show(params.orderId);
@@ -394,19 +433,12 @@ const OmsThankYouPageView: FC = () => {
       NavigationAction.navigate('HistoryListView');
     }, 1000);
   };
+
   /** => Order Notes */
   const renderOrderNotes = () => {
     if (thankYouPageData != null) {
       return (
         <ThankYouPageCard title="Informasi Pengiriman">
-          <ThankYouPageCardItem
-            title="Tanggal Pemesanan"
-            value={
-              thankYouPageData?.createdAt
-                ? toLocalDateTime(thankYouPageData?.createdAt)
-                : '-'
-            }
-          />
           <ThankYouPageCardItem
             title="Alamat Pengiriman"
             value={`${thankYouPageData?.buyerAddress} ${thankYouPageData?.buyerAddressNoteAddress}, ${thankYouPageData?.buyerAddressUrban}, ${thankYouPageData?.buyerAddressDistrict}, ${thankYouPageData?.buyerAddressCity}, ${thankYouPageData?.buyerAddressProvince}, ${thankYouPageData?.buyerAddressZipCode}`}
@@ -417,6 +449,14 @@ const OmsThankYouPageView: FC = () => {
               value={`${thankYouPageData?.buyerAddress} ${thankYouPageData?.buyerAddressNoteAddress} ${thankYouPageData?.buyerAddressUrban} ${thankYouPageData?.buyerAddressDistrict} ${thankYouPageData?.buyerAddressCity} ${thankYouPageData?.buyerAddressProvince}, ${thankYouPageData?.buyerAddressZipCode}`}
             />
           )} */}
+          <ThankYouPageCardItem
+            title="Estimasi Pengiriman"
+            value={
+              thankYouPageData?.deliveryEstDate
+                ? thankYouPageData?.deliveryEstDate
+                : '-'
+            }
+          />
         </ThankYouPageCard>
       );
     }
@@ -432,6 +472,7 @@ const OmsThankYouPageView: FC = () => {
           ? renderPaymentDetailV2()
           : paymentDetailCod()}
         {renderPaymentGuide()}
+        {invoiceInformation()}
         {renderOrderNotes()}
       </>
     </ScrollView>

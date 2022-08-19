@@ -10,7 +10,7 @@ export interface ThankYouOrderDetailProps {
   paymentServiceFeeDeduct: number;
   paymentIsServiceFeeFree: boolean;
   totalOrderPriceAfterTax: number;
-  totalOrderAmount: string;
+  sinbadVoucherDiscountOrder: number;
   sellers: OrderSeller[];
   buyerAddress: string;
   buyerAddressProvince: string;

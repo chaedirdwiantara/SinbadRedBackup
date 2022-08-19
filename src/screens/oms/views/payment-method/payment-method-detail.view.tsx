@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { PaymentMethodStyle } from '@screen/oms/styles';
 import { Payment } from '@sinbad/react-native-sinbad-ui';
 import { toCurrency } from '@core/functions/global/currency-format';
 import * as models from '@models';

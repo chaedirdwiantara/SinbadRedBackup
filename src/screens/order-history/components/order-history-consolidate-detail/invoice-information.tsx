@@ -31,7 +31,7 @@ const InvoiceInformation = () => {
         />
         <Description
           title="Jumlah Supplier"
-          value={data?.totalSupplier || ''}
+          value={`${data?.totalSupplier}` || ''}
         />
       </View>
       <Divider />

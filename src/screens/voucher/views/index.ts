@@ -1,9 +1,8 @@
 /** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
-import VoucherCartListMoreView from './list-more/voucher-cart-list-more.view';
-import VoucherCartListView from './list/voucher-cart-list.view';
+import VoucherCartListView from './list/voucher-cart.view';
 import VoucherDetailView from './detail/voucher-detail.view';
 /** === EXPORT ALL === */
-export { VoucherCartListView, VoucherCartListMoreView, VoucherDetailView };
+export { VoucherCartListView, VoucherDetailView };
 /**
  * ================================================================
  * NOTES
