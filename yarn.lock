@@ -1612,10 +1612,12 @@
   resolved "http://lib.sinbad.web.id/@sinbad%2fimage-editor/-/image-editor-2.3.1.tgz#0b517c411026ed3a015792e6be68646d3ee511c4"
   integrity sha512-KjBqHNalgPXr8DRPqNjWhvVBVWbwzb6SvzHDXu+Rxbyx7rY/XQa+G2s0/VDMLr5SQiJ+CTzZj35P1SCwNLaTUw==
 
-"@sinbad/react-native-sinbad-ui@1.0.84":
-  version "1.0.84"
-  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.84.tgz#36b560fd1c4e3b613a63c6339ffcb74eeb521263"
-  integrity sha512-mU7KUsjCmzSKiicSYgWqU1VqmjvsDs+oBEwSMQd5b/N8toM0C/WjaHECJjbeppVkgEm1bvomrDEm5oe6336Ucw==
+
+"@sinbad/react-native-sinbad-ui@1.0.89":
+  version "1.0.89"
+  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.89.tgz#71239f24de77717488fdc24055518b0ef1933f29"
+  integrity sha512-LIJQrgxAVcHdaCoD2NJ8/14q+iEZcSCQyZn9BLNTxz0vi+e1yYfX4GT6M37vji7HZrAuL6W97n7sEmdflx37Hg==
+
   dependencies:
     "@gorhom/bottom-sheet" "4.1.5"
     "@sinbad/design-token" "0.0.1"
@@ -6894,6 +6896,11 @@ react-native-blob-util@0.13.17:
   dependencies:
     base-64 "0.1.0"
     glob "^7.1.6"
+
+react-native-caches@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-caches/-/react-native-caches-1.2.0.tgz#ea71d1873bb7deb04c5a2fb2e1863ded09e9ac43"
+  integrity sha512-RkoqwCkXggwNN739nQctxiILVaicSo/pFkChESRRGOmK2EyuKiPeFZ73BTeLm3hpDFfT4TBYtiZ5iu9H3Qeacg==
 
 react-native-calendars@1.1263.0:
   version "1.1263.0"

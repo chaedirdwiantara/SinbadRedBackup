@@ -31,7 +31,10 @@ import {
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
 import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
 import { goBack } from '@screen/quest/function';
-import { findIsSelected } from '@screen/oms/functions/payment-method/payment-method.function';
+import {
+  findIdSeller,
+  findIsSelected,
+} from '@screen/oms/functions/payment-method/payment-method.function';
 
 interface PaymentMethodInterface {
   props: {};
@@ -75,6 +78,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     contexts.CheckoutContext,
   );
   const checkoutContextData = stateCheckout.checkout.data;
+  const idSeller = findIdSeller(checkoutContextData?.sellers);
   /** => Get payment method  */
   const { statePaymentMethod } = useContext(contexts.PaymentMethodContext); //get id to sub rtdb
 
@@ -96,6 +100,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     keyword: '',
     sort: 'desc',
     sortBy: '',
+    sellerIds: idSeller,
   };
   const getPaymentMethodListContent = usePaymentMethodListContent();
   const handlePaymentMethodList = () => {
@@ -124,7 +129,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   }, []);
 
   /** => get data if there's isSelected:true */
-  const dataPaymentMethod = data[0]?.paymentMethods;
+  const dataPaymentMethod = data;
 
   useEffect(() => {
     if (dataPaymentMethod != undefined) {
@@ -361,6 +366,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
         sinbadVoucherId: checkoutContextData.sinbadVoucherId,
         ownerIdNo: checkoutContextData.ownerIdNo,
         buyerTaxNo: checkoutContextData.buyerTaxNo,
+        paymentMethodCollection: selectedPaymentMethodData.collection,
       };
 
       paymentMethodCreateOrder.fetch(dispatchPaymentMethod, params);

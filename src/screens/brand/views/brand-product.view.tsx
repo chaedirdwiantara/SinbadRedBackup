@@ -1,8 +1,8 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useCallback, memo, useEffect } from 'react';
+import React, { FC, memo, useEffect } from 'react';
 import { View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
-import { RouteProp, useRoute, useFocusEffect } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 /** === IMPORT COMPONENT === */
 import { Header } from '../components';
 import ProductListView from '@core/components/product/product-list/product-list.view';
@@ -39,7 +39,7 @@ const BrandProductView: FC = () => {
   const {
     params: { brand },
   } = useRoute<BrandProductRouteProps>();
-  const { setQuery } = useProductListContext();
+  const { setQuery, setSearch } = useProductListContext();
   const { fetch, clearContents } = useProductListActions();
   const { dispatchProduct } = useProductContext();
 
@@ -47,7 +47,8 @@ const BrandProductView: FC = () => {
   useEffect(() => {
     fetch(dispatchProduct, { brandId: brand.id });
     setQuery({ brandId: brand.id });
-
+    // clean keyword search
+    setSearch(undefined);
     return () => clearContents(dispatchProduct);
   }, []);
   /** === VIEW === */

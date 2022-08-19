@@ -17,6 +17,8 @@ export interface PaymentMethod {
   isServiceFeeFree: boolean;
   isSelected: boolean;
   isActive: boolean;
+  status: boolean;
+  collection: boolean;
 }
 
 export interface PaymentMethodGetWaitingPaymentOrder {
@@ -64,6 +66,7 @@ export interface PaymentMethodCreateOrderData {
   paymentMethodIsServiceFeeFree: boolean;
   paymentMethodIconUrl: string;
   reservedAt: string;
+  paymentMethodCollection: boolean;
   sinbadVoucherDiscountOrder: number;
   sinbadVoucherId: number;
   ownerIdNo: string;

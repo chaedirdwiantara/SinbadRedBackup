@@ -154,9 +154,6 @@ const FilterAction = forwardRef<FilterActionRef, FilterActionProps>(
             </View>
           ))}
         </View>
-        <View style={{ marginBottom: spacing.sm }}>
-          <SnbText2.Body.Default>Harga</SnbText2.Body.Default>
-        </View>
         <PriceRangeInputSlider
           testID={testID}
           value={value}
