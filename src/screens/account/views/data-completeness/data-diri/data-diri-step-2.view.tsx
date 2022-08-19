@@ -22,6 +22,7 @@ import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { contexts } from '@contexts';
 import { useEasyRegistration } from '@screen/account/functions';
 import { NavigationAction } from '@navigation';
+import { useInputFormat } from '@screen/auth/functions';
 
 const DataDiriStep2View: React.FC = () => {
   const refModalListOfStep = React.useRef<SnbBottomSheet2Ref>()
@@ -42,12 +43,9 @@ const DataDiriStep2View: React.FC = () => {
   } = useEasyRegistration();
   const isFocused = useIsFocused();
 
-  const [npwp, setNpwp] = React.useState(
-    completeDataState?.data?.userData?.taxNo || '',
-  );
-  const [messageErrorNPWP, setMessageErrorNPWP] = React.useState('');
+  const npwp = useInputFormat(completeDataState?.data?.userData?.taxNo || '', 'number-only', 'npwp');
+  const userData = completeDataState.data?.userData;
 
-  const [isNPWPValid, setIsNPWPValid] = React.useState(false);
   React.useEffect(() => {
     return () => {
       save(dispatchGlobal, '');
@@ -55,18 +53,6 @@ const DataDiriStep2View: React.FC = () => {
       resetUpdateCompleteData();
     };
   }, []);
-
-  React.useEffect(() => {
-    if (npwp) {
-      if (npwp?.length === 15 || npwp === '' || npwp === null) {
-        setMessageErrorNPWP('');
-        setIsNPWPValid(true);
-      } else {
-        setMessageErrorNPWP('Pastikan Nomor NPWP 15 Digit');
-        setIsNPWPValid(false);
-      }
-    }
-  }, [npwp]);
 
   // HANDLE BACK DEVICE
   const handleBackButton = React.useCallback(() => {
@@ -83,11 +69,17 @@ const DataDiriStep2View: React.FC = () => {
   useFocusEffect(handleBackButton);
 
   React.useEffect(() => {
-    if (
-      stateGlobal.uploadImage.data !== null &&
-      capturedImage.data?.type === 'npwp'
-    ) {
+    if (stateGlobal.uploadImage.data !== null && capturedImage.data?.type === 'npwp') {
       SnbToast.show('Foto Berhasil Diupload', 2500, { positionValue: 40 });
+      const npwpIsChanged =
+        npwp.value !== '' &&
+        npwp.value.replace(/[^0-9]/g, '') !== userData.taxNo;
+      const user: any = {
+        taxImageUrl: stateGlobal.uploadImage?.data?.url,
+      };
+      npwpIsChanged &&
+        (user.taxNo = npwp.value?.replace(/[^0-9]/g, ''));
+      updateCompleteData({ user });
       resetCamera();
     }
 
@@ -96,59 +88,40 @@ const DataDiriStep2View: React.FC = () => {
     }
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
-  //BACK AND SAVE
-  const backSave = () => {
-    if (capturedImage?.data?.url && capturedImage.data?.type === 'npwp') {
-      upload(dispatchGlobal, capturedImage.data.url);
-      setBackHandle(true);
-    } else if (isNPWPValid) {
-      if (
-        npwp === completeDataState?.data?.userData?.taxNo ||
-        npwp === '' ||
-        npwp === null
-      ) {
-        backToDataCompleteness();
-      } else {
-        updateCompleteData({
-          user: { taxNo: npwp },
-        });
-      }
-      setBackHandle(true);
-    } else {
-      backToDataCompleteness();
-    }
-  };
-
-  //FOR CHECK IF IMAGE UPLOADED AND HIT API UPDATE COMPLETENESS DATA
-  React.useEffect(() => {
-    if (stateGlobal.uploadImage.data && capturedImage.data?.type === 'npwp') {
-      updateCompleteData({
-        user: {
-          taxImageUrl: stateGlobal.uploadImage?.data?.url,
-          taxNo: isNPWPValid ? npwp : null,
-        },
-      });
-    }
-  }, [stateGlobal.uploadImage.data, capturedImage.data?.type]);
-
   // FOR SAVE URL IMAGE TO DB USING API UPDATE COMPLETENESS DATA
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null && isFocused) {
       refetchCompleteData();
+      resetUpdateCompleteData();
+      save(dispatchGlobal, '');
+      resetCamera();
       if (backHandle) {
         backToDataCompleteness();
-        resetUpdateCompleteData();
-        setBackHandle(false);
-        save(dispatchGlobal, '');
-        resetCamera();
       } else {
         NavigationAction.navigate(DATA_DIRI_STEP_3_VIEW);
-        resetUpdateCompleteData();
-        save(dispatchGlobal, '');
-        resetCamera();
       }
     }
   }, [updateCompleteDataState, isFocused]);
+
+  function handleSave(actionFrom: 'simpan' | 'back') {
+    const npwpIsChanged =
+      npwp.value !== '' &&
+      npwp.value.replace(/[^0-9]/g, '') !== userData.taxNo;
+
+    actionFrom === 'back' && setBackHandle(true);
+
+    if (capturedImage?.data?.type === 'npwp') {
+      upload(dispatchGlobal, capturedImage.data.url)
+    } else if (npwpIsChanged) {
+      const user: any = {};
+      npwpIsChanged && (user.taxNo = npwp.value?.replace(/[^0-9]/g, ''));
+      updateCompleteData({ user });
+    } else {
+      actionFrom === 'back'
+        ? backToDataCompleteness()
+        : NavigationAction.navigate(DATA_DIRI_STEP_3_VIEW);
+    }
+  }
 
   const renderUploadPhotoRules = () => {
     return (
@@ -202,28 +175,10 @@ const DataDiriStep2View: React.FC = () => {
             />
             <View style={{ padding: 16 }} />
             <SnbTextField2.Text
-              type={npwp ? (isNPWPValid ? 'default' : 'error') : 'default'}
-              value={npwp}
-              maxLength={15}
-              helperText={'Abaikan bila sudah sesuai NPWP'}
-              onChangeText={(text) => {
-                text = text.replace(/[^0-9]/g, '');
-                setNpwp(text);
-                setIsNPWPValid(false);
-                setMessageErrorNPWP('');
-                if (text?.length === 15 || text === '' || text === null) {
-                  setMessageErrorNPWP('');
-                  setIsNPWPValid(true);
-                } else {
-                  setMessageErrorNPWP('Pastikan Nomor NPWP 15 Digit');
-                  setIsNPWPValid(false);
-                }
-              }}
-              placeholder={'Masukkan Nomor NPWP'}
+              {...npwp}
               labelText={'Nomor NPWP'}
-              keyboardType={'number-pad'}
-              mandatory
-              valMsgError={messageErrorNPWP}
+              placeholder={'Masukkan Nomor NPWP'}
+              keyboardType="number-pad"
               testID={'08.1'}
             />
           </View>
@@ -251,26 +206,9 @@ const DataDiriStep2View: React.FC = () => {
               disabled={
                 stateGlobal.uploadImage.loading ||
                 updateCompleteDataState.loading ||
-                !isNPWPValid ||
-                !npwp
+                npwp?.value?.length < 20
               }
-              onPress={() => {
-                if (capturedImage.data) {
-                  upload(dispatchGlobal, capturedImage.data.url);
-                } else if (isNPWPValid) {
-                  if (
-                    npwp === completeDataState?.data?.userData?.taxNo ||
-                    npwp === '' ||
-                    npwp === null
-                  ) {
-                    NavigationAction.navigate(DATA_DIRI_STEP_3_VIEW);
-                  } else {
-                    updateCompleteData({
-                      user: { taxNo: npwp },
-                    });
-                  }
-                }
-              }}
+              onPress={() => handleSave('simpan')}
               size="medium"
               full
               testID={'08.3'}
@@ -304,7 +242,7 @@ const DataDiriStep2View: React.FC = () => {
       {isImageAvailable ? renderImagePreview() : renderUploadPhotoRules()}
       <ModalBack
         ref={refModalBack}
-        confirm={() => backSave()}
+        confirm={() => handleSave('back')}
       />
       <ListOfSteps
         type="user"

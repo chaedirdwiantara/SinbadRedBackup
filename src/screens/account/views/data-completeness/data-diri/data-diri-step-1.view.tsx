@@ -14,7 +14,7 @@ import {
   UploadPhotoRules,
 } from '../../shared/index';
 import { View, BackHandler, ScrollView } from 'react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/core';
+import { useFocusEffect, useNavigation, useIsFocused } from '@react-navigation/core';
 import { useEasyRegistration } from '@screen/account/functions';
 import { formatter, renderIF, useCamera } from '@screen/auth/functions';
 import { OCRResultContent } from '@screen/shared/views/components';
@@ -42,6 +42,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
   const [backHandle, setBackHandle] = React.useState(false);
   const { navigate } = useNavigation();
   const userData = completeDataState.data?.userData;
+  const isFocused = useIsFocused();
 
   React.useEffect(() => {
     if (userData) {
@@ -55,7 +56,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
   }, []);
 
   React.useEffect(() => {
-    if (updateCompleteDataState.data !== null) {
+    if (updateCompleteDataState.data !== null && isFocused) {
       refetchCompleteData();
       resetUpdateCompleteData();
       uploadSecureImageReset();

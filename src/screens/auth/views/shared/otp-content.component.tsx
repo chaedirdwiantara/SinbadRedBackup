@@ -124,7 +124,7 @@ const OTPContent: React.FC<Props> = (props) => {
       </View>
       <FooterButton.Single
         testID={props.testID}
-        title='Veriffikasi'
+        title='Verifikasi'
         buttonPress={() => onVerifyOTP(otp)}
         loadingButton={loading}
         disabled={otp.length < 5 || loading}
