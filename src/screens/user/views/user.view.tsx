@@ -42,12 +42,14 @@ const UserView: FC = ({ start }: any) => {
   /** === HOOK === */
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
-  const refModalLogout = React.useRef<SnbBottomSheet2Ref>(null)
+  const refModalLogout = React.useRef<SnbBottomSheet2Ref>(null);
   const { coachmarkState } = useCoachmark();
   const { width } = Dimensions.get('window');
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [loadingCarousel, setLoadingCarousel] = useState(true);
   const [clickFromCart, setClickFromCart] = useState(false);
+  const { updateBadgeProfile, resetUpdateBadgeProfile } =
+    UserHookFunc.useUpdateBadgeProfile();
 
   const dataHeader = [
     {
@@ -56,7 +58,11 @@ const UserView: FC = ({ start }: any) => {
       subTitle: 'Tim kami sedang memproses upgrade akun Anda.',
       icon: 'shield',
       type: 'upgradeVipProcess',
-      status: false,
+      status: stateUser?.updateBadgeProfile?.data
+        ? true
+        : stateUser?.detail?.data?.vipStatus === 'to_review'
+        ? false
+        : true,
     },
     {
       id: 2,
@@ -64,7 +70,11 @@ const UserView: FC = ({ start }: any) => {
       subTitle: 'Akun Anda telah berhasil menjadi akun VIP.',
       icon: 'shield_blue',
       type: 'upgradeVipSuccess',
-      status: false,
+      status: stateUser?.updateBadgeProfile?.data
+        ? true
+        : stateUser?.detail?.data?.vipStatus === 'vip'
+        ? false
+        : true,
     },
     {
       id: 3,
@@ -72,7 +82,11 @@ const UserView: FC = ({ start }: any) => {
       subTitle: 'Silakan cek kembali kelengkapan profil anda.',
       icon: 'error',
       type: 'upgradeVipFailed',
-      status: false,
+      status: stateUser?.updateBadgeProfile?.data
+        ? true
+        : stateUser?.detail?.data?.vipStatus === 'reject'
+        ? false
+        : true,
     },
     {
       id: 4,
@@ -134,6 +148,7 @@ const UserView: FC = ({ start }: any) => {
   useFocusEffect(
     React.useCallback(() => {
       storeDetailAction.detail(dispatchUser);
+      resetUpdateBadgeProfile(dispatchUser);
     }, []),
   );
 
@@ -244,11 +259,24 @@ const UserView: FC = ({ start }: any) => {
           }
           iconComponent={<Svg name={item.icon} size={40} />}
           onPress={() => {
-            goTo({
-              type: item.type,
-              title: item.title,
-            });
+            if (
+              item.type === 'upgradeVipProcess' ||
+              item.type === 'upgradeVipSuccess'
+            ) {
+              updateBadgeProfile(dispatchUser);
+            } else {
+              goTo({
+                type: item.type,
+                title: item.title,
+              });
+            }
           }}
+          loading={
+            item.type === 'upgradeVipProcess' ||
+            item.type === 'upgradeVipSuccess'
+              ? stateUser?.updateBadgeProfile.loading
+              : false
+          }
           testID={'01.1'}
         />
       </View>
@@ -335,8 +363,8 @@ const UserView: FC = ({ start }: any) => {
         </LinearGradient>
         <View>
           {!ownerData?.info.isImageIdOcrValidate ||
-            buyerData?.buyerInformation.buyerAccount.name === null ||
-            buyerData?.buyerAddress.address === null
+          buyerData?.buyerInformation.buyerAccount.name === null ||
+          buyerData?.buyerAddress.address === null
             ? pagination()
             : null}
         </View>
@@ -400,7 +428,7 @@ const UserView: FC = ({ start }: any) => {
                     background
                   />
                 )}
-                {true && (
+                {!ownerData?.info.isTaxNo && (
                   <Content.MenuList
                     title="Upload Foto NPWP"
                     iconComponent={
@@ -418,7 +446,7 @@ const UserView: FC = ({ start }: any) => {
                     background
                   />
                 )}
-                {true && (
+                {!ownerData?.info.isSelfieImageUrl && (
                   <Content.MenuList
                     title="Upload Foto Selfie + KTP"
                     iconComponent={

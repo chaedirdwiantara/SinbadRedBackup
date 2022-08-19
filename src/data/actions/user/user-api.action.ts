@@ -53,3 +53,32 @@ export const changePasswordFailed = (
 export const changePasswordReset = () => {
   return { type: types.CHANGE_PASSWORD_RESET };
 };
+/** === UPDATE BADGE PROFILE === */
+/** => process */
+export const updateBadgeProfileProcess = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({
+    type: types.UPDATE_BADGE_PROFILE_PROCESS,
+  });
+  return {
+    type: types.UPDATE_BADGE_PROFILE_PROCESS,
+    contextDispatch,
+  };
+};
+/** => success */
+export const updateBadgeProfileSuccess = (
+  data: models.UpdateSuccessV3Props<models.UpdateBadgeProfileResponse>,
+): models.UpdateSuccessV3Action<models.UpdateBadgeProfileResponse> => {
+  return { type: types.UPDATE_BADGE_PROFILE_SUCCESS, payload: data };
+};
+/** => failed */
+export const updateBadgeProfileFailed = (
+  data: models.ErrorProps,
+): models.UpdateFailedAction => {
+  return { type: types.UPDATE_BADGE_PROFILE_FAILED, payload: data };
+};
+/** => reset */
+export const updateBadgeProfileReset = () => {
+  return { type: types.UPDATE_BADGE_PROFILE_RESET };
+};
