@@ -124,7 +124,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   }, []);
 
   /** => get data if there's isSelected:true */
-  const dataPaymentMethod = data[0]?.paymentMethods;
+  const dataPaymentMethod = data;
 
   useEffect(() => {
     if (dataPaymentMethod != undefined) {

@@ -4,7 +4,8 @@ import { colorV2 } from 'react-native-sinbad-ui';
 export const PaymentMethodStyle = StyleSheet.create({
   mainBodyContainer: {
     backgroundColor: colorV2.neutral.cloud10,
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
   },
   listContainer: {
     backgroundColor: colorV2.bgColor.light,
