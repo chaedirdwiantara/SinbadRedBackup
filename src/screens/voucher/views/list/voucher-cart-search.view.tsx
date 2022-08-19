@@ -51,7 +51,7 @@ export const VoucherCartSearch: FC<VoucherCartSearchProps> = ({
       <SnbTextField2.Text
         onChangeText={changeKeyword}
         value={keyword}
-        placeholder="Masukkan Kode Promo"
+        placeholder="Masukkan Kode Voucher"
       />
     </View>
   );
