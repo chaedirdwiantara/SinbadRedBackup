@@ -1,6 +1,7 @@
 /** === IMPORT PACKAGE HERE === */
 import React from 'react';
 import messaging from '@react-native-firebase/messaging';
+import SplashScreen from 'react-native-splash-screen';
 import { NavigationAction } from '@navigation';
 import { isEmpty } from 'lodash';
 import PushNotifications, { Importance } from 'react-native-push-notification';
@@ -66,7 +67,9 @@ const PushNotification = () => {
       .getInitialNotification()
       .then(async (remoteMessage) => {
         if (remoteMessage !== null) {
-          deepLink(remoteMessage?.data);
+          setTimeout(() => {
+            deepLink(remoteMessage?.data);
+          }, 2000);
         }
       });
 
@@ -95,6 +98,7 @@ const PushNotification = () => {
   const deepLink = (data: any) => {
     if (!isEmpty(data)) {
       if (data?.screen !== undefined) {
+        SplashScreen.hide();
         const payload = JSON.parse(data.payload);
         onDispatchReadFromDrawer(payload?.notificationId ?? '');
         switch (data?.screen) {
