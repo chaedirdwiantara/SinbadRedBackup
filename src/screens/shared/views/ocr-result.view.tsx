@@ -9,7 +9,7 @@ import { OCRResultContent } from './components';
 import * as models from '@models';
 import { MerchantHookFunc } from '@screen/merchant/function';
 import { contexts } from '@contexts';
-import { formatter, useCamera } from '@screen/auth/functions';
+import { useCamera } from '@screen/auth/functions';
 import { useEasyRegistration } from '@screen/account/functions';
 
 interface Props {
@@ -31,7 +31,7 @@ const OCRResultView: React.FC<Props> = (props) => {
   React.useEffect(() => {
     if (ownerData) {
       setValue({
-        idNumber: formatter(ownerData?.idNo, [6, 12], '-'),
+        idNumber: ownerData?.idNo,
         nameOnKtp: ownerData?.name
       });
     }
@@ -43,7 +43,7 @@ const OCRResultView: React.FC<Props> = (props) => {
     if (uploadImageSecureState?.data) {
       const user = {
         name: value?.nameOnKtp,
-        idNo: value?.idNumber?.replace(/[^0-9]/g, ''),
+        idNo: value?.idNumber,
         imageId: uploadImageSecureState?.data?.data?.id
       };
       editProfile(dispatchSupplier, { data: { user } });
@@ -85,7 +85,7 @@ const OCRResultView: React.FC<Props> = (props) => {
             }}
             disabled={
               value?.idNumber === '' ||
-              value?.idNumber?.length < 18 ||
+              value?.idNumber?.length < 16 ||
               value?.nameOnKtp === '' ||
               stateMerchant.profileEdit.loading ||
               uploadImageSecureState.loading
