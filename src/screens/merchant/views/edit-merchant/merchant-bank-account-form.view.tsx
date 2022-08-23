@@ -216,7 +216,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <SnbText2.Paragraph.Small color={colorV2.textColor.disable}>
           Dengan verifikasi, anda menyetujui
         </SnbText2.Paragraph.Small>
-        <View>
+        <View style={{ marginLeft: layout.spacing.xxsm }}>
           <SnbButton2.Link
             onPress={() => {
               Keyboard.dismiss();
