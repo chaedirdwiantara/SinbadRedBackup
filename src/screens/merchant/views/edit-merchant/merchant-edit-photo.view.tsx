@@ -240,7 +240,7 @@ const MerchantEditPhotoView = () => {
             }}
           />
           <View style={{ justifyContent: 'space-between' }}>
-            <View style={{ padding: layout.spacing.lg }}>
+            <View style={{ padding: layout.spacing.lg, alignItems: 'center' }}>
               <SnbButton2.Link
                 size="small"
                 title="Ubah Foto"

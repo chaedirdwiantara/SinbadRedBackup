@@ -16,7 +16,7 @@ import {
 import { View, BackHandler, ScrollView } from 'react-native';
 import { useFocusEffect, useNavigation, useIsFocused } from '@react-navigation/core';
 import { useEasyRegistration } from '@screen/account/functions';
-import { formatter, renderIF, useCamera } from '@screen/auth/functions';
+import { renderIF, useCamera } from '@screen/auth/functions';
 import { OCRResultContent } from '@screen/shared/views/components';
 import * as models from '@models';
 import { DATA_DIRI_STEP_2_VIEW } from '@screen/account/functions/screens_name';
@@ -47,7 +47,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
   React.useEffect(() => {
     if (userData) {
       setValue({
-        idNumber: formatter(userData?.idNo, [6, 12], '-'),
+        idNumber: userData?.idNo,
         nameOnKtp: userData?.fullName,
       });
     }
@@ -70,17 +70,17 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
 
   React.useEffect(() => {
     if (uploadImageSecureState?.data) {
-      const idNumberIsChanged =
-        value.idNumber !== '' &&
-        value.idNumber.replace(/[^0-9]/g, '') !== userData.idNo;
-      const nameIsChanged =
-        value.nameOnKtp !== '' && value.nameOnKtp !== userData.fullName;
+      const idNumberIsChanged = value.idNumber !== '' && value.idNumber !== userData.idNo;
+      const nameIsChanged = value.nameOnKtp !== '' && value.nameOnKtp !== userData.fullName;
       const user: any = {
         imageId: uploadImageSecureState?.data?.data?.id,
       };
-      nameIsChanged && (user.name = value?.nameOnKtp);
-      idNumberIsChanged &&
-        (user.idNo = value?.idNumber?.replace(/[^0-9]/g, ''));
+      if (nameIsChanged) {
+        user.name = value?.nameOnKtp
+      }
+      if (idNumberIsChanged) {
+        user.idNo = value?.idNumber
+      }
       updateCompleteData({ user });
     }
     if (uploadImageSecureState?.error) {
@@ -89,11 +89,9 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
   }, [uploadImageSecureState]);
 
   function handleSave(actionFrom: 'simpan' | 'back') {
-    const idNumberIsChanged =
-      value.idNumber !== '' &&
-      value.idNumber.replace(/[^0-9]/g, '') !== userData.idNo;
-    const nameIsChanged =
-      value.nameOnKtp !== '' && value.nameOnKtp !== userData.fullName;
+    const idNumberIsChanged = value.idNumber !== '' && value.idNumber !== userData.idNo;
+    const nameIsChanged = value.nameOnKtp !== '' && value.nameOnKtp !== userData.fullName;
+
     actionFrom === 'back' && setBackHandle(true);
 
     if (capturedImage?.data?.type === 'ktp') {
@@ -101,9 +99,12 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
       uploadSecureImage({ imageUrl: capturedImage.data?.url });
     } else if (idNumberIsChanged || nameIsChanged) {
       const user: any = {};
-      nameIsChanged && (user.name = value.nameOnKtp);
-      idNumberIsChanged &&
-        (user.idNo = value?.idNumber?.replace(/[^0-9]/g, ''));
+      if (nameIsChanged) {
+        user.name = value.nameOnKtp
+      }
+      if (idNumberIsChanged) {
+        user.idNo = value?.idNumber
+      }
       updateCompleteData({ user });
     } else {
       actionFrom === 'back'
@@ -167,7 +168,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
               onPress={() => handleSave('simpan')}
               disabled={
                 value?.idNumber === '' ||
-                value?.idNumber?.length < 18 ||
+                value?.idNumber?.length < 16 ||
                 value?.nameOnKtp === '' ||
                 updateCompleteDataState.loading ||
                 uploadImageSecureState.loading

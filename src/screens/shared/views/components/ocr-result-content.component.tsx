@@ -10,7 +10,7 @@ import {
 import { View, Image } from 'react-native';
 import { IOCRResult } from '@model/global';
 import * as models from '@models';
-import { useCamera, useInputFormat } from '@screen/auth/functions/global-hooks.functions';
+import { useCamera } from '@screen/auth/functions/global-hooks.functions';
 import apiHost from '@core/services/apiHost';
 import { useEasyRegistration } from '@screen/account/functions';
 interface Props {
@@ -25,7 +25,7 @@ const OCRResultContent: React.FC<Props> = ({
   testID,
 }) => {
   const nameOnKtp = useInput('');
-  const idNumber = useInputFormat('', 'number-only', 'ktp');
+  const idNumber = useInput('', 'number-only');
   const { completeDataState } = useEasyRegistration();
   const { capturedImage, resetCamera } = useCamera()
 
@@ -92,13 +92,22 @@ const OCRResultContent: React.FC<Props> = ({
         {...idNumber}
         labelText="NIK pada KTP"
         placeholder="Masukkan NIK pada KTP"
-        maxLength={18}
+        maxLength={16}
         helperText={
           idNumber.type !== 'error'
             ? 'Abaikan bila sudah sesuai dengan KTP'
             : ''
         }
         keyboardType="number-pad"
+        onChangeText={(text) => {
+          text = text.replace(/[^0-9]/g, '');
+          idNumber.setValue(text);
+          if (text.length === 16) {
+            idNumber.setType('default');
+          } else {
+            idNumber.setMessageError('Nomor KTP harus 16 Digit');
+          }
+        }}
         testID={testID}
       />
       <View

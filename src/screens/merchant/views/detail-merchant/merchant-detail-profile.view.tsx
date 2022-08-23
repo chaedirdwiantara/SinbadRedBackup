@@ -234,7 +234,7 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Nomor Induk Kependudukan (NIK)',
-          value: formatter(ownerData?.profile.idNo, [6, 12], '-'),
+          value: ownerData?.profile.idNo,
           type: 'merchantOwnerIdNo',
           title: ownerData?.profile.idNo ? 'Ubah KTP' : 'Tambah KTP',
         })}
