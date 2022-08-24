@@ -32,8 +32,8 @@ const InformationInfoice = () => {
       <View style={styles.main}>
         <HeaderWithLink
           title="Informasi Invoice"
-          linkTitle="Lihat Invoce"
-          testID="textTitle.2.2"
+          linkTitle="Lihat Invoice"
+          testID="textTitle.informasiInvoice.detailPesanan.detailParsel"
           linkOnPress={handleLinkOnPress}
         />
         <Description title="Order ID" value={data?.orderCode || ''} />
