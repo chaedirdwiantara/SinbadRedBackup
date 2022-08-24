@@ -7,6 +7,7 @@ import { completeData } from './complete-data.reducer';
 import { updateCompleteData } from './update-complete-data.reducer';
 import { completeDataConfirmation } from './complete-data-confirmation.reducer';
 import { ocrImage } from './ocr-image.reducer';
+import { uploadSecureImage } from './upload-secure-image.reducer';
 export const account = combineReducers({
   buyerCategories,
   productCategories,
@@ -17,4 +18,5 @@ export const account = combineReducers({
   updateCompleteData,
   completeDataConfirmation,
   ocrImage,
+  uploadSecureImage
 });

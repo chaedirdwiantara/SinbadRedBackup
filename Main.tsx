@@ -11,6 +11,7 @@ import { BottomSheetModalProvider } from '@sinbad/react-native-sinbad-ui/src/uti
 import MoengageCore from '@core/report/moengage/MoengageCore';
 import ForceUpdate from '@core/components/ForceUpdate';
 import Maintenance from '@core/components/Maintenance';
+import BannedAccount from '@core/components/BannedAccount';
 
 const Main = () => {
   return (
@@ -23,6 +24,7 @@ const Main = () => {
             <MainNavigator />
             <ForceUpdate />
             <Maintenance />
+            <BannedAccount />
             <Toast />
             <MoengageCore />
           </PersistGate>

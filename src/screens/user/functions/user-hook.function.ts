@@ -86,6 +86,18 @@ const useChangePassword = () => {
     },
   };
 };
+/** => update badge profile */
+const useUpdateBadgeProfile = () => {
+  const dispatch = useDispatch();
+  return {
+    updateBadgeProfile: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.updateBadgeProfileProcess(contextDispatch));
+    },
+    resetUpdateBadgeProfile: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.updateBadgeProfileReset());
+    },
+  };
+};
 /** === EXPORT === */
 export const UserHookFunc = {
   useUserData,
@@ -95,6 +107,7 @@ export const UserHookFunc = {
   useConfirmNewPassword,
   useStoreDetailAction,
   useChangePassword,
+  useUpdateBadgeProfile,
 };
 /**
  * ================================================================

@@ -4,9 +4,10 @@ import { View, Image, BackHandler } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav2,
-  SnbButton2,
   SnbToast,
   spacingV2 as layout,
+  SnbBottomSheet2Ref,
+  FooterButton,
 } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
@@ -24,11 +25,10 @@ import {
 } from '@screen/account/functions/screens_name';
 
 interface Props {
-  openModalBack: boolean;
-  onCloseModalBack: (value: boolean) => void;
+  ref: any
 }
 
-const Content: React.FC<Props> = (props) => {
+const Content: React.FC<Props> = React.forwardRef((_, ref) => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { stateGlobal, dispatchGlobal } = React.useContext(
     contexts.GlobalContext,
@@ -90,23 +90,22 @@ const Content: React.FC<Props> = (props) => {
   const renderUploadPhotoRules = () => {
     return (
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>
-          <UploadPhotoRules
-            rulesTitle="Pastikan Foto Toko Anda Sesuai Ketentuan"
-            imgSrc={require('@image/store_image.png')}
-            buttonLabel="Ambil Foto"
-            rules={[
-              'Pastikan foto toko terlihat dengan jelas',
-              'Foto Tidak silau dan tidak buram',
-              'Pastikan foto fokus keseluruhan toko',
-            ]}
-            action={() => openCamera('store')}
-            type="vertical"
-            resizeMode="stretch"
-            blurRadius={2}
-            listType="number"
-          />
-        </View>
+        <UploadPhotoRules
+          rulesTitle="Pastikan Foto Toko Anda Sesuai Ketentuan"
+          imgSrc={require('@image/store_image.png')}
+          buttonLabel="Ambil Foto"
+          rules={[
+            'Pastikan foto toko terlihat dengan jelas',
+            'Foto Tidak silau dan tidak buram',
+            'Pastikan foto fokus keseluruhan toko',
+          ]}
+          action={() => openCamera('store')}
+          type="vertical"
+          resizeMode="stretch"
+          blurRadius={2}
+          listType="number"
+          testID={'12.1'}
+        />
       </View>
     );
   };
@@ -125,41 +124,27 @@ const Content: React.FC<Props> = (props) => {
             margin: layout.spacing.lg,
           }}
         />
-        <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
-          <View style={{ flex: 1 }}>
-            <SnbButton2.Primary
-              title={capturedImage?.data?.url ? 'Ulangi' : 'Ubah Foto'}
-              onPress={() => openCamera('store')}
-              disabled={stateGlobal.uploadImage.loading}
-              size="medium"
-              full
-              outline
-            />
-          </View>
-          <View style={{ marginHorizontal: layout.spacing.sm }} />
-          <View style={{ flex: 1 }}>
-            <SnbButton2.Primary
-              title={'Lanjutkan'}
-              onPress={() => {
-                if (capturedImage?.data?.url) {
-                  upload(dispatchGlobal, capturedImage.data.url);
-                } else {
-                  const { latitude, longitude } =
-                    completeDataState.data?.buyerData || {};
-                  if (latitude !== null && longitude !== null) {
-                    navigate(DATA_TOKO_STEP_3_VIEW);
-                  } else {
-                    navigate(MAPS_VIEW_TYPE_2);
-                  }
-                }
-              }}
-              disabled={stateGlobal.uploadImage.loading}
-              loading={stateGlobal.uploadImage.loading}
-              size="medium"
-              full
-            />
-          </View>
-        </View>
+        <FooterButton.Dual
+          title2={capturedImage?.data?.url ? 'Ulangi' : 'Ubah Foto'}
+          button2Press={() => openCamera('store')}
+          disabled={stateGlobal.uploadImage.loading}
+          title1={'Lanjutkan'}
+          button1Press={() => {
+            if (capturedImage?.data?.url) {
+              upload(dispatchGlobal, capturedImage.data.url);
+            } else {
+              const { latitude, longitude } =
+                completeDataState.data?.buyerData || {};
+              if (latitude !== null && longitude !== null) {
+                navigate(DATA_TOKO_STEP_3_VIEW);
+              } else {
+                navigate(MAPS_VIEW_TYPE_2);
+              }
+            }
+          }}
+          loadingButton={stateGlobal.uploadImage.loading}
+          testID={'12.3'}
+        />
       </View>
     );
   };
@@ -175,10 +160,7 @@ const Content: React.FC<Props> = (props) => {
         renderUploadPhotoRules(),
       )}
       <ModalBack
-        open={props.openModalBack}
-        closeModal={() => {
-          props.onCloseModalBack(false);
-        }}
+        ref={ref}
         confirm={() => {
           if (capturedImage?.data?.url) {
             upload(dispatchGlobal, capturedImage.data.url);
@@ -190,18 +172,18 @@ const Content: React.FC<Props> = (props) => {
       />
     </View>
   );
-};
+});
 
 const DataTokoStep2View: React.FC = () => {
-  const [openModalStep, setOpenModalStep] = React.useState(false);
-  const [openModalBack, setOpenModalBack] = React.useState(false);
+  const refModalListOfStep = React.useRef<SnbBottomSheet2Ref>()
+  const refModalBack = React.useRef<SnbBottomSheet2Ref>()
   const { completeDataState } = useEasyRegistration();
 
   const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
-        setOpenModalBack(true);
+        refModalBack.current?.open()
         return true;
       },
     );
@@ -213,23 +195,22 @@ const DataTokoStep2View: React.FC = () => {
   return (
     <SnbContainer color="white">
       <SnbTopNav2.Type3
-        backAction={() => setOpenModalBack(true)}
+        backAction={() => refModalBack.current?.open()}
         color="white"
         title="Foto Toko"
+        testID={'12'}
       />
       <Stepper
         complete={completeDataState?.data?.buyerProgress?.completed}
         total={completeDataState?.data?.buyerProgress?.total}
-        onPress={() => setOpenModalStep(true)}
+        onPress={() => refModalListOfStep.current?.open()}
+        testID={'12'}
       />
-      <Content
-        openModalBack={openModalBack}
-        onCloseModalBack={setOpenModalBack}
-      />
+      <Content ref={refModalBack} />
       <ListOfSteps
-        open={openModalStep}
+        ref={refModalListOfStep}
         type="buyer"
-        closeModal={() => setOpenModalStep(false)}
+        testID={'12.5'}
       />
     </SnbContainer>
   );

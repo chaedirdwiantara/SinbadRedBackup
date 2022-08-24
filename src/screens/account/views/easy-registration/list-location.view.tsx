@@ -9,6 +9,7 @@ import {
   spacingV2 as layout,
   borderV2,
   SnbIcon,
+  Option,
 } from '@sinbad/react-native-sinbad-ui';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { renderIF, useInput } from '@screen/auth/functions';
@@ -57,32 +58,34 @@ const Content: React.FC = () => {
     const locationName = `${city}, ${district}, ${urban}`;
 
     return (
-      <TouchableOpacity
-        onPress={() => setSelectedLocation(item)}
-        style={{
-          paddingVertical: layout.spacing.lg,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
-        <View style={{ flex: 1 }}>
-          <SnbText2.Body.Default>{locationName}</SnbText2.Body.Default>
-        </View>
-        <View style={{ marginHorizontal: layout.spacing.xxsm }} />
-        <SnbIcon
-          name={
-            selectedLocation?.id === item.id
-              ? 'radio_button'
-              : 'radio_button_outline'
-          }
-          size={22}
-          color={
-            selectedLocation?.id === item.id
-              ? colorV2.iconColor.red
-              : colorV2.iconColor.default
-          }
-        />
-      </TouchableOpacity>
+      <View>
+        <TouchableOpacity
+          onPress={() => setSelectedLocation(item)}
+          style={{
+            paddingVertical: layout.spacing.lg,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <View style={{ flex: 1 }}>
+            <SnbText2.Body.Default>{locationName}</SnbText2.Body.Default>
+          </View>
+          <View style={{ marginHorizontal: layout.spacing.xxsm }} />
+          <SnbIcon
+            name={
+              selectedLocation?.id === item.id
+                ? 'radio_button'
+                : 'radio_button_outline'
+            }
+            size={22}
+            color={
+              selectedLocation?.id === item.id
+                ? colorV2.iconColor.red
+                : colorV2.iconColor.default
+            }
+          />
+        </TouchableOpacity>
+      </View>
     );
   }
   return (
