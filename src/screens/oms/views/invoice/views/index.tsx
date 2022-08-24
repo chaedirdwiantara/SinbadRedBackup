@@ -109,8 +109,6 @@ const InvoiceView: FC<Props> = (props: any) => {
           setFilePath(file.filePath);
         })
         .catch((errors) => {
-          console.log(file.base64, 'BASE64');
-          console.log(errors, 'ERROR');
           setLoadingDownload(false);
           SnbToast.show('Terjadi Kesalahan', 3000, { positionValue: 50 });
         });
