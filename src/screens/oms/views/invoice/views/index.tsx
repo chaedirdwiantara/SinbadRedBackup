@@ -4,22 +4,22 @@ import {
   PermissionsAndroid,
   Platform,
   View,
-} from "react-native";
-import React, { useEffect, useState, FC } from "react";
+} from 'react-native';
+import React, { useEffect, useState, FC } from 'react';
 import {
   SnbContainer,
   SnbPdf,
   SnbToast,
   SnbTopNav2,
-} from "@sinbad/react-native-sinbad-ui";
-import { NavigationAction } from "@core/functions/navigation";
-import { useInvoice } from "../functions";
-import { useInvoiceContext } from "src/data/contexts/oms/invoice/useInvoiceContext";
-import RNHTMLtoPDF from "react-native-html-to-pdf";
-import { WebView } from "react-native-webview";
-import LoadingPage from "@core/components/LoadingPage";
-import { useCustomBackHardware } from "@core/functions/navigation/navigation-hook.function";
-import RNFetchBlob from "rn-fetch-blob";
+} from '@sinbad/react-native-sinbad-ui';
+import { NavigationAction } from '@core/functions/navigation';
+import { useInvoice } from '../functions';
+import { useInvoiceContext } from 'src/data/contexts/oms/invoice/useInvoiceContext';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import { WebView } from 'react-native-webview';
+import LoadingPage from '@core/components/LoadingPage';
+import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
+import RNFetchBlob from 'rn-fetch-blob';
 
 type Props = {};
 
@@ -44,21 +44,21 @@ const InvoiceView: FC<Props> = (props: any) => {
   }, []);
 
   // create html to pdf
-  const [filePath, setFilePath] = useState<string | any>("");
+  const [filePath, setFilePath] = useState<string | any>('');
   const [loadingDownload, setLoadingDownload] = useState(false);
   const isPermitted = async () => {
-    if (Platform.OS === "android") {
+    if (Platform.OS === 'android') {
       try {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
           {
-            title: "External Storage Write Permission",
-            message: "App needs access to Storage data",
-          }
+            title: 'External Storage Write Permission',
+            message: 'App needs access to Storage data',
+          },
         );
         return granted === PermissionsAndroid.RESULTS.GRANTED;
       } catch (err) {
-        SnbToast.show("Write permission err", 3000, { positionValue: 50 });
+        SnbToast.show('Write permission err', 3000, { positionValue: 50 });
         return false;
       }
     } else {
@@ -79,14 +79,14 @@ const InvoiceView: FC<Props> = (props: any) => {
         }`,
         //File Name
         fileName: `Invoice_${
-          data && type == "thankyoupage-Invoice"
+          data && type == 'thankyoupage-Invoice'
             ? `${data.orderId}`
-            : data && type == "orderhistory-Invoice"
+            : data && type == 'orderhistory-Invoice'
             ? `${data.orderId}_${data.orderSellerId}`
-            : ""
+            : ''
         }`,
         //File directory
-        directory: "docs",
+        directory: 'docs',
         base64: true,
       };
       let file = await RNHTMLtoPDF.convert(options);
@@ -94,28 +94,30 @@ const InvoiceView: FC<Props> = (props: any) => {
       let filePath2 =
         RNFetchBlob.fs.dirs.DownloadDir +
         `/Invoice_${
-          data && type == "thankyoupage-Invoice"
+          data && type == 'thankyoupage-Invoice'
             ? `${data.orderId}`
-            : data && type == "orderhistory-Invoice"
+            : data && type == 'orderhistory-Invoice'
             ? `${data.orderId}_${data.orderSellerId}`
-            : ""
+            : ''
         }.pdf`;
 
       RNFetchBlob.fs
-        .writeFile(filePath2, file.base64, "base64")
+        .writeFile(filePath2, file.base64, 'base64')
         .then((response) => {
           setLoadingDownload(false);
-          SnbToast.show("Pdf Downloaded", 3000, { positionValue: 50 });
+          SnbToast.show('Pdf Downloaded', 3000, { positionValue: 50 });
           setFilePath(file.filePath);
         })
         .catch((errors) => {
+          console.log(file.base64, 'BASE64');
+          console.log(errors, 'ERROR');
           setLoadingDownload(false);
-          SnbToast.show("Terjadi Kesalahan", 3000, { positionValue: 50 });
+          SnbToast.show('Terjadi Kesalahan', 3000, { positionValue: 50 });
         });
     }
   };
 
-  filePath !== ""
+  filePath !== ''
     ? RNFetchBlob.fs
         .unlink(filePath)
         .then(() => {
@@ -143,20 +145,19 @@ const InvoiceView: FC<Props> = (props: any) => {
         backAction={NavigationAction.back}
         iconAction={createPDF}
         testID={`topNav.${
-          type === "thankyoupage-Invoice"
-            ? "1.3"
-            : type === "orderhistory-Invoice"
-            ? "2.3"
-            : ""
+          type === 'thankyoupage-Invoice'
+            ? '1.3'
+            : type === 'orderhistory-Invoice'
+            ? '2.3'
+            : ''
         }`}
       />
       <ScrollView
         // refreshControl={<RefreshControl refreshing={loading} onRefresh={get} />}
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
-        <View style={{ height: "100%", width: "100%" }}>
+        contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={{ height: '100%', width: '100%' }}>
           <WebView
-            originWhitelist={["*"]}
+            originWhitelist={['*']}
             source={{
               html: `${
                 data
