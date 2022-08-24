@@ -54,7 +54,7 @@ const BannedACcountView: React.FC = () => {
           <Content.Illustration
             image={ImagesSinbad.forceRegister}
             title="Akun Terblokir"
-            testID='01'
+            testID='01.2'
             description="Maaf, akun Anda terdeteksi melakukan pelanggaran. Jika ada kendala, silahkan hubungi team CS kami"
             imageStyle={{ height: 240, width: 240, resizeMode: 'contain' }}
           />
@@ -65,7 +65,7 @@ const BannedACcountView: React.FC = () => {
             title=''
             iconName='chat'
             size='medium'
-            testID='01'
+            testID='01.2'
             onPress={() => {
               Linking.openURL("whatsapp://send?phone=+6282260106010")
                 .catch(err => {
@@ -81,7 +81,7 @@ const BannedACcountView: React.FC = () => {
               full
               title='Saya Mengerti'
               size='medium'
-              testID='01'
+              testID='01.2'
               onPress={() => {
                 if (me.data) {
                   logout({
