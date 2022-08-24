@@ -3,7 +3,8 @@ import { useTextFieldSelect } from '@screen/auth/functions';
 import React from 'react';
 import { View } from 'react-native';
 import {
-  SnbButton2,
+  FooterButton,
+  SnbBottomSheet2Ref,
   SnbContainer,
   SnbTopNav2,
   spacingV2 as layout,
@@ -22,10 +23,11 @@ const Content = () => {
   const [urban, setUrban] = React.useState<any>(null);
   const { goBack } = useNavigation();
   const [type, setType] = React.useState<models.ITypeList>('');
-  const [openModalSelection, setOpenModalSelection] =
-    React.useState<boolean>(false);
+  const refModalSelection = React.useRef<SnbBottomSheet2Ref>()
   const [params, setParams] = React.useState('');
   const { getLocation, locations, resetLocation } = useLocations();
+  const [modalSelectionTestId, setModalSelectionTestId] = React.useState('')
+
 
   React.useEffect(() => {
     if (type === 'listProvince' && province) {
@@ -47,21 +49,24 @@ const Content = () => {
       <View style={{ flex: 1 }}>
         <View style={{ padding: layout.spacing.lg }}>
           <TextFieldSelect
+            testID={'14.1'}
             labelText="Provinsi"
             placeholder="Pilih Provinsi"
             mandatory
             value={province?.province || ''}
             type="default"
             onPress={() => {
+              setModalSelectionTestId('14.2')
               setType('listProvince');
               getSelection({ type: 'listProvince' });
-              setOpenModalSelection(true);
+              refModalSelection.current?.open();
             }}
             rightType="icon"
             rightIcon="chevron_right"
           />
           <View style={{ marginVertical: layout.spacing.md }} />
           <TextFieldSelect
+            testID={'14.1'}
             labelText="Kota"
             placeholder="Pilih Kota"
             mandatory
@@ -69,6 +74,7 @@ const Content = () => {
             type="default"
             onPress={() => {
               if (province) {
+                setModalSelectionTestId('14.3')
                 const cityParams = `province=${province?.province || ''}`;
                 setType('listCity');
                 setParams(cityParams);
@@ -77,7 +83,7 @@ const Content = () => {
                   type: 'listCity',
                   params: cityParams,
                 });
-                setOpenModalSelection(true);
+                refModalSelection.current?.open();
               }
             }}
             rightType="icon"
@@ -85,6 +91,7 @@ const Content = () => {
           />
           <View style={{ marginVertical: layout.spacing.md }} />
           <TextFieldSelect
+            testID={'14.1'}
             labelText="Kecamatan"
             placeholder="Pilih Kecamatan"
             mandatory
@@ -92,9 +99,9 @@ const Content = () => {
             type="default"
             onPress={() => {
               if (city?.city) {
-                const districtParams = `province=${province?.province}&city=${
-                  city?.city || ''
-                }`;
+                setModalSelectionTestId('14.4')
+                const districtParams = `province=${province?.province}&city=${city?.city || ''
+                  }`;
                 setType('listDistrict');
                 setParams(districtParams);
                 district &&
@@ -103,7 +110,7 @@ const Content = () => {
                   type: 'listDistrict',
                   params: districtParams,
                 });
-                setOpenModalSelection(true);
+                refModalSelection.current?.open();
               }
             }}
             rightType="icon"
@@ -111,6 +118,7 @@ const Content = () => {
           />
           <View style={{ marginVertical: layout.spacing.md }} />
           <TextFieldSelect
+            testID={'14.1'}
             labelText="Desa/Kelurahan"
             placeholder="Pilih Desa/Kelurahan"
             value={urban?.urban || ''}
@@ -118,11 +126,10 @@ const Content = () => {
             type="default"
             onPress={() => {
               if (district?.district) {
-                const urbanParams = `province=${
-                  province?.province || ''
-                }&city=${city?.city || ''}&district=${
-                  district?.district || ''
-                }`;
+                setModalSelectionTestId('14.5')
+                const urbanParams = `province=${province?.province || ''
+                  }&city=${city?.city || ''}&district=${district?.district || ''
+                  }`;
                 setType('listUrban');
                 setParams(urbanParams);
                 getSelection({
@@ -130,7 +137,7 @@ const Content = () => {
                   params: urbanParams,
                 });
                 urban && onSelectedItem({ type: 'listUrban', item: urban });
-                setOpenModalSelection(true);
+                refModalSelection.current?.open();
               }
             }}
             rightType="icon"
@@ -138,36 +145,34 @@ const Content = () => {
           />
           <View style={{ marginVertical: layout.spacing.md }} />
           <TextFieldSelect
+            testID={'14.1'}
             labelText="Kode Pos"
             placeholder="Lihat Kode Pos"
             mandatory
             value={urban?.zipCode || ''}
             type="default"
-            onPress={() => {}}
+            onPress={() => { }}
             rightType="icon"
             rightIcon="chevron_right"
           />
         </View>
       </View>
-      <View style={{ padding: layout.spacing.lg }}>
-        <SnbButton2.Primary
-          title="Simpan Lokasi Manual"
-          loading={locations.loading}
-          onPress={() => {
-            getLocation({
-              params: `province=${province.province}&city=${city.city}&district=${district.district}&urban=${urban.urban}`,
-            });
-          }}
-          disabled={
-            !province || !city || !district || !urban || locations.loading
-          }
-          size="medium"
-          full
-        />
-      </View>
+      <FooterButton.Single
+        title="Simpan Lokasi Manual"
+        loadingButton={locations.loading}
+        buttonPress={() => {
+          getLocation({
+            params: `province=${province.province}&city=${city.city}&district=${district.district}&urban=${urban.urban}`,
+          });
+        }}
+        disabled={
+          !province || !city || !district || !urban || locations.loading
+        }
+      />
       <ModalSelection
+        testID={modalSelectionTestId}
         type={type}
-        open={openModalSelection}
+        ref={refModalSelection}
         params={params}
         onCloseModalSelection={(result) => {
           if (result) {
@@ -201,7 +206,7 @@ const Content = () => {
           }
           resetGetSelection();
           resetSelectedItem();
-          setOpenModalSelection(false);
+          refModalSelection.current?.close()
         }}
       />
     </View>

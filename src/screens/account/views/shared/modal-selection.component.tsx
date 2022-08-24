@@ -1,27 +1,27 @@
 import React from 'react';
 import {
   colorV2,
+  FooterButton,
   SnbBottomSheet2,
-  SnbBottomSheet2Ref,
   SnbBottomSheetPart,
-  SnbButton2,
   SnbIcon,
   SnbProgress,
   SnbText2,
   spacingV2 as layout,
 } from '@sinbad/react-native-sinbad-ui';
-import { Dimensions, FlatList, TouchableOpacity, View } from 'react-native';
+import { FlatList, LogBox, TouchableOpacity, View } from 'react-native';
 import * as models from '@models';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import { IRadioButton } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/RadioButtonTypes';
 import ErrorContent from './error-content.component';
-
-const { height } = Dimensions.get('screen');
+import { testProps } from '@core/functions/global/test-props';
+import { camelize } from '@core/functions/global/camelize';
 interface Props {
-  open: boolean;
+  ref: any;
   type: models.ITypeList;
   onCloseModalSelection: (result?: any) => void;
   params?: string;
+  testID?: string
 }
 
 function setTitle(type: models.ITypeList) {
@@ -111,21 +111,17 @@ function handleRadioButtonStatus(
   return { label, status };
 }
 
-const ModalSelection: React.FC<Props> = ({
+const ModalSelection: React.FC<Props> = React.forwardRef(({
   type,
-  open,
   onCloseModalSelection,
   params,
-}) => {
+  testID
+}, ref: any) => {
   const { listSelection, selectedItem, loadMoreSelection, getSelection } =
     useTextFieldSelect();
   const [tempSelectedItem, setTempSelectedItem] = React.useState<any>(null);
-  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
 
-  React.useEffect(() => {
-    open ? bottomSheetRef.current?.open() : bottomSheetRef.current?.close();
-  }, [open]);
-
+  LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.'])
   React.useEffect(() => {
     setTempSelectedItem(selectedItem);
   }, [selectedItem]);
@@ -146,7 +142,7 @@ const ModalSelection: React.FC<Props> = ({
 
   return (
     <SnbBottomSheet2
-      ref={bottomSheetRef}
+      ref={ref}
       type="m-l"
       snap={false}
       name={`modal-selection-${type}`}
@@ -167,18 +163,15 @@ const ModalSelection: React.FC<Props> = ({
         setTempSelectedItem(null);
       }}
       button={
-        <View style={{ padding: layout.spacing.lg }}>
-          <SnbButton2.Primary
-            title={setTitle(type)}
-            onPress={() => {
-              onCloseModalSelection(tempSelectedItem);
-              setTempSelectedItem(null);
-            }}
-            disabled={tempSelectedItem === null || listSelection.data === null}
-            full
-            size="medium"
-          />
-        </View>
+        <FooterButton.Single
+          testID={testID}
+          title={setTitle(type)}
+          buttonPress={() => {
+            onCloseModalSelection(tempSelectedItem);
+            setTempSelectedItem(null);
+          }}
+          disabled={tempSelectedItem === null || listSelection.data === null}
+        />
       }
       content={
         <View style={{ flex: 1 }}>
@@ -224,6 +217,7 @@ const ModalSelection: React.FC<Props> = ({
                 );
                 return (
                   <TouchableOpacity
+                    {...testProps(`btn-${camelize(label)}.${testID}`)}
                     onPress={() => setTempSelectedItem({ item, type })}
                     style={{
                       paddingVertical: layout.spacing.lg,
@@ -260,6 +254,6 @@ const ModalSelection: React.FC<Props> = ({
       }
     />
   );
-};
+});
 
 export default ModalSelection;

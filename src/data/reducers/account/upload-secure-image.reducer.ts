@@ -8,14 +8,18 @@ const INITIAL_STATE = {
   error: null,
 };
 
-export const register = simplifyReducer(INITIAL_STATE, {
-  [types.REGISTER_MERCHANT_PROCESS]() {
+export const uploadSecureImage = simplifyReducer(INITIAL_STATE, {
+  [types.UPLOAD_SECURE_IMAGE_RESET]() {
+    return INITIAL_STATE;
+  },
+
+  [types.UPLOAD_SECURE_IMAGE_PROCESS]() {
     return { ...INITIAL_STATE, loading: true };
   },
 
-  [types.REGISTER_MERCHANT_SUCCESS](
+  [types.UPLOAD_SECURE_IMAGE_SUCCESS](
     state = INITIAL_STATE,
-    action: models.IRegisterAction<models.IRegisterMerchantDetail>,
+    action: models.IAction<any>,
   ) {
     return {
       ...state,
@@ -24,18 +28,11 @@ export const register = simplifyReducer(INITIAL_STATE, {
     };
   },
 
-  [types.REGISTER_MERCHANT_FAILED](
-    state = INITIAL_STATE,
-    action: models.IRegisterAction<any>,
-  ) {
+  [types.UPLOAD_SECURE_IMAGE_FAILED](state = INITIAL_STATE, action: models.IAction<any>) {
     return {
       ...state,
       loading: false,
       error: action.payload,
     };
-  },
-
-  [types.REGISTER_MERCHANT_RESET]() {
-    return INITIAL_STATE;
   },
 });

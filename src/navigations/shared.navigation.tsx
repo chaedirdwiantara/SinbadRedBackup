@@ -1,8 +1,8 @@
+import { MapsViewType2 } from '@screen/account/views';
 import {
   CameraView,
   CameraWithOCRView,
   ListAndSearchView,
-  MapsView,
   OCRResultView,
 } from '@screen/shared/views';
 
@@ -16,8 +16,8 @@ const SharedNav = {
   ListAndSearchView: {
     component: ListAndSearchView,
   },
-  MapsView: {
-    component: MapsView,
+  MapsViewType2: {
+    component: MapsViewType2,
   },
   OCRResultView: {
     component: OCRResultView,

@@ -5,7 +5,7 @@ import SplashScreen from 'react-native-splash-screen';
 import { useDataAuth, useDataPermanent } from '@core/redux/Data';
 import { useAuthCoreAction, useAdsID } from '@core/functions/auth';
 import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
-import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
+import { setFlagByDeviceId, useCheckBannedAccount } from '@core/functions/firebase/flag-rtdb.function';
 import { NavigationAction } from '@navigation';
 import { useOTP } from '@screen/auth/functions';
 import { useIsFocused } from '@react-navigation/native';
@@ -17,8 +17,8 @@ import { useSetUpdateAvailable } from '../functions';
 /** === COMPONENT === */
 const IntroSplashView: React.FC = () => {
   const isFocused = useIsFocused();
-  const { meV2 } = useDataAuth();
-  const { maintenance } = useDataPermanent();
+  const { meV2, me } = useDataAuth();
+  const { maintenance, userBanned } = useDataPermanent();
   const { getLocationPermissions } = useOTP();
   const { setUpdateAvailable } = useSetUpdateAvailable();
   /** === HOOK === */
@@ -28,6 +28,8 @@ const IntroSplashView: React.FC = () => {
   useCheckMaintenance();
   /** => this for save update availabale */
   setUpdateAvailable();
+  /** => this for check account is banned/not */
+  useCheckBannedAccount();
   const authCoreAction = useAuthCoreAction();
   // this for google ads ID
   const useAdsIDAction = useAdsID();
@@ -44,7 +46,12 @@ const IntroSplashView: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    if (meV2.data && !meV2.loading) {
+    if ((me.data?.user.id === userBanned?.userId) && userBanned?.isBanned) {
+      setTimeout(() => {
+        NavigationAction.resetToBannedAccount()
+        SplashScreen.hide()
+      }, 100)
+    } else if (meV2.data && !meV2.loading) {
       if (meV2.data?.data?.isBuyerCategoryCompleted) {
         setTimeout(() => {
           if (isFocused) {
@@ -67,7 +74,7 @@ const IntroSplashView: React.FC = () => {
         SplashScreen.hide();
       }, 100);
     }
-  }, [meV2, maintenance]);
+  }, [meV2, maintenance, me]);
   /** === VIEW === */
   /** => main */
   return null;

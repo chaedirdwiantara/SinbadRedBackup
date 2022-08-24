@@ -3,20 +3,16 @@ import {
   colorV2,
   SnbButton2,
   SnbContainer,
-  SnbIcon,
   SnbProgress,
   SnbText2,
   SnbTopNav2,
   spacingV2 as layout,
   borderV2,
+  SpecialButton,
+  SnbInfoBox2,
+  FooterButton,
 } from '@sinbad/react-native-sinbad-ui';
-import {
-  BackHandler,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { BackHandler, FlatList, Image, View } from 'react-native';
 import {
   useFocusEffect,
   useNavigation,
@@ -68,7 +64,7 @@ const BuyerLocation: React.FC = () => {
       <View style={{ flex: 1 }}>
         <SnbText2.Paragraph.Tiny>Lokasi Toko</SnbText2.Paragraph.Tiny>
         <View style={{ marginVertical: layout.spacing.xxsm }} />
-        <SnbText2.Body.Small>
+        <SnbText2.Body.Small testID={'05'}>
           {location
             ? `${location.city}, ${location.district}, ${location.urban}`
             : 'Lokasi tidak ditemukan'}
@@ -81,6 +77,7 @@ const BuyerLocation: React.FC = () => {
         disabled={false}
         size="small"
         outline
+        testID={'05'}
       />
     </View>
   );
@@ -140,78 +137,55 @@ const BuyerCategory: React.FC = () => {
 
   function renderBuyerCategoryItem({ item }: any) {
     return (
-      <TouchableOpacity
-        onPress={() => {
-          setSelectedBuyerCategory(item);
-          navigate(PRODUCT_CATEGORY_VIEW, {
-            setSelectedProductCategory,
-            selectedProductCategory,
-          });
-        }}
-        style={{
-          borderRadius: borderV2.radius.md,
-          borderWidth: 1,
-          borderColor: colorV2.strokeColor.default,
-        }}>
-        <View
-          style={{
-            padding: layout.spacing.lg,
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Image
-            source={setIcon(item.slug)}
-            style={{ height: 40, width: 40, alignSelf: 'flex-start' }}
-            resizeMode="contain"
-          />
-          <View style={{ marginHorizontal: layout.spacing.sm }} />
-          <View style={{ flex: 1 }}>
-            <SnbText2.Headline.Default>{item.name}</SnbText2.Headline.Default>
-            <View style={{ marginTop: layout.spacing.xxsm }}>
-              {item.description.map((el: string, idx: number) => (
-                <View
-                  key={idx}
-                  style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <View
-                    style={{
-                      height: 4,
-                      width: 4,
-                      borderRadius: borderV2.radius.sm,
-                      backgroundColor: colorV2.textColor.secondary,
-                    }}
-                  />
-                  <View style={{ marginHorizontal: layout.spacing.xxsm }} />
-                  <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
-                    {el}
-                  </SnbText2.Paragraph.Small>
-                </View>
-              ))}
-            </View>
-          </View>
-          <SnbIcon
-            name="chevron_right"
-            color={colorV2.bgColor.dark}
-            size={20}
-          />
-        </View>
-        {selectedBuyerCategory?.slug === item?.slug &&
-          selectedProductCategory.length > 0 && (
+      <View>
+        <SpecialButton.Card
+          testID={'05'}
+          title={item.name}
+          subTitle={item.description.map((el: string, idx: number) => (
             <View
-              style={{
-                margin: layout.spacing.lg,
-                marginTop: 0,
-                paddingHorizontal: layout.spacing.lg,
-                backgroundColor: colorV2.special.blue10,
-                paddingVertical: layout.spacing.sm,
-                borderRadius: borderV2.radius.sm,
-              }}>
-              <SnbText2.Paragraph.Small color={colorV2.textColor.link}>
-                {selectedProductCategory.length} kategori produk terpilih
+              key={idx}
+              style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View
+                style={{
+                  height: 4,
+                  width: 4,
+                  borderRadius: borderV2.radius.sm,
+                  backgroundColor: colorV2.textColor.secondary,
+                }}
+              />
+              <View style={{ marginHorizontal: layout.spacing.xxsm }} />
+              <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
+                {el}
               </SnbText2.Paragraph.Small>
             </View>
-          )}
-      </TouchableOpacity>
+          ))}
+          iconComponent={
+            <Image
+              source={setIcon(item.slug)}
+              style={{ height: 40, width: 40, alignSelf: 'flex-start' }}
+              resizeMode="contain"
+            />
+          }
+          infoComponent={
+            selectedBuyerCategory?.slug === item?.slug &&
+            selectedProductCategory.length > 0 && (
+              <SnbInfoBox2
+                title={`${selectedProductCategory.length} kategori produk terpilih`}
+                color="blue"
+              />
+            )
+          }
+          onPress={() => {
+            setSelectedBuyerCategory(item);
+            navigate(PRODUCT_CATEGORY_VIEW, {
+              setSelectedProductCategory,
+              selectedProductCategory,
+            });
+          }}
+          action
+          actionType="action"
+        />
+      </View>
     );
   }
   return (
@@ -246,34 +220,25 @@ const BuyerCategory: React.FC = () => {
           )}
         />
       </View>
-      <View style={{ width: '100%', marginTop: layout.spacing.lg }}>
-        <View style={{ marginHorizontal: layout.spacing.lg }}>
-          <SnbButton2.Primary
-            onPress={() => handleOnCreateBasicAccount('mulai')}
-            title="Mulai Pakai Sinbad"
-            loading={createBasicAccountState.loading && actionFrom === 'mulai'}
-            disabled={
-              selectedBuyerCategory === null ||
-              selectedProductCategory.length === 0 ||
-              createBasicAccountState.loading
-            }
-            size={'medium'}
-            full
-          />
-        </View>
-      </View>
-      <View style={{ marginBottom: layout.spacing.lg, alignItems: 'center' }}>
-        <SnbButton2.Link
-          size="medium"
-          onPress={() => {
-            handleOnCreateBasicAccount('lengkapi');
-          }}
-          title="Lengkapi Akun Saya"
-          // loading={createBasicAccountState.loading && actionFrom === 'lengkapi'}
+      <View>
+        <FooterButton.Single
+          title="Mulai Pakai Sinbad"
+          textLink={'Lengkapi Akun Saya'}
+          buttonPress={() => handleOnCreateBasicAccount('mulai')}
+          textLinkPress={() => handleOnCreateBasicAccount('lengkapi')}
+          testID={'05'}
           disabled={
             selectedBuyerCategory === null ||
             selectedProductCategory.length === 0 ||
             createBasicAccountState.loading
+          }
+          disabledTextLink={
+            selectedBuyerCategory === null ||
+            selectedProductCategory.length === 0 ||
+            createBasicAccountState.loading
+          }
+          loadingButton={
+            createBasicAccountState.loading && actionFrom === 'mulai'
           }
         />
       </View>
@@ -307,7 +272,11 @@ const BuyerCategoryView: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav2.Type1 title="Pilih Kategori Toko" color="white" />
+      <SnbTopNav2.Type1
+        title="Pilih Kategori Toko"
+        color="white"
+        testID={'05'}
+      />
       <Content />
     </SnbContainer>
   );

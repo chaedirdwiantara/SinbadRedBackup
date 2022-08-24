@@ -1,18 +1,6 @@
 /** === IMPORT EXTERNAL FUNCTION === */
 import apiMapping from '@core/services/apiMapping';
-import * as models from '@models';
 /** === FUNCTION === */
-/** => supplier list */
-const supplierList = (data: models.ListProcessProps) => {
-  const path = `suppliers?limit=${data.limit}&skip=${data.skip}`;
-  return apiMapping<models.SupplierList[]>(
-    'auth',
-    path,
-    'account',
-    'v1',
-    'DETAIL',
-  );
-};
 /** => merchant edit */
 const editMerchant = (data: object) => {
   const path = 'stores/profile';
@@ -55,7 +43,6 @@ const verificationBankAccount = (data: object) => {
 };
 /** === EXPORT FUNCTIONS === */
 export const MerchantApi = {
-  supplierList,
   editMerchant,
   editProfile,
   changeEmail,

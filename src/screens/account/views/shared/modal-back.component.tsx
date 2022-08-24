@@ -1,31 +1,22 @@
 import React, { FC } from 'react';
 import {
   SnbBottomSheet2,
-  SnbButton2,
-  spacingV2 as layout,
-  SnbBottomSheet2Ref,
   Content,
   SnbBottomSheetPart,
+  spacingV2 as layout,
+  SnbButton2,
 } from '@sinbad/react-native-sinbad-ui';
 import { View } from 'react-native';
 import { useEasyRegistration } from '@screen/account/functions';
 
 interface ListOfStepsProps {
-  closeModal: () => void;
-  open: boolean;
+  ref: any;
   confirm: () => void;
 }
 
-const ModalBack: FC<ListOfStepsProps> = (props) => {
-  const { updateCompleteDataState } = useEasyRegistration();
+const ModalBack: FC<ListOfStepsProps> = React.forwardRef((props, ref: any) => {
+  const { updateCompleteDataState, uploadImageSecureState } = useEasyRegistration();
   const [contentHeight, setContentHeight] = React.useState(0);
-  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
-
-  React.useEffect(() => {
-    props.open
-      ? bottomSheetRef.current?.open()
-      : bottomSheetRef.current?.close();
-  }, [props.open]);
 
   const renderContent = () => {
     return (
@@ -43,13 +34,12 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
   return (
     <View>
       <SnbBottomSheet2
-        ref={bottomSheetRef}
+        ref={ref}
         content={renderContent()}
         title={<SnbBottomSheetPart.Title title="" />}
         name="modal-back-profile-completion"
         type="content"
         snap={false}
-        close={props.closeModal}
         contentHeight={contentHeight + 100}
         button={
           <View
@@ -60,13 +50,14 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
             <View style={{ flex: 1 }}>
               <SnbButton2.Primary
                 onPress={() => {
-                  props.closeModal();
+                  ref.current?.close()
                 }}
                 title="Batal"
                 disabled={false}
                 size="medium"
                 full
                 outline
+                testID={'06.3'}
               />
             </View>
             <View style={{ marginHorizontal: layout.spacing.sm }} />
@@ -76,10 +67,11 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
                   props.confirm();
                 }}
                 title="Ya, Keluar"
-                disabled={updateCompleteDataState.loading}
-                loading={updateCompleteDataState.loading}
+                disabled={updateCompleteDataState.loading || uploadImageSecureState.loading}
+                loading={updateCompleteDataState.loading || uploadImageSecureState.loading}
                 size="medium"
                 full
+                testID={'06.3'}
               />
             </View>
           </View>
@@ -87,6 +79,6 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
       />
     </View>
   );
-};
+});
 
 export default ModalBack;

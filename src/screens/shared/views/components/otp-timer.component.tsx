@@ -1,9 +1,10 @@
 import { useAuthCoreAction } from '@core/functions/auth';
 import { useDataAuth } from '@core/redux/Data';
 import { useCheckPhoneV2 } from '@screen/auth/functions';
-import { SnbButton2, SnbText2, SnbToast } from '@sinbad/react-native-sinbad-ui';
+import { SnbButton2, SnbText2, SnbToast, spacingV2 as layout } from '@sinbad/react-native-sinbad-ui';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+
 
 interface Props {
   action: () => void;
@@ -66,15 +67,17 @@ const OTPTimer: React.FC<Props> = (props) => {
             Tidak menerima kode?
           </SnbText2.Paragraph.Default>
         </View>
-        <SnbButton2.Link
-          title="Kirim Ulang"
-          size="small"
-          onPress={() => {
-            setResend(true);
-            props.action();
-          }}
-          disabled={false}
-        />
+        <View style={{marginLeft: layout.spacing.xxsm}}>
+          <SnbButton2.Link
+            title="Kirim Ulang"
+            size="small"
+            onPress={() => {
+              setResend(true);
+              props.action();
+            }}
+            disabled={false}
+          />
+        </View>
       </View>
     );
   };

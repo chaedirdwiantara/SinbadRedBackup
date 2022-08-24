@@ -28,3 +28,8 @@ export interface MaintenanceActions {
   type: string;
   payload: boolean;
 }
+/** === FOR BANNED ACCOUNT=== */
+export interface BannedAccountActions {
+  type: string;
+  payload: boolean;
+}
