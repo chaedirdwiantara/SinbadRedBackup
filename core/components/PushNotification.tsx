@@ -69,7 +69,7 @@ const PushNotification = () => {
         if (remoteMessage !== null) {
           setTimeout(() => {
             deepLink(remoteMessage?.data);
-          }, 2000);
+          }, 4000);
         }
       });
 
