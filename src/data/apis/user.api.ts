@@ -18,8 +18,14 @@ const changePassword = (data: object) => {
   const path = 'change-password';
   return apiMapping('auth', path, 'auth', 'v1', 'UPDATE', data);
 };
+/** => update badge profile */
+const updateBadgeProfile = () => {
+  const path = 'vip-status';
+  return apiMapping('auth', path, 'account', 'v1', 'UPDATE');
+};
 /** === EXPORT FUNCTIONS === */
 export const UserApi = {
   storeDetail,
   changePassword,
+  updateBadgeProfile,
 };

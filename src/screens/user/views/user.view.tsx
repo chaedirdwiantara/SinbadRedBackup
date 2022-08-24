@@ -10,6 +10,8 @@ import {
   SnbButton2,
   spacingV2 as layout,
   Content,
+  SnbBottomSheet2Ref,
+  SpecialButton,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 /** === IMPORT STYLE HERE === */
@@ -40,12 +42,84 @@ const UserView: FC = ({ start }: any) => {
   /** === HOOK === */
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
-  const [showConfirmation, setShowConfirmation] = React.useState(false);
+  const refModalLogout = React.useRef<SnbBottomSheet2Ref>(null);
   const { coachmarkState } = useCoachmark();
   const { width } = Dimensions.get('window');
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [loadingCarousel, setLoadingCarousel] = useState(true);
   const [clickFromCart, setClickFromCart] = useState(false);
+  const { updateBadgeProfile, resetUpdateBadgeProfile } =
+    UserHookFunc.useUpdateBadgeProfile();
+
+  const dataHeader = [
+    {
+      id: 1,
+      title: 'Upgrade VIP Diproses',
+      subTitle: 'Tim kami sedang memproses upgrade akun Anda.',
+      icon: 'shield',
+      type: 'upgradeVipProcess',
+      status: stateUser?.updateBadgeProfile?.data
+        ? true
+        : stateUser?.detail?.data?.vipStatus === 'to_review'
+        ? false
+        : true,
+    },
+    {
+      id: 2,
+      title: 'Upgrade Akun Berhasil',
+      subTitle: 'Akun Anda telah berhasil menjadi akun VIP.',
+      icon: 'shield_blue',
+      type: 'upgradeVipSuccess',
+      status: stateUser?.updateBadgeProfile?.data
+        ? true
+        : stateUser?.detail?.data?.vipStatus === 'vip'
+        ? false
+        : true,
+    },
+    {
+      id: 3,
+      title: 'Upgrade Akun Gagal',
+      subTitle: 'Silakan cek kembali kelengkapan profil anda.',
+      icon: 'error',
+      type: 'upgradeVipFailed',
+      status: stateUser?.updateBadgeProfile?.data
+        ? true
+        : stateUser?.detail?.data?.vipStatus === 'reject'
+        ? false
+        : true,
+    },
+    {
+      id: 4,
+      title: 'Foto KTP',
+      subTitle: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+      icon: 'ktp',
+      type: 'ktp',
+      status: stateUser.detail.data?.ownerData?.info?.isImageIdOcrValidate,
+    },
+    {
+      id: 5,
+      title: 'Tambah Nama Toko',
+      subTitle: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+      icon: 'store',
+      type: 'merchantAccountName',
+      status:
+        stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
+          ?.name !== null
+          ? true
+          : false,
+    },
+    {
+      id: 6,
+      title: 'Alamat Toko',
+      subTitle: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+      icon: 'location',
+      type: 'storeAddress',
+      status:
+        stateUser.detail.data?.buyerData?.buyerAddress?.address !== null
+          ? true
+          : false,
+    },
+  ];
 
   // usage for show modal
   const [modalUserProfileCompletion, setModalUserProfileCompletion] =
@@ -74,6 +148,7 @@ const UserView: FC = ({ start }: any) => {
   useFocusEffect(
     React.useCallback(() => {
       storeDetailAction.detail(dispatchUser);
+      resetUpdateBadgeProfile(dispatchUser);
     }, []),
   );
 
@@ -109,6 +184,10 @@ const UserView: FC = ({ start }: any) => {
       case 'storeAddress':
         handleAddressNavigation();
         break;
+      case 'npwp':
+      case 'selfie':
+        NavigationAction.navigate('MerchantEditPhotoView', { title, type });
+        break;
       default:
         break;
     }
@@ -117,9 +196,9 @@ const UserView: FC = ({ start }: any) => {
   /** => header */
   const header = () => {
     if (stateUser.detail.data) {
-      return <SnbTopNav2.Type1 color="white" title="Profil" />;
+      return <SnbTopNav2.Type1 color="white" title="Profil" testID={'01.1'} />;
     }
-    return <SnbTopNav2.Type1 color="red" title="Profil" />;
+    return <SnbTopNav2.Type1 color="red" title="Profil" testID={'01.1'} />;
   };
 
   const handleAddressNavigation = () => {
@@ -133,42 +212,6 @@ const UserView: FC = ({ start }: any) => {
 
   /** === RENDER SLIDER PAGINATION DOT === */
   const pagination = () => {
-    const dataHeader = [
-      {
-        id: 1,
-        title: 'Foto KTP',
-        subTitle: 'Upload Foto KTP',
-        icon: 'ktp',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'ktp',
-        status: stateUser.detail.data?.ownerData?.info?.isImageIdOcrValidate,
-      },
-      {
-        id: 2,
-        title: 'Tambah Nama Toko',
-        subTitle: 'Isi Nama Toko',
-        icon: 'store',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'merchantAccountName',
-        status:
-          stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
-            ?.name !== null
-            ? true
-            : false,
-      },
-      {
-        id: 3,
-        title: 'Alamat Toko',
-        subTitle: 'Isi Alamat Toko',
-        icon: 'location',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'storeAddress',
-        status:
-          stateUser.detail.data?.buyerData?.buyerAddress?.address !== null
-            ? true
-            : false,
-      },
-    ];
     const dataCarousel = dataHeader.filter((item) => item.status === false);
     return (
       <View>
@@ -202,31 +245,40 @@ const UserView: FC = ({ start }: any) => {
   const renderItem = (item: any, index: any) => {
     return (
       <View key={index}>
-        <View>
-          <View style={[UserStyles.shadowStyle, UserStyles.carouselContainer]}>
-            <View style={UserStyles.cardBody}>
-              <View>
-                <Svg name={item.icon} size={40} />
-              </View>
-              <View style={{ flex: 1, marginHorizontal: layout.spacing.lg }}>
-                <SnbText2.Body.Default>{item.subTitle}</SnbText2.Body.Default>
-                <SnbText2.Paragraph.Small>
-                  {item.message}
-                </SnbText2.Paragraph.Small>
-              </View>
-              <SnbButton2.Primary
-                size="tiny"
-                onPress={() => {
-                  goTo({
-                    type: item.type,
-                    title: item.title,
-                  });
-                }}
-                title="Lengkapi"
-              />
-            </View>
-          </View>
-        </View>
+        <SpecialButton.Card
+          title={item.title}
+          subTitle={item.subTitle}
+          height={88}
+          action={item.type === 'upgradeVipFailed' ? false : true}
+          actionType="button"
+          actionTitle={
+            item.type === 'upgradeVipProcess' ||
+            item.type === 'upgradeVipSuccess'
+              ? 'Mengerti'
+              : 'Lengkapi'
+          }
+          iconComponent={<Svg name={item.icon} size={40} />}
+          onPress={() => {
+            if (
+              item.type === 'upgradeVipProcess' ||
+              item.type === 'upgradeVipSuccess'
+            ) {
+              updateBadgeProfile(dispatchUser);
+            } else {
+              goTo({
+                type: item.type,
+                title: item.title,
+              });
+            }
+          }}
+          loading={
+            item.type === 'upgradeVipProcess' ||
+            item.type === 'upgradeVipSuccess'
+              ? stateUser?.updateBadgeProfile.loading
+              : false
+          }
+          testID={'01.1'}
+        />
       </View>
     );
   };
@@ -238,42 +290,6 @@ const UserView: FC = ({ start }: any) => {
     const source = data?.imageUrl
       ? { uri: data?.imageUrl }
       : require('../../../assets/images/sinbad_image/avatar.png');
-    const dataHeader = [
-      {
-        id: 1,
-        title: 'Foto KTP',
-        subTitle: 'Upload Foto KTP',
-        icon: 'ktp',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'ktp',
-        status: stateUser.detail.data?.ownerData?.info?.isImageIdOcrValidate,
-      },
-      {
-        id: 2,
-        title: 'Tambah Nama Toko',
-        subTitle: 'Isi Nama Toko',
-        icon: 'store',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'merchantAccountName',
-        status:
-          stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
-            ?.name !== null
-            ? true
-            : false,
-      },
-      {
-        id: 3,
-        title: 'Alamat Toko',
-        subTitle: 'Isi Alamat Toko',
-        icon: 'location',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'storeAddress',
-        status:
-          stateUser.detail.data?.buyerData?.buyerAddress?.address !== null
-            ? true
-            : false,
-      },
-    ];
     const dataCarousel = dataHeader.filter((item) => item.status === false);
     return (
       <View style={UserStyles.headerInformationContainer}>
@@ -298,7 +314,7 @@ const UserView: FC = ({ start }: any) => {
             </View>
             <View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <SnbText2.Body.Small numberOfLines={1}>
+                <SnbText2.Body.Small numberOfLines={1} testID={'01.1'}>
                   {data?.name ||
                     buyerData?.buyerInformation?.buyerAccount?.code}
                 </SnbText2.Body.Small>
@@ -314,7 +330,7 @@ const UserView: FC = ({ start }: any) => {
                   />
                 </View>
               </View>
-              <SnbText2.Paragraph.Tiny>
+              <SnbText2.Paragraph.Tiny testID={'01.1'}>
                 {ownerData?.accountType === 'basic' ? 'Akun Basic' : 'Akun VIP'}
               </SnbText2.Paragraph.Tiny>
             </View>
@@ -369,7 +385,10 @@ const UserView: FC = ({ start }: any) => {
             <View style={{ marginVertical: layout.spacing.lg }}>
               <View style={UserStyles.bodyTitleContainer}>
                 <SnbText2.Body.Small>Data Pemilik</SnbText2.Body.Small>
-                <SnbText2.Paragraph.Small>{`${data?.ownerProgress.done}/${data?.ownerProgress.total} Selesai`}</SnbText2.Paragraph.Small>
+                <SnbText2.Paragraph.Small
+                  testID={
+                    '01.1'
+                  }>{`${data?.ownerProgress.done}/${data?.ownerProgress.total} Selesai`}</SnbText2.Paragraph.Small>
               </View>
               <View
                 style={{
@@ -405,6 +424,42 @@ const UserView: FC = ({ start }: any) => {
                     actionText="Lengkapi"
                     onActionPress={() =>
                       goTo({ type: 'ktp', title: 'Foto KTP' })
+                    }
+                    background
+                  />
+                )}
+                {!ownerData?.info.isTaxNo && (
+                  <Content.MenuList
+                    title="Upload Foto NPWP"
+                    iconComponent={
+                      <SnbIcon
+                        name="ktp"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={() =>
+                      goTo({ type: 'npwp', title: 'Foto NPWP' })
+                    }
+                    background
+                  />
+                )}
+                {!ownerData?.info.isSelfieImageUrl && (
+                  <Content.MenuList
+                    title="Upload Foto Selfie + KTP"
+                    iconComponent={
+                      <SnbIcon
+                        name="ktp"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={() =>
+                      goTo({ type: 'selfie', title: 'Foto Selfie + KTP' })
                     }
                     background
                   />
@@ -515,7 +570,7 @@ const UserView: FC = ({ start }: any) => {
                 size={24}
               />
             }
-            onActionPress={() => setShowConfirmation(true)}
+            onActionPress={refModalLogout.current?.open}
           />
         </View>
       </View>
@@ -538,7 +593,7 @@ const UserView: FC = ({ start }: any) => {
             color="white"
             title="Profil"
             iconName={'exit_to_app'}
-            iconAction={() => setShowConfirmation(true)}
+            iconAction={() => refModalLogout.current?.open()}
           />
           <View
             style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -599,7 +654,7 @@ const UserView: FC = ({ start }: any) => {
   return (
     <View style={{ flex: 1 }}>
       <SnbContainer color={'grey'}>{content()}</SnbContainer>
-      <ModalLogout open={showConfirmation} setOpen={setShowConfirmation} />
+      <ModalLogout ref={refModalLogout} />
     </View>
   );
 };

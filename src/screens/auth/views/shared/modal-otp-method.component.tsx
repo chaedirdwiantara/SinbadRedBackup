@@ -16,6 +16,8 @@ import { useOTP } from '@screen/auth/functions';
 import { useDataAuth } from '@core/redux/Data';
 import { LOGIN_OTP_VIEW, REGISTER_OTP_VIEW } from '@screen/auth/functions/screens_name';
 import { useAuthCoreAction } from '@core/functions/auth';
+import { testProps } from '@core/functions/global/test-props';
+import { camelize } from '@core/functions/global/camelize';
 
 interface Props {
   ref: any,
@@ -26,14 +28,16 @@ interface Props {
 
 interface RadioButtonProps {
   label: string;
-  onPress: () => void,
-  selected: boolean,
-  icon?: React.ReactNode
+  onPress: () => void;
+  selected: boolean;
+  icon?: React.ReactNode;
+  testID?: string;
 }
 
-const RadioButton: React.FC<RadioButtonProps> = ({ label, onPress, selected, icon }) => {
+const RadioButton: React.FC<RadioButtonProps> = ({ label, onPress, selected, icon, testID }) => {
   return (
     <TouchableOpacity
+      {...testProps(`btn-${camelize(label)}.${testID}`)}
       onPress={onPress}
       style={{
         paddingVertical: layout.spacing.lg,
@@ -117,12 +121,14 @@ const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone, action, onRes
           </SnbText2.Paragraph.Default>
         </View>
         <RadioButton
+          testID={'03'}
           label='SMS'
           onPress={() => setOtpMethod('sms')}
           selected={otpMethod === 'sms'}
           icon={<SnbIcon name="chat" size={24} color={colorV2.iconColor.default} />} />
         <SnbDivider2 />
         <RadioButton
+          testID={'03'}
           label='Whatsapp'
           onPress={() => setOtpMethod('wa')}
           selected={otpMethod === 'wa'}
@@ -162,6 +168,7 @@ const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone, action, onRes
             full
             loading={requestOTPState.loading}
             disabled={otpMethod === '' || requestOTPState.loading}
+            testID={'03'}
           />
         </View>
       }

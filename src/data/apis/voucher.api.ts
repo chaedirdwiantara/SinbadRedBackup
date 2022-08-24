@@ -1,43 +1,82 @@
 /** === IMPORT EXTERNAL FUNCTION === */
-import apiMapping from '@core/services/apiMapping';
+import apiMapping from '@core/services/apiMappingV3';
 import * as models from '@models';
 /** === FUNCTION === */
 /** => voucher detail */
 const voucherDetail = (data: models.VoucherDetailProcessProps) => {
-  const path = `voucher-cart-list/detail/${data.id}?type=${data.type}`;
-  return apiMapping<models.VoucherDetailProps>(
+  const path = `sinbad-vouchers/${data.id}`;
+  return apiMapping<models.VoucherCartDetailProps>(
     'auth',
     path,
-    'discount',
+    'voucher',
     'v1',
     'DETAIL',
   );
 };
 /** => voucher cart list */
-const voucherCartList = () => {
-  const path = 'voucher-cart-list';
+const voucherCartList = ({
+  totalOrder,
+  ...other
+}: models.VoucherListProcessProps) => {
+  const path = other?.uniqueCode
+    ? `sinbad-vouchers?totalOrder=${totalOrder}&uniqueCode=${other?.uniqueCode}`
+    : `sinbad-vouchers?totalOrder=${totalOrder}`;
   return apiMapping<models.VoucherCartListProps>(
     'auth',
     path,
-    'discount',
+    'voucher',
     'v1',
-    'DETAIL',
+    'LIST',
   );
 };
-/** => count all voucher */
-const countAllVoucher = () => {
-  const path = 'voucher-cart-list/count';
-  return apiMapping<models.CountAllVoucherProps>(
+/** => check sinbad voucher */
+const checkSinbadVoucher = ({
+  data,
+}: models.CreateProcessProps<models.CheckSinbadVoucherPayload>) => {
+  const path = 'sinbad-vouchers/check-sinbad-voucher';
+  return apiMapping<models.CheckSinbadVoucherResponse>(
     'auth',
     path,
-    'discount',
+    'voucher',
     'v1',
-    'DETAIL',
+    'CREATE',
+    data,
   );
 };
+/** => cancel reserve voucher */
+const cancelVoucher = () => {
+  const path = 'sinbad-vouchers/cancel-reserve-voucher';
+  return apiMapping<models.DeleteItemV3Props>(
+    'auth',
+    path,
+    'voucher',
+    'v1',
+    'DELETE',
+  );
+};
+
+/** => update voucher visibility */
+const updateVisibilityVoucher = ({
+  id,
+}: models.VoucherUpdateVisibilityProps) => {
+  const path = `sinbad-vouchers/sinbad-voucher-visibility/${id}`;
+  return apiMapping<models.UpdateItemV2Props>(
+    'auth',
+    path,
+    'voucher',
+    'v1',
+    'UPDATE',
+    {
+      isVisible: true,
+    },
+  );
+};
+
 /** === EXPORT FUNCTIONS === */
 export const VoucherApi = {
   voucherCartList,
   voucherDetail,
-  countAllVoucher,
+  checkSinbadVoucher,
+  cancelVoucher,
+  updateVisibilityVoucher,
 };

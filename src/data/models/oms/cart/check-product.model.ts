@@ -23,4 +23,5 @@ export interface CheckProductResponse
   status: string;
   brandId: string;
   brandName: string;
+  categoryName: string;
 }

@@ -1,27 +1,40 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
-import { View } from 'react-native';
-import { SnbText, SnbDivider, color } from 'react-native-sinbad-ui';
-import SnbTextSeeMore from '@core/components/TextSeeMore';
+import { Dimensions, View } from 'react-native';
+import {
+  SnbDashedLine,
+  SnbHtml2,
+  SnbText2,
+  styles,
+} from 'react-native-sinbad-ui';
 import { VoucherDetailStyles } from '../../styles';
 /** === INTERFACE === */
 interface VoucherDetailDescriptionProps {
-  voucherDescription: string;
+  name: string;
+  description: string;
 }
 /** === COMPONENT ===  */
 export const VoucherDetailDescription: FC<VoucherDetailDescriptionProps> = ({
-  voucherDescription,
+  name,
+  description,
 }) => {
+  const contentWidth = Dimensions.get('window').width;
+
   return (
-    <View style={VoucherDetailStyles.sectionContainer}>
-      <SnbTextSeeMore
-        maxLine={3}
-        toggleColor={color.red50}
-        toggleShowMore={'Lihat Semua'}
-        toggleShowLess={'Lihat Lebih Sedikit'}
-        content={<SnbText.B1>{voucherDescription}</SnbText.B1>}
+    <View
+      style={{
+        ...VoucherDetailStyles.sectionContainer,
+        ...{ marginBottom: 8 },
+        ...styles.shadowForBox5,
+      }}>
+      <SnbText2.Headline.Default>{name}</SnbText2.Headline.Default>
+      <SnbDashedLine
+        dashGap={5}
+        dashLength={8}
+        style={{ marginVertical: 10 }}
       />
-      <SnbDivider style={{ marginTop: 20 }} />
+      <SnbHtml2 contentWidth={contentWidth} value={description} />
+      <SnbDashedLine dashGap={5} dashLength={8} />
     </View>
   );
 };
