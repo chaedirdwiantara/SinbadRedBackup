@@ -1,16 +1,11 @@
-import {
-  setErrorMessage,
-  useInputPhone,
-} from '@screen/auth/functions';
+import { setErrorMessage, useInputPhone } from '@screen/auth/functions';
 import { SELF_REGISTRATION_VIEW } from '@screen/auth/functions/screens_name';
-import { loginPhoneStyles } from '@screen/auth/styles';
 import React from 'react';
 import { View, ScrollView, Image, Keyboard } from 'react-native';
 import {
+  FooterButton,
   SnbBottomSheet2Ref,
-  SnbButton2,
   SnbContainer,
-  SnbText2,
   SnbTextField2,
   SnbTopNav2,
   spacingV2 as layout,
@@ -20,10 +15,12 @@ import { ModalOTPMethod, ModalSalesman } from '../shared';
 import { useAuthCoreAction } from '@core/functions/auth';
 import { useDataAuth, useDataPermanent } from '@core/redux/Data';
 import { ForceRegistrationModal } from '../shared/index';
+import { NavigationAction } from '@core/functions/navigation';
 
 const Content: React.FC = () => {
-  const { checkPhoneLogin, resetCheckLoginPhone, resetRequestOTP } = useAuthCoreAction();
-  const { checkPhoneLogin: checkPhoneLoginState } = useDataAuth()
+  const { checkPhoneLogin, resetCheckLoginPhone, resetRequestOTP } =
+    useAuthCoreAction();
+  const { checkPhoneLogin: checkPhoneLoginState } = useDataAuth();
   const phone = useInputPhone();
   const { navigate } = useNavigation();
   const refModalOTP = React.useRef<SnbBottomSheet2Ref>(null);
@@ -33,9 +30,9 @@ const Content: React.FC = () => {
 
   React.useEffect(() => {
     return () => {
-      resetCheckLoginPhone()
-      resetRequestOTP()
-      phone.clearText()
+      resetCheckLoginPhone();
+      resetRequestOTP();
+      phone.clearText();
     };
   }, []);
 
@@ -54,7 +51,11 @@ const Content: React.FC = () => {
       }
     }
     if (checkPhoneLoginState.error !== null) {
-      phone.setMessageError(setErrorMessage(checkPhoneLoginState.error.code));
+      if (checkPhoneLoginState.error.code === 40010000084) {
+        NavigationAction.resetToBannedAccount()
+      } else {
+        phone.setMessageError(setErrorMessage(checkPhoneLoginState.error.code));
+      }
     }
   }, [checkPhoneLoginState]);
 
@@ -74,58 +75,46 @@ const Content: React.FC = () => {
           {...phone}
           labelText="Nomor Handphone"
           keyboardType="phone-pad"
+          testID={'01'}
         />
       </View>
-      <View style={{ marginTop: layout.spacing.lg }} />
-      <View style={{ paddingHorizontal: layout.spacing.lg }}>
-        <SnbButton2.Primary
-          title="Selanjutnya"
-          onPress={() => {
-            Keyboard.dismiss()
-            resetCheckLoginPhone();
-            checkPhoneLogin({
-              mobilePhone: phone.value,
-              identifierDeviceId:
-                advertisingId === undefined ? null : advertisingId,
-            });
-          }}
-          loading={checkPhoneLoginState.loading}
-          disabled={
-            phone.value === '' ||
-            phone.valMsgError !== '' ||
-            checkPhoneLoginState.loading
-          }
-          size="medium"
-          full
-        />
-      </View>
-      <View style={loginPhoneStyles.registerLink}>
-        <SnbText2.Paragraph.Default>
-          Belum punya akun Sinbad?
-        </SnbText2.Paragraph.Default>
-        <View style={{ marginLeft: -layout.spacing.sm }}>
-          <SnbButton2.Link
-            title="Daftar"
-            size="medium"
-            onPress={() => {
-              phone.clearText();
-              navigate(SELF_REGISTRATION_VIEW);
-            }}
-          />
-        </View>
-      </View>
+      <FooterButton.Single
+        testID={'01'}
+        title="Selanjutnya"
+        buttonPress={() => {
+          Keyboard.dismiss();
+          resetCheckLoginPhone();
+          checkPhoneLogin({
+            mobilePhone: phone.value,
+            identifierDeviceId:
+              advertisingId === undefined ? null : advertisingId,
+          });
+        }}
+        textLink={'Daftar'}
+        description={'Belum punya akun Sinbad?'}
+        textLinkPress={() => {
+          phone.clearText();
+          navigate(SELF_REGISTRATION_VIEW);
+        }}
+        disabled={
+          phone.value === '' ||
+          phone.valMsgError !== '' ||
+          checkPhoneLoginState.loading
+        }
+        loadingButton={checkPhoneLoginState.loading}
+      />
       <ModalOTPMethod 
         ref={refModalOTP} 
         phone={phone.value} 
-        action="login" 
+        action="login"
         onResetField={phone.clearText}
-      />
+       />
       <ModalSalesman ref={refModalSalesman} />
       <View style={{ flex: 1 }}>
         <ForceRegistrationModal
           ref={refModalForceRegist}
           confirm={() => {
-            phone.clearText()
+            phone.clearText();
             navigate(SELF_REGISTRATION_VIEW);
             refModalForceRegist.current?.close();
           }}
@@ -144,6 +133,7 @@ const LoginPhoneView = () => {
         backAction={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
         color="white"
         title="Masuk"
+        testID={'01'}
       />
       <Content />
     </SnbContainer>

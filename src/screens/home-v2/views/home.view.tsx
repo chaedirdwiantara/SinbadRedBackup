@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useCallback } from 'react';
 import {
   View,
   ScrollView,
@@ -28,6 +28,8 @@ import { renderIF } from '@screen/auth/functions';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { NavigationAction } from '@navigation';
 import BottomSheetUpdate from '@core/components/BottomSheetUpdate';
+import { useFocusEffect } from '@react-navigation/native';
+import { useAuthCoreAction } from '@core/functions/auth';
 
 const { width } = Dimensions.get('window');
 const CopilotView = walkthroughable(View);
@@ -38,6 +40,7 @@ const HomeView: FC = ({ start }: any) => {
   const { isUpdateApp } = useDataUpdateApp();
   const tabBarHeight = useBottomTabBarHeight();
   const [vipBadgeLayout, setVipBadgeLayout] = useState<LayoutRectangle>();
+  const authCoreAction = useAuthCoreAction();
 
   const isBadgeVIPAvailable =
     typeof meV2.data?.data?.isDataCompleted === 'boolean' &&
@@ -47,6 +50,12 @@ const HomeView: FC = ({ start }: any) => {
   const bottomSheetUpdate = () => {
     return <BottomSheetUpdate open={isUpdateApp} />;
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      authCoreAction.meV2();
+    }, []),
+  );
 
   return (
     <View style={{ flex: 1 }}>

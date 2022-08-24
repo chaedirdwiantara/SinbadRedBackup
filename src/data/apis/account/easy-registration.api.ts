@@ -1,4 +1,5 @@
 import apiMapping from '@core/services/apiMapping';
+import apiSecureUpload from '@core/services/apiSecureUpload';
 import * as models from '@models';
 
 const getBuyerCategory = () => {
@@ -62,6 +63,10 @@ const updateCompleteData = (data: models.IUpdateCompleteData) => {
   return apiMapping<any>('auth', path, 'account', 'v2', 'UPDATE', data);
 };
 
+const uploadImage = (data: string) => {
+  return apiSecureUpload(data);
+};
+
 export const easyRegistrationApi = {
   createBasicAccount,
   getBuyerCategory,
@@ -69,4 +74,5 @@ export const easyRegistrationApi = {
   getCompleteData,
   updateCompleteData,
   completeDataConfirmation,
+  uploadImage
 };

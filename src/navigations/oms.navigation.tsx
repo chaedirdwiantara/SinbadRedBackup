@@ -3,6 +3,7 @@ import {
   OmsCheckoutView,
   OmsThankYouPageView,
   OmsPaymentMethod,
+  InvoiceView,
 } from '@screen/oms/views';
 
 const OmsNav = {
@@ -17,6 +18,9 @@ const OmsNav = {
   },
   OmsPaymentMethod: {
     component: OmsPaymentMethod,
+  },
+  InvoiceView: {
+    component: InvoiceView,
   },
 };
 

@@ -2,7 +2,8 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { BackHandler, ScrollView, View } from 'react-native';
 import {
-  SnbButton2,
+  FooterButton,
+  SnbBottomSheet2Ref,
   SnbContainer,
   SnbText2,
   SnbTextField2,
@@ -30,15 +31,15 @@ const DataTokoStep1View: React.FC = () => {
   const [telp, setTelp] = useState(
     completeDataState?.data?.buyerData?.buyerPhoneNo,
   );
-  const [openModalStep, setOpenModalStep] = useState(false);
-  const [openModalBack, setOpenModalBack] = useState(false);
+  const refModalListOfStep = React.useRef<SnbBottomSheet2Ref>()
+  const refModalBack = React.useRef<SnbBottomSheet2Ref>()
   const [backHandle, setBackHandle] = useState(false);
 
   const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
-        setOpenModalBack(true);
+        refModalBack.current?.open()
         return true;
       },
     );
@@ -63,14 +64,16 @@ const DataTokoStep1View: React.FC = () => {
     <SnbContainer color="white">
       <ScrollView style={{ flex: 1 }}>
         <SnbTopNav2.Type3
-          backAction={() => setOpenModalBack(true)}
+          backAction={() => refModalBack.current?.open()}
           color="white"
           title="Informasi Toko"
+          testID={'11'}
         />
         <Stepper
           complete={completeDataState?.data?.buyerProgress?.completed}
           total={completeDataState?.data?.buyerProgress?.total}
-          onPress={() => setOpenModalStep(true)}
+          onPress={() => refModalListOfStep.current?.open()}
+          testID={'11'}
         />
         <View style={{ margin: layout.spacing.lg }}>
           <SnbText2.Body.Default>Sinbad ID</SnbText2.Body.Default>
@@ -86,6 +89,7 @@ const DataTokoStep1View: React.FC = () => {
             placeholder={'Contoh: Samsul'}
             labelText={'Nama Toko'}
             mandatory
+            testID={'11'}
           />
         </View>
         <View style={{ margin: layout.spacing.lg }}>
@@ -101,30 +105,27 @@ const DataTokoStep1View: React.FC = () => {
             placeholder={'Contoh: 0812345678'}
             labelText={'Nomor Telepon Toko'}
             mandatory
+            testID={'11'}
           />
         </View>
       </ScrollView>
-      <View style={{ padding: layout.spacing.lg }}>
-        <SnbButton2.Primary
-          title="Lanjut"
-          disabled={!name || !telp || updateCompleteDataState.loading}
-          onPress={() => {
-            const { buyerName, buyerPhoneNo } =
-              completeDataState?.data?.buyerData || {};
-            if (name !== buyerName || telp !== buyerPhoneNo) {
-              updateCompleteData({ buyer: { name, phoneNo: telp } });
-            } else {
-              navigate(DATA_TOKO_STEP_2_VIEW);
-            }
-          }}
-          loading={updateCompleteDataState.loading}
-          size="medium"
-          full
-        />
-      </View>
+      <FooterButton.Single
+        title="Lanjut"
+        disabled={!name || !telp || updateCompleteDataState.loading}
+        buttonPress={() => {
+          const { buyerName, buyerPhoneNo } =
+            completeDataState?.data?.buyerData || {};
+          if (name !== buyerName || telp !== buyerPhoneNo) {
+            updateCompleteData({ buyer: { name, phoneNo: telp } });
+          } else {
+            navigate(DATA_TOKO_STEP_2_VIEW);
+          }
+        }}
+        loadingButton={updateCompleteDataState.loading}
+        testID={'11'}
+      />
       <ModalBack
-        open={openModalBack}
-        closeModal={() => setOpenModalBack(false)}
+        ref={refModalBack}
         confirm={() => {
           setBackHandle(true);
           const { buyerName, buyerPhoneNo } =
@@ -137,9 +138,9 @@ const DataTokoStep1View: React.FC = () => {
         }}
       />
       <ListOfSteps
-        open={openModalStep}
+        ref={refModalListOfStep}
         type="buyer"
-        closeModal={() => setOpenModalStep(false)}
+        testID={'11.4'}
       />
     </SnbContainer>
   );

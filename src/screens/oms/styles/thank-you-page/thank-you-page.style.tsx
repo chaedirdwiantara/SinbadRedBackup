@@ -3,7 +3,6 @@ import { color } from 'react-native-sinbad-ui';
 
 export const ThankYouPageStyle = StyleSheet.create({
   headerExtension: {
-    backgroundColor: color.red50,
     width: '100%',
     height: 50,
     position: 'absolute',
@@ -20,25 +19,25 @@ export const ThankYouPageStyle = StyleSheet.create({
     height: 50,
     marginRight: 16,
     resizeMode: 'contain',
-    borderColor: color.black5
+    borderColor: color.black5,
   },
   paymentDetail: {
     flexDirection: 'row',
     paddingVertical: 16,
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
   },
-  defaultContentPadding : {
-    paddingTop: 16
+  defaultContentPadding: {
+    paddingTop: 16,
   },
-  OrderDetailItem : {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  OrderDetailItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     flex: 1,
-    marginVertical: 6
+    marginVertical: 6,
   },
   expandableButton: {
-    alignItems: 'center', 
-    marginVertical: 6
+    alignItems: 'center',
+    marginVertical: 6,
   },
   cardItem: {
     flexDirection: 'row',
@@ -52,7 +51,7 @@ export const ThankYouPageStyle = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingTop: 16,
-    paddingBottom: 24
+    paddingBottom: 24,
   },
   footerCancelOrder: {
     // alignItems: 'center',
@@ -60,7 +59,7 @@ export const ThankYouPageStyle = StyleSheet.create({
     paddingVertical: 16,
   },
   footerCancelOrderButton: {
-    height: 70
+    height: 70,
   },
   cardTimeBlock: {
     justifyContent: 'center',
@@ -70,5 +69,4 @@ export const ThankYouPageStyle = StyleSheet.create({
     backgroundColor: color.red50,
     borderRadius: 2,
   },
-})
-
+});
