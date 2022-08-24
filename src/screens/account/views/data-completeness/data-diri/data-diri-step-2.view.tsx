@@ -180,6 +180,7 @@ const DataDiriStep2View: React.FC = () => {
               placeholder={'Masukkan Nomor NPWP'}
               keyboardType="number-pad"
               testID={'08.1'}
+              maxLength={20}
             />
           </View>
         </ScrollView>

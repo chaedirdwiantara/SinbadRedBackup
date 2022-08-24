@@ -416,6 +416,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nomor Pokok Wajib Pajak (NPWP) Pemilik'}
           placeholder={'Masukkan Nomor NPWP maks.15 Digit'}
           keyboardType="number-pad"
+          maxLength={20}
         />
       </View>
     );
