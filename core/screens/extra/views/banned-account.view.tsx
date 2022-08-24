@@ -48,7 +48,7 @@ const BannedACcountView: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav2.Type1 testID='01' title='Terjadi Kendala' color='white' />
+      <SnbTopNav2.Type1 testID='01.2' title='Terjadi Kendala' color='white' />
       <View style={{ flex: 1 }}>
         <View style={{ paddingHorizontal: layout.spacing['3xl'], flex: 1 }}>
           <Content.Illustration
