@@ -1,11 +1,9 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { SnbText, color } from 'react-native-sinbad-ui';
+import { View } from 'react-native';
+import { colorV2, SnbText2, spacingV2 } from 'react-native-sinbad-ui';
 import { VoucherDetailStyles } from '../../styles';
-import { useStandardModalState } from '../../functions';
-import { VoucherDetailListItem } from './voucher-detail-list-item.view';
-import { VoucherDetailListModal } from './voucher-detail-list-modal.view';
+import { VoucherDetailAccordion } from '@screen/voucher/components/VoucherDetailAccordion';
 /** === INTERFACE === */
 interface VoucherDetailInstructionProps {
   instructions: Array<string>;
@@ -14,28 +12,36 @@ interface VoucherDetailInstructionProps {
 export const VoucherDetailInstruction: FC<VoucherDetailInstructionProps> = ({
   instructions,
 }) => {
-  const instructionModal = useStandardModalState();
+  const [open, setOpen] = React.useState(false);
   return (
-    <View style={VoucherDetailStyles.sectionContainer}>
-      <View style={{ marginBottom: 8 }}>
-        <SnbText.B2>Cara Pakai</SnbText.B2>
-      </View>
-      <VoucherDetailListItem listItem={instructions} />
-      <View style={{ marginTop: 8 }}>
-        {instructions.length > 3 ? (
-          <TouchableOpacity onPress={() => instructionModal.setOpen(true)}>
-            <SnbText.B1 color={color.red50}>Baca Selengkapnya</SnbText.B1>
-          </TouchableOpacity>
-        ) : (
-          <View />
-        )}
-      </View>
-      <VoucherDetailListModal
-        isOpen={instructionModal.isOpen}
-        handleClose={() => instructionModal.setOpen(false)}
-        type={'Cara Pakai'}
-        listItem={instructions}
-      />
+    <View
+      style={{
+        ...VoucherDetailStyles.sectionContainer,
+        ...{ paddingVertical: 0 },
+      }}>
+      <VoucherDetailAccordion
+        label="Cara Pakai"
+        open={open}
+        onPress={() => setOpen((prev) => !prev)}>
+        <View style={{ paddingBottom: 28 }}>
+          {instructions.map((instruction) => (
+            <View
+              key={`${instruction}`}
+              style={{ flex: 1, flexDirection: 'row' }}>
+              <View style={{ marginRight: spacingV2.spacing.sm }}>
+                <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+                  {'\u2022'}
+                </SnbText2.Paragraph.Default>
+              </View>
+              <SnbText2.Paragraph.Default
+                key={`${instruction}`}
+                color={colorV2.textColor.secondary}>
+                {`${instruction}`}
+              </SnbText2.Paragraph.Default>
+            </View>
+          ))}
+        </View>
+      </VoucherDetailAccordion>
     </View>
   );
 };

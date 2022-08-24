@@ -1,112 +1,22 @@
 import { useCallback, useContext } from 'react';
-import { ProductListContext } from '../product-list.context';
 import {
-  useTagListActions,
   useProductDetailCartAction,
   useStockValidationAction,
 } from '@screen/product/functions';
 import { useAddToCartAction } from '@screen/oms/functions';
 import { useGetTotalCartAction } from '@screen/oms/functions';
+import { useProductListContext } from './product-list.util';
 
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
-import { useProductContext, useTagContext } from 'src/data/contexts/product';
+import { useProductContext } from 'src/data/contexts/product';
 import { contexts } from '@contexts';
 
 import type * as models from '@models';
 import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
 
-const useProductListContext = () => {
-  const { state, setState, orderQty, onChangeQty } =
-    useContext(ProductListContext);
-
-  const trigerModal = useCallback(
-    (
-      type:
-        | 'sort'
-        | 'filter'
-        | 'addToCart'
-        | 'needLogin'
-        | 'errorStock'
-        | 'errorProduct',
-      status: boolean,
-    ) => {
-      setState((prev) => {
-        const value = { ...prev };
-        value.modal[type] = status;
-        return value;
-      });
-    },
-    [],
-  );
-
-  const setSearch = useCallback((keyword: string) => {
-    setState((prev) => {
-      const value = { ...prev };
-      value.query.keyword = keyword;
-      return value;
-    });
-  }, []);
-
-  const setQuery = useCallback((payload: models.ProductListQueryOptions) => {
-    setState((prev) => {
-      const value = { ...prev };
-      const query = { ...prev.query, ...payload };
-      value.query = query;
-      return value;
-    });
-  }, []);
-
-  const setCategory = useCallback(
-    (
-      payload?:
-        | models.CategoryLevel
-        | models.CategoryLevel2
-        | models.CategoryLevel3,
-    ) => {
-      setState((prev) => {
-        const value = { ...prev };
-        const category = payload;
-        value.category = category;
-
-        return value;
-      });
-    },
-    [],
-  );
-
-  const onChangeLayout = useCallback((layout: 'list' | 'grid') => {
-    setState((prev) => {
-      const value = { ...prev };
-      value.layout = layout;
-      return value;
-    });
-  }, []);
-
-  const setSelectProduct = useCallback((id: string) => {
-    setState((prev) => {
-      const value = { ...prev };
-      value.productSelected = id;
-      return value;
-    });
-  }, []);
-
-  return {
-    state,
-    orderQty,
-    onChangeQty,
-    trigerModal,
-    setSearch,
-    onChangeLayout,
-    setQuery,
-    setCategory,
-    setSelectProduct,
-  };
-};
-
 const useProductListFunction = () => {
   const { trigerModal, setSelectProduct, orderQty } = useProductListContext();
   const totalCartActions = useGetTotalCartAction();
-  const tagActions = useTagListActions();
   const productDetailActions = useProductDetailCartAction();
   const addToCartActions = useAddToCartAction();
   const stockValidationActions = useStockValidationAction();
@@ -218,4 +128,4 @@ const useProductListFunction = () => {
   };
 };
 
-export { useProductListContext, useProductListFunction };
+export { useProductListFunction };

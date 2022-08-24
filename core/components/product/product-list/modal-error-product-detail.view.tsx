@@ -1,9 +1,7 @@
 import React, { FC, memo, useCallback, useEffect, useMemo } from 'react';
 import BottomSheetError from '@core/components/BottomSheetError';
-import {
-  useProductListContext,
-  useProductListFunction,
-} from './function/product-list.function';
+import { useProductListFunction } from './function/product-list.function';
+import { useProductListContext } from './function/product-list.util';
 
 type Props = {
   testID: string;
@@ -50,6 +48,7 @@ const Main: FC<Props> = ({ testID }) => {
     <BottomSheetError
       testID={'modal-error-product-detail.' + testID}
       open={visibleModal}
+      // @ts-ignore
       error={productDetailError}
       closeAction={() => {
         onReset();
@@ -60,4 +59,6 @@ const Main: FC<Props> = ({ testID }) => {
   );
 };
 
-export const ModalErrorProductDetailView = memo(Main);
+const ModalErrorProductDetailView = memo(Main);
+
+export default ModalErrorProductDetailView;

@@ -1,6 +1,6 @@
 import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 import React, { FC, memo, useMemo } from 'react';
-import { useProductListContext } from './';
+import { useProductListContext } from './function/product-list.util';
 
 type Props = {
   testID: string;
@@ -21,4 +21,6 @@ const App: FC<Props> = ({ testID }) => {
   );
 };
 
-export const ModalNeedLoginView = memo(App);
+const ModalNeedLoginView = memo(App);
+
+export default ModalNeedLoginView;

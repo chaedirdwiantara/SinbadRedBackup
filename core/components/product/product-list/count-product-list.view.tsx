@@ -4,7 +4,7 @@ import { View, TouchableOpacity } from 'react-native';
 import { Text, SnbIcon, spacingV2 } from '@sinbad/react-native-sinbad-ui';
 // function
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
-import { useProductListContext } from './';
+import { useProductListContext } from './function/product-list.util';
 
 // types
 type TitleSectionProps = {
@@ -68,4 +68,6 @@ const App: FC<TitleSectionProps> = ({ testID }) => {
   );
 };
 
-export const CountProductList = memo(App);
+const CountProductList = memo(App);
+
+export default CountProductList;

@@ -1,12 +1,8 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Linking } from 'react-native';
-import { colorV2, SnbText2, SnbButton2 } from '@sinbad/react-native-sinbad-ui';
-import BottomSheetConfirmation, {
-  BottomSheetTransactionRef,
-} from '@core/components/BottomSheetConfirmation';
+import React, { useCallback, useState } from 'react';
+import { View, StyleSheet, Linking } from 'react-native';
+import { colorV2, SnbButton2 } from '@sinbad/react-native-sinbad-ui';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { useDetailHistoryOrder } from '../../functions/history-detail';
-import Svg from '@svg';
 import { ConfirmationDoneSheet } from '../order-history-list';
 
 const ActionFooter = () => {
@@ -18,9 +14,6 @@ const ActionFooter = () => {
   const { doneOrder } = useDetailHistoryOrder();
   const [confirmationOpen, setConfirmationOpen] = useState(false);
 
-  // const onCancelOrder = useCallback(() => {
-  //   cancelOrder({ type: 'detail', id: String(data?.id) });
-  // }, [data?.id]);
   const onPressAction = useCallback(() => {
     const payload: { id: string; type: 'detail' } = {
       type: 'detail',
@@ -65,16 +58,14 @@ const ActionFooter = () => {
   return (
     <>
       <View style={styles.main}>
-        <TouchableOpacity
+        <SnbButton2.Link
+          disabled={false}
+          iconName={'whatsapp'}
+          size="medium"
+          title="Butuh Bantuan?"
           onPress={onOpenWhatsapp}
-          style={styles.footerIconText}>
-          <View style={styles.icon}>
-            <Svg size={24} name="whatsapp" />
-          </View>
-          <SnbText2.Body.Default color={colorV2.textColor.link}>
-            Butuh Bantuan?
-          </SnbText2.Body.Default>
-        </TouchableOpacity>
+          testID="07.2.1 Button TextLink+Icon"
+        />
         {data?.isOrderAbleToDone ? (
           <View style={styles.buttonContainer}>
             <SnbButton2.Primary
@@ -104,8 +95,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  icon: { marginRight: 8, marginTop: -2 },
-  footerIconText: { flexDirection: 'row', marginLeft: 24 },
   buttonContainer: { width: 156, height: 44, marginTop: 16, marginBottom: 16 },
 });
 

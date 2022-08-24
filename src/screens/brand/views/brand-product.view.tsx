@@ -1,23 +1,21 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useCallback, memo } from 'react';
+import React, { FC, memo, useEffect } from 'react';
 import { View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
-import { RouteProp, useRoute, useFocusEffect } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 /** === IMPORT COMPONENT === */
 import { Header } from '../components';
-import {
-  ProductListView,
-  CountProductList,
-  ModalAddToCartView,
-  ModalNeedLoginView,
-  ModalFilterView,
-  ModalNotInUrbanView,
-  ModalErrorStockView,
-  ModalErrorProductDetailView,
-  ProductListProvider,
-  useProductListContext,
-} from '@core/components/product/product-list';
+import ProductListView from '@core/components/product/product-list/product-list.view';
+import CountProductList from '@core/components/product/product-list/count-product-list.view';
+import ModalAddToCartView from '@core/components/product/product-list/modal-add-to-cart.view';
+import ModalNeedLoginView from '@core/components/product/product-list/modal-need-login.view';
+import ModalFilterView from '@core/components/product/product-list/modal-filter.view';
+import ModalNotInUrbanView from '@core/components/product/product-list/modal-not-in-urban.view';
+import ModalErrorStockView from '@core/components/product/product-list/modal-error-stock.view';
+import ModalErrorProductDetailView from '@core/components/product/product-list/modal-error-product-detail.view';
+import { ProductListProvider } from '@core/components/product/product-list/product-list.context';
 /** === IMPORT FUNCTIONS === */
+import { useProductListContext } from '@core/components/product/product-list/function/product-list.util';
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { useProductListActions } from '@screen/product/functions';
 /** === IMPORT TYPE === */
@@ -41,17 +39,18 @@ const BrandProductView: FC = () => {
   const {
     params: { brand },
   } = useRoute<BrandProductRouteProps>();
-  const { setQuery } = useProductListContext();
+  const { setQuery, setSearch } = useProductListContext();
   const { fetch, clearContents } = useProductListActions();
   const { dispatchProduct } = useProductContext();
 
-  useFocusEffect(
-    useCallback(() => {
-      fetch(dispatchProduct, { brandId: brand.id });
-      setQuery({ brandId: brand.id });
-      return () => clearContents(dispatchProduct);
-    }, []),
-  );
+  // initial get
+  useEffect(() => {
+    fetch(dispatchProduct, { brandId: brand.id });
+    setQuery({ brandId: brand.id });
+    // clean keyword search
+    setSearch(undefined);
+    return () => clearContents(dispatchProduct);
+  }, []);
   /** === VIEW === */
   return (
     <SnbContainer color="white">

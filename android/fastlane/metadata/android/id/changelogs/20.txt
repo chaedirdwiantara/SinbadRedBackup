@@ -1,0 +1,3 @@
+Sinbad versi 0.1.14
+
+bug fixing

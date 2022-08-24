@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 // function
 import { useOrderQuantity } from '@screen/product/functions';
-import { useProductListFunction } from './function/product-list.function';
+import { useProductContext } from 'src/data/contexts/product';
 
 /** => Types */
 import type * as models from '@models';
@@ -78,7 +78,11 @@ export const ProductListContext = createContext<PropContext>({
 
 const Provider: FC<Props> = ({ children }) => {
   const [state, setState] = useState(defaultValue);
-  const { productDetailState: productDetail } = useProductListFunction();
+  const {
+    stateProduct: {
+      cart: { data: productDetail },
+    },
+  } = useProductContext();
   const { orderQty, onChangeQty } = useOrderQuantity({
     minQty: productDetail?.minQty ?? 1,
   });

@@ -8,7 +8,7 @@ import { useDataAuth } from '@core/redux/Data';
 import { useProductDetailCartAction } from '@screen/product/functions';
 import { useProductListActions } from '@screen/product/functions';
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
-import { useProductListContext } from './';
+import { useProductListContext } from './function/product-list.util';
 // types
 import type * as models from '@models';
 
@@ -69,4 +69,6 @@ const Main: FC<Props> = ({ testID }) => {
   );
 };
 
-export const ProductListView = memo(Main);
+const ProductListView = memo(Main);
+
+export default ProductListView;

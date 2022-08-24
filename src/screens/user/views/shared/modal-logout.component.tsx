@@ -16,6 +16,7 @@ import { useAuthCoreAction } from '@core/functions/auth';
 import { useCoachmark } from '@screen/account/functions';
 import { useNotificationTotalActions } from '@screen/notification/functions';
 import { useGetTotalCartAction } from '@screen/oms/functions';
+import Caches from 'react-native-caches'
 
 interface Props {
   ref: any
@@ -36,6 +37,10 @@ const ModalLogout: React.FC<Props> = React.forwardRef((_, ref: any) => {
     return resetLogout
   }, [])
 
+  const clearCache = React.useCallback(async () => {
+    await Caches.runClearCache()
+  }, [])
+
   React.useEffect(() => {
     if (logoutState.data) {
       meReset()
@@ -46,6 +51,7 @@ const ModalLogout: React.FC<Props> = React.forwardRef((_, ref: any) => {
       ref.current?.close();
       reset({ index: 0, routes: [{ name: 'OnBoardingView' }] });
       resetLogout()
+      clearCache()
     }
     if (logoutState.error) {
       ref.current?.close()

@@ -20,8 +20,9 @@ const { height } = Dimensions.get('window');
 interface ModalParcelDetail {
   parentRef: Ref<SnbBottomSheet2Ref>;
   close: () => void;
-  data: models.CheckoutCartProduct[];
-  sellerName: string;
+  data?: models.CheckoutCartProduct[];
+  sellerName?: string;
+  testID: string;
 }
 /** === COMPONENT === */
 export const ModalParcelDetail: FC<ModalParcelDetail> = ({
@@ -29,35 +30,37 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
   close,
   data,
   sellerName,
+  testID,
 }) => {
   /** === HOOK === */
   const deliveryFee = 0;
-  const totalProductsPrice = totalBarangPrice(data);
+  const totalProductsPrice = totalBarangPrice(data || []);
 
   const productDetail = () => {
-    if (data === null) {
-      return null;
-    }
-
     return (
       <View style={{ paddingBottom: 16 }}>
-        <SnbText2.Body.Default color={colorV2.textColor.secondary}>
-          {sellerName}
-        </SnbText2.Body.Default>
-        <View style={{ marginVertical: 8 }}>
-          <SnbDivider2 />
+        <View style={{ marginBottom: 8 }}>
+          <SnbText2.Body.Default
+            testID={`sellerName.modalParcelDetail.${testID}`}
+            color={colorV2.textColor.secondary}>
+            {sellerName}
+          </SnbText2.Body.Default>
         </View>
-        {productList(data)}
+        {productList(data || [])}
         <View style={{ marginVertical: 8 }}>
           <SnbDivider2 />
         </View>
         <View style={CheckoutStyle.modalDetailTotalContainer}>
           <View style={{ width: '50%' }}>
-            <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-              Biaya Pengiriman
+            <SnbText2.Paragraph.Default
+              testID={`deliveryLabel.modalParcelDetail.${testID}`}
+              color={colorV2.textColor.secondary}>
+              Ongkos Kirim
             </SnbText2.Paragraph.Default>
           </View>
-          <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+          <SnbText2.Paragraph.Default
+            testID={`deliveryValue.modalParcelDetail.${testID}`}
+            color={colorV2.textColor.secondary}>
             {toCurrency(deliveryFee, { withFraction: false })}
           </SnbText2.Paragraph.Default>
         </View>
@@ -66,11 +69,15 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
         </View>
         <View style={CheckoutStyle.modalDetailTotalContainer}>
           <View style={{ width: '50%' }}>
-            <SnbText2.Headline.Small color={colorV2.textColor.default}>
+            <SnbText2.Headline.Small
+              testID={`totalPriceLabel.modalParcelDetail.${testID}`}
+              color={colorV2.textColor.default}>
               Total
             </SnbText2.Headline.Small>
           </View>
-          <SnbText2.Headline.Small color={colorV2.textColor.default}>
+          <SnbText2.Headline.Small
+            testID={`totalPriceValue.modalParcelDetail.${testID}`}
+            color={colorV2.textColor.default}>
             {totalProductsPrice}
           </SnbText2.Headline.Small>
         </View>
@@ -80,21 +87,25 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
 
   const productList = (products: models.CheckoutCartProduct[]) => {
     return products.map((product) => (
-      <>
+      <React.Fragment key={product.productId}>
         <View style={CheckoutStyle.modalDetailItemContainer}>
           <View style={{ width: '50%' }}>
-            <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+            <SnbText2.Paragraph.Default
+              testID={`productName.product${product.productId}.modalParcelDetail.${testID}`}
+              color={colorV2.textColor.secondary}>
               {product.productName}
             </SnbText2.Paragraph.Default>
           </View>
-          <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+          <SnbText2.Paragraph.Default
+            testID={`displayPrice.product${product.productId}.modalParcelDetail.${testID}`}
+            color={colorV2.textColor.secondary}>
             {' '}
             {toCurrency(product.priceAfterTax * product.qty, {
               withFraction: false,
             })}
           </SnbText2.Paragraph.Default>
         </View>
-      </>
+      </React.Fragment>
     ));
   };
 
@@ -130,7 +141,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
     );
   };
 
-  return data !== null ? (
+  return (
     <SnbBottomSheet2
       ref={parentRef}
       name={'checkoutParcelDetailModal'}
@@ -141,8 +152,6 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
       content={content()}
       navigation={navigation()}
     />
-  ) : (
-    <View />
   );
 };
 
