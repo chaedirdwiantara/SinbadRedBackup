@@ -22,6 +22,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
   onLoadMore,
   loading,
   error,
+  onCardPress,
 }) => {
   /** === HOOK ===  */
   const displayState = useListDisplayState({
@@ -82,6 +83,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
                       key={product.id}
                       product={product}
                       index={productIndex}
+                      onCardPress={onCardPress}
                       onOrderPress={() => onOrderPress(product)}
                     />
                   ),
@@ -96,6 +98,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
                       key={product.id}
                       product={product}
                       index={productIndex}
+                      onCardPress={onCardPress}
                       onOrderPress={() => onOrderPress(product)}
                     />
                   ),
