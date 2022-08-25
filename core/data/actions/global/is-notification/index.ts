@@ -1,18 +1,9 @@
 /**
  * ============================================================
- * REGISTER ALL REDUCERS HERE
+ * REGISTER ALL ACTIONS HERE
  * ============================================================
  */
-import { combineReducers } from 'redux';
-import { flagRTDB } from './flag-rtdb/flag-rtdb.reducer';
-import { updateApp } from './update-app/update-app.reducer';
-import { notificationQuit } from './is-notification/is-notification.reducer';
-
-export const globalCore = combineReducers({
-  flagRTDB,
-  updateApp,
-  notificationQuit,
-});
+export * from './is-notification-napi.action';
 /**
  * ================================================================
  * NOTES

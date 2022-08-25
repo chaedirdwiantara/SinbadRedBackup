@@ -1,6 +1,8 @@
 /** === IMPORT PACKAGE HERE === */
 import React from 'react';
 import messaging from '@react-native-firebase/messaging';
+import { useDispatch } from 'react-redux';
+import * as CoreAction from '../data/actions';
 import SplashScreen from 'react-native-splash-screen';
 import { NavigationAction } from '@navigation';
 import { isEmpty } from 'lodash';
@@ -20,6 +22,7 @@ interface RemoteMessage {
 const PushNotification = () => {
   /** === HOOK === */
   const { me } = useDataAuth();
+  const dispatch = useDispatch();
   const notificationTotalActions = useNotificationTotalActions();
   const { onDispatchReadFromDrawer } = useNotificationAction();
   /** === ACTION FOR FOREGROUND === */
@@ -67,9 +70,11 @@ const PushNotification = () => {
       .getInitialNotification()
       .then(async (remoteMessage) => {
         if (remoteMessage !== null) {
+          dispatch(CoreAction.notificationQuit(true));
+          NavigationAction.resetToHome();
           setTimeout(() => {
             deepLink(remoteMessage?.data);
-          }, 4000);
+          }, 1000);
         }
       });
 

@@ -48,7 +48,7 @@ const IntroSplashView: React.FC = () => {
         SplashScreen.hide();
       }, 100);
     }
-  }, [meV2, maintenance]);
+  }, [meV2]);
   /** === VIEW === */
   /** => main */
   return null;

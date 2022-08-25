@@ -5,6 +5,7 @@
  */
 export * from './flag-rtdb';
 export * from './update-app';
+export * from './is-notification';
 /**
  * ================================================================
  * NOTES

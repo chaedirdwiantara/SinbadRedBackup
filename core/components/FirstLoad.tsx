@@ -2,13 +2,18 @@
 import React from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { buildNumber } from '@core/functions/global/device-data';
-import { useDataPermanent, useDataUpdateApp } from '@core/redux/Data';
+import {
+  useDataPermanent,
+  useDataUpdateApp,
+  useDataNotificationQuit,
+} from '@core/redux/Data';
 import { NavigationAction } from '@navigation';
 /** === COMPONENT === */
 const FirstLoad = () => {
   /** === HOOK === */
   const data = useDataPermanent();
   const dataUpdateApp = useDataUpdateApp();
+  const dataNotificationQuit = useDataNotificationQuit();
   /** === EFFECT === */
   React.useEffect(() => {
     /** ==> this for force update */
@@ -24,7 +29,9 @@ const FirstLoad = () => {
         SplashScreen.hide();
         NavigationAction.resetToMaintenance();
       } else {
-        NavigationAction.restartApp();
+        if (!dataNotificationQuit.isNotification) {
+          NavigationAction.restartApp();
+        }
       }
     }
   }, [data.forceUpdateVersion, data.maintenance]);
