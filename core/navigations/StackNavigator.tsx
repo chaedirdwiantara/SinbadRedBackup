@@ -9,12 +9,23 @@ import {
   FirstView,
   ForceUpdateView,
   MaintenanceView,
+  BannedACcountView
 } from '../screens/extra/views';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 enableScreens();
 
 const StackNavigator: React.FC = () => {
+  /** => this for maintenance app */
+  const BannedAccountNav = () => {
+    return (
+      <Screen
+        name="BannedAccount"
+        component={BannedACcountView}
+        options={{ headerShown: false, screenOrientation: 'portrait' }}
+      />
+    );
+  };
   /** => this for maintenance app */
   const MaintenanceNav = () => {
     return (
@@ -95,6 +106,7 @@ const StackNavigator: React.FC = () => {
       {IntroSplashNav()}
       {tabNav()}
       {projectNav()}
+      {BannedAccountNav()}
     </Navigator>
   );
 };

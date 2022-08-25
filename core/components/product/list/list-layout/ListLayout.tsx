@@ -35,6 +35,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
   onChangeLayoutListPress,
   onFilterPress,
   onSortPress,
+  onCardPress,
 }) => {
   /** === HOOK ===  */
   const displayState = useListDisplayState({
@@ -71,6 +72,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
               id: item.id,
               warehouseId: item.warehouseOriginId,
             });
+            onCardPress();
           }}
           withOrderButton={true}
           onOrderPress={() => onOrderPress(item)}

@@ -13,18 +13,18 @@ import { ThankYouPageStyle } from '@screen/oms/styles/thank-you-page/thank-you-p
 import {
   color,
   colorV2,
-  SnbButton,
   SnbButton2,
   SnbContainer,
   SnbText,
   SnbText2,
   SnbToast,
-  SnbTopNav,
   styles,
   FooterButton,
-  SnbTopNav2
+  SnbTopNav2,
+  Content,
+  WaitingPayment,
 } from '@sinbad/react-native-sinbad-ui';
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
   ScrollView,
   View,
@@ -42,9 +42,7 @@ import moment from 'moment';
 import { CountDownTimer } from '@screen/oms/components/thank-you-page-count-down-timer.component';
 import { NavigationAction } from '@core/functions/navigation';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import BottomSheetConfirmationV2, {
-  // BottomSheetTransactionRef,
-} from '@core/components/BottomSheetConfirmationV2';
+import BottomSheetConfirmationV2 from '@core/components/BottomSheetConfirmationV2';
 import ThankYouPageCustomAccordion from '@screen/oms/components/thank-you-page-custom-accordion.component';
 
 type ThankYouPageParamList = {
@@ -54,7 +52,7 @@ type ThankYouPageParamList = {
 type ThankYouPageRouteProp = RouteProp<ThankYouPageParamList, 'Detail'>;
 
 const OmsThankYouPageView: FC = () => {
-  const virtualAccount = ['BCA', 'BNI', 'BRI', 'Mandiri']
+  const virtualAccount = ['BCA', 'BNI', 'BRI', 'Mandiri'];
   const { params } = useRoute<ThankYouPageRouteProp>();
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   // const confirmModalRef = useRef<BottomSheetTransactionRef>(null);
@@ -79,9 +77,6 @@ const OmsThankYouPageView: FC = () => {
     },
     dispatchThankYouPage,
   } = useThankYouPageContext();
-  // const thankYouPageDataDummy = {
-  //       "expiredDate": "2022-06-06T19:19:15Z",
-  //   }
 
   //hardware back handler
   useEffect(() => {
@@ -143,10 +138,14 @@ const OmsThankYouPageView: FC = () => {
         moment.utc(expiredPaymentTime).local() &&
         expiredPaymentTime !== null ? (
         <View style={styles.shadowForBox10}>
-          <View style={{ height: 5, backgroundColor: colorV2.bgColor.neutral }} />
+          <View
+            style={{ height: 5, backgroundColor: colorV2.bgColor.neutral }}
+          />
           <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
-            <SnbText2.Headline.Default align="center" color={colorV2.textColor.default}>
-              Silahkan Lakukan Pembayaran dalam Waktu
+            <SnbText2.Headline.Default
+              align="center"
+              color={colorV2.textColor.default}>
+              Silakan lakukan pembayaran dalam waktu
             </SnbText2.Headline.Default>
             <View style={{ alignItems: 'center', marginVertical: 8 }}>
               <CountDownTimer
@@ -154,17 +153,33 @@ const OmsThankYouPageView: FC = () => {
                 expiredTime={thankYouPageData!.expiredDate}
               />
             </View>
-            <SnbText2.Paragraph.Small color={colorV2.textColor.secondary} align="center">
+            <SnbText2.Paragraph.Small
+              color={colorV2.textColor.secondary}
+              align="center">
               {`Sebelum ${moment(expiredPaymentTime).format('LLLL')} WIB`}
             </SnbText2.Paragraph.Small>
           </View>
-          <View style={{ height: 10, backgroundColor: colorV2.bgColor.neutral }} />
+          <View
+            style={{ height: 10, backgroundColor: colorV2.bgColor.neutral }}
+          />
         </View>
       ) : (
         <View />
       );
     }
   };
+
+  /** => render coundownCOD */
+  const renderCountDownCod = () => {
+    return (
+      <Content.Illustration
+        image={require('../../../../assets/images/cod.png')}
+        title="Pesanan Anda akan segera diproses"
+        testID="cntIllustration.ThankyouPage"
+      />
+    );
+  };
+
   /** => Payment Total */
   const renderPaymentTotal = () => {
     if (thankYouPageData === null || thankYouPageData === undefined) {
@@ -172,29 +187,27 @@ const OmsThankYouPageView: FC = () => {
     }
     return (
       <View>
-
-      
-      <ThankYouPageCard
-        title="Total Pembayaran"
-        headerButton={true}
-        headerButtonTitle="Lihat Detail"
-        headerButtonAction={handleThankYouPageOrderDetail}>
-        <View style={ThankYouPageStyle.defaultContentPadding}>
-          <SnbText.H3 color={color.red50}>
-            {toCurrency(
-              Number(thankYouPageData?.totalOrderPriceAfterTax) ?? 0,
-              {
-                withFraction: false,
-              },
-            )}
-          </SnbText.H3>
+        <ThankYouPageCard
+          title="Total Pembayaran"
+          headerButton={true}
+          headerButtonTitle="Lihat Detail"
+          headerButtonAction={handleThankYouPageOrderDetail}>
           <View style={ThankYouPageStyle.defaultContentPadding}>
-            <TouchableOpacity onPress={() => onOrderAmountCopied()}>
-              <SnbText.B1 color={color.blue50}>{'Salin Jumlah'}</SnbText.B1>
-            </TouchableOpacity>
+            <SnbText.H3 color={color.red50}>
+              {toCurrency(
+                Number(thankYouPageData?.totalOrderPriceAfterTax) ?? 0,
+                {
+                  withFraction: false,
+                },
+              )}
+            </SnbText.H3>
+            <View style={ThankYouPageStyle.defaultContentPadding}>
+              <TouchableOpacity onPress={() => onOrderAmountCopied()}>
+                <SnbText.B1 color={color.blue50}>{'Salin Jumlah'}</SnbText.B1>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </ThankYouPageCard>
+        </ThankYouPageCard>
       </View>
     );
   };
@@ -235,63 +248,108 @@ const OmsThankYouPageView: FC = () => {
       return null;
     }
     return (
-    <ThankYouPageCard
+      <ThankYouPageCard
         title="Detail Pembayaran"
         headerButton={true}
         headerButtonTitle="Lihat Detail"
         headerButtonAction={handleThankYouPageOrderDetail}>
-      <View style={{
-        flexDirection: 'row',
-        paddingVertical: 16,
-        paddingHorizontal: 0
-      }}>
-        <Image
-          source={{
-            uri: thankYouPageData?.paymentIconUrl,
-          }}
-          style={ThankYouPageStyle.mediumIcon}
-        />
-        <View style={{ width: '60%' }}>
-          <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>Metode Pembayaran</SnbText2.Paragraph.Small>
-          <SnbText2.Body.Default color={colorV2.textColor.default}>
-            {virtualAccount[Number(thankYouPageData?.paymentMethodId)-1]+' Virtual Account'}
-          </SnbText2.Body.Default>
+        <View
+          style={{
+            flexDirection: 'row',
+            paddingVertical: 16,
+            paddingHorizontal: 0,
+          }}>
+          <Image
+            source={{
+              uri: thankYouPageData?.paymentIconUrl,
+            }}
+            style={ThankYouPageStyle.mediumIcon}
+          />
+          <View style={{ width: '60%' }}>
+            <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
+              Metode Pembayaran
+            </SnbText2.Paragraph.Small>
+            <SnbText2.Body.Default color={colorV2.textColor.default}>
+              {virtualAccount[Number(thankYouPageData?.paymentMethodId) - 1] +
+                ' Virtual Account'}
+            </SnbText2.Body.Default>
+          </View>
         </View>
-      </View>
-      <View style={{paddingHorizontal: 0}}>
-        <SnbText2.Paragraph.Small color={colorV2.textColor.secondary} align={'left'}>
-          {"Nomor Virtual Account"}
-        </SnbText2.Paragraph.Small>
-        <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-          <SnbText2.Body.Default color={colorV2.textColor.default} align={'left'}>
-            {thankYouPageData?.vaAccountNo}
-          </SnbText2.Body.Default>
-          <TouchableOpacity onPress={() => onVACopied()}>
-            <SnbText2.Body.Small color={colorV2.textColor.link} align={'center'}>{'Salin'}</SnbText2.Body.Small>
-          </TouchableOpacity>
+        <View style={{ paddingHorizontal: 0 }}>
+          <SnbText2.Paragraph.Small
+            color={colorV2.textColor.secondary}
+            align={'left'}>
+            {'Nomor Virtual Account'}
+          </SnbText2.Paragraph.Small>
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <SnbText2.Body.Default
+              color={colorV2.textColor.default}
+              align={'left'}>
+              {thankYouPageData?.vaAccountNo}
+            </SnbText2.Body.Default>
+            <TouchableOpacity onPress={() => onVACopied()}>
+              <SnbText2.Body.Small
+                color={colorV2.textColor.link}
+                align={'center'}>
+                {'Salin'}
+              </SnbText2.Body.Small>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-      <View style={{paddingTop: 16, paddingHorizontal: 0}}>
-        <SnbText2.Paragraph.Small color={colorV2.textColor.secondary} align={'left'}>
-          {"Total"}
-        </SnbText2.Paragraph.Small>
-        <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-          <SnbText2.Body.Default color={colorV2.textColor.error} align={'left'}>
-            {toCurrency(
-              Number(thankYouPageData?.totalOrderPriceAfterTax) ?? 0,
-              {
-                withFraction: false,
-              },
-            )}
-          </SnbText2.Body.Default>
-          <TouchableOpacity onPress={() => onOrderAmountCopied()}>
-            <SnbText2.Body.Small color={colorV2.textColor.link} align={'center'}>{'Salin'}</SnbText2.Body.Small>
-          </TouchableOpacity>
+        <View style={{ paddingTop: 16, paddingHorizontal: 0 }}>
+          <SnbText2.Paragraph.Small
+            color={colorV2.textColor.secondary}
+            align={'left'}>
+            {'Total'}
+          </SnbText2.Paragraph.Small>
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <SnbText2.Body.Default
+              color={colorV2.textColor.error}
+              align={'left'}>
+              {toCurrency(
+                Number(thankYouPageData?.totalOrderPriceAfterTax) ?? 0,
+                {
+                  withFraction: false,
+                },
+              )}
+            </SnbText2.Body.Default>
+            <TouchableOpacity onPress={() => onOrderAmountCopied()}>
+              <SnbText2.Body.Small
+                color={colorV2.textColor.link}
+                align={'center'}>
+                {'Salin'}
+              </SnbText2.Body.Small>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>  
-    </ThankYouPageCard>
-    )
-  }
+      </ThankYouPageCard>
+    );
+  };
+  
+  /** => Payment Detail COD */
+  const paymentDetailCod = () => {
+    return (
+      <WaitingPayment.DetailPembayaranCod
+        title="Detail Pembayaran"
+        linkTitle="Lihat Detail"
+        testID="DetailPembayaran.ThankYouPage"
+        linkOnPress={handleThankYouPageOrderDetail}
+        paymethodTitle="Metode Pembayaran"
+        paymethodType="Bayar di Tempat (COD)"
+        totalTitle="Total"
+        totalValue={toCurrency(
+          Number(thankYouPageData?.totalOrderPriceAfterTax) ?? 0,
+          {
+            withFraction: false,
+          },
+        )}
+        iconUri={`${thankYouPageData?.paymentIconUrl}`}
+      />
+    );
+  };
+  
   const generatePaymentGuideListData = (data: PaymentGuideListItem[]) => {
     return data.map((item: PaymentGuideListItem) => {
       return {
@@ -302,7 +360,9 @@ const OmsThankYouPageView: FC = () => {
   };
   /** => Payment Guide List */
   const renderPaymentGuideList = (data: PaymentGuideListItem[]) => {
-    return <ThankYouPageCustomAccordion data={generatePaymentGuideListData(data)} />;
+    return (
+      <ThankYouPageCustomAccordion data={generatePaymentGuideListData(data)} />
+    );
   };
   /** => Payment Guide */
   const renderPaymentGuide = () => {
@@ -315,10 +375,52 @@ const OmsThankYouPageView: FC = () => {
       </ThankYouPageCard>
     );
   };
+
+  /** => Invoice Information */
+  const [toInvoice, setToInvoice] = useState(false);
+
+  useEffect(() => {
+    toInvoice == true
+      ? (setToInvoice(false),
+        NavigationAction.navigate('InvoiceView', {
+          id: thankYouPageData?.id,
+          type: 'thankyoupage-Invoice',
+        }))
+      : null;
+  }, [toInvoice]);
+
+  const handleInvoice = () => {
+    setToInvoice(true);
+  };
+  const invoiceInformation = () => {
+    if (thankYouPageData != null) {
+      return (
+        <ThankYouPageCard
+          title="Informasi Invoice"
+          headerButton={true}
+          headerButtonTitle="Lihat Invoice"
+          headerButtonAction={handleInvoice}>
+          <ThankYouPageCardItem
+            title="Order ID"
+            value={thankYouPageData?.orderCode}
+          />
+          <ThankYouPageCardItem
+            title="Tanggal Pemesanan"
+            value={
+              thankYouPageData?.createdAt
+                ? toLocalDateTime(thankYouPageData?.createdAt)
+                : '-'
+            }
+          />
+        </ThankYouPageCard>
+      );
+    }
+  };
+
   /** => batalkan pesanan */
   const handleCancelOrder = () => {
     // confirmModalRef.current?.show(params.orderId);
-    setConfirmationOpen(true)
+    setConfirmationOpen(true);
   };
   const handleConfirmationCancelOrder = () => {
     // update order to cancelled and back to history list view
@@ -331,22 +433,15 @@ const OmsThankYouPageView: FC = () => {
       NavigationAction.navigate('HistoryListView');
     }, 1000);
   };
+
   /** => Order Notes */
   const renderOrderNotes = () => {
     if (thankYouPageData != null) {
       return (
         <ThankYouPageCard title="Informasi Pengiriman">
           <ThankYouPageCardItem
-            title="Tanggal Pemesanan"
-            value={
-              thankYouPageData?.createdAt
-                ? toLocalDateTime(thankYouPageData?.createdAt)
-                : '-'
-            }
-          />
-          <ThankYouPageCardItem
-              title="Alamat Pengiriman"
-              value={`${thankYouPageData?.buyerAddress} ${thankYouPageData?.buyerAddressNoteAddress}, ${thankYouPageData?.buyerAddressUrban}, ${thankYouPageData?.buyerAddressDistrict}, ${thankYouPageData?.buyerAddressCity}, ${thankYouPageData?.buyerAddressProvince}, ${thankYouPageData?.buyerAddressZipCode}`}
+            title="Alamat Pengiriman"
+            value={`${thankYouPageData?.buyerAddress} ${thankYouPageData?.buyerAddressNoteAddress}, ${thankYouPageData?.buyerAddressUrban}, ${thankYouPageData?.buyerAddressDistrict}, ${thankYouPageData?.buyerAddressCity}, ${thankYouPageData?.buyerAddressProvince}, ${thankYouPageData?.buyerAddressZipCode}`}
           />
           {/* {params.section == 'orderHistory' && (
             <ThankYouPageCardItem
@@ -354,6 +449,14 @@ const OmsThankYouPageView: FC = () => {
               value={`${thankYouPageData?.buyerAddress} ${thankYouPageData?.buyerAddressNoteAddress} ${thankYouPageData?.buyerAddressUrban} ${thankYouPageData?.buyerAddressDistrict} ${thankYouPageData?.buyerAddressCity} ${thankYouPageData?.buyerAddressProvince}, ${thankYouPageData?.buyerAddressZipCode}`}
             />
           )} */}
+          <ThankYouPageCardItem
+            title="Estimasi Pengiriman"
+            value={
+              thankYouPageData?.deliveryEstDate
+                ? thankYouPageData?.deliveryEstDate
+                : '-'
+            }
+          />
         </ThankYouPageCard>
       );
     }
@@ -362,11 +465,14 @@ const OmsThankYouPageView: FC = () => {
   const renderThankYouPageContent = () => (
     <ScrollView>
       <>
-        {renderCountDown()}
-        {renderPaymentDetailV2()}
-        {/* {renderPaymentDetail()}
-        {renderPaymentTotal()} */}
+        {thankYouPageData?.useCollection !== true
+          ? renderCountDown()
+          : renderCountDownCod()}
+        {thankYouPageData?.useCollection !== true
+          ? renderPaymentDetailV2()
+          : paymentDetailCod()}
         {renderPaymentGuide()}
+        {invoiceInformation()}
         {renderOrderNotes()}
       </>
     </ScrollView>
@@ -426,19 +532,26 @@ const OmsThankYouPageView: FC = () => {
             />
           </View>
         </View>
+      ) : (
         // <FooterButton.Single
         //   title={'Batalkan Pesanan'}
         //   buttonPress={handleCancelOrder}
         // />
-      ) : (
         <FooterButton.Dual
           title2={'Ke Beranda'}
           button2Press={goToHome}
-          title1={'Cek Status'}
-          button1Press={() => NavigationAction.navigate('HistoryListView')}
+          title1={'Cek Pesanan'}
+          button1Press={() =>
+            NavigationAction.navigate(
+              thankYouPageData?.useCollection !== true
+                ? 'HistoryListView'
+                : 'OrderHistoryConsolidateDetailView',
+              {
+                id: thankYouPageData?.orderCode,
+              },
+            )
+          }
         />
-
-        
       )}
     </>
   );
@@ -449,18 +562,15 @@ const OmsThankYouPageView: FC = () => {
         <LoadingPage />
       ) : (
         <>
-        {params.section == 'orderHistory' ?
-          <SnbTopNav2.Type3 
-          color="white" 
-          title={'Menunggu Pembayaran'} 
-          backAction={NavigationAction.back}
-          />
-          :
-          <SnbTopNav2.Type1 
-          color="white" 
-          title={'Menunggu Pembayaran'}
-          />
-        }
+          {params.section == 'orderHistory' ? (
+            <SnbTopNav2.Type3
+              color="white"
+              title={'Menunggu Pembayaran'}
+              backAction={NavigationAction.back}
+            />
+          ) : (
+            <SnbTopNav2.Type1 color="white" title={'Terima Kasih'} />
+          )}
 
           {renderContent()}
           {renderFooter()}

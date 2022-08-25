@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   SnbContainer,
   SnbTopNav2,
   SnbButton2,
   spacingV2 as layout,
+  SnbBottomSheet2Ref,
+  SnbToast,
 } from 'react-native-sinbad-ui';
 import {
   Stepper,
@@ -12,23 +14,20 @@ import {
   UploadPhotoRules,
 } from '../../shared/index';
 import { View, BackHandler, ScrollView } from 'react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/core';
+import { useFocusEffect, useNavigation, useIsFocused } from '@react-navigation/core';
 import { useEasyRegistration } from '@screen/account/functions';
 import { renderIF, useCamera } from '@screen/auth/functions';
 import { OCRResultContent } from '@screen/shared/views/components';
 import * as models from '@models';
-import { useOCR } from '@screen/auth/functions/global-hooks.functions';
 import { DATA_DIRI_STEP_2_VIEW } from '@screen/account/functions/screens_name';
 
 interface Props {
-  openModalBack: boolean;
-  onCloseModalBack: (value: boolean) => void;
+  ref: any;
 }
 
-const Content: React.FC<Props> = (props) => {
-  const { openCameraWithOCR } = useCamera();
+const Content: React.FC<Props> = React.forwardRef((_, ref: any) => {
+  const { capturedImage, openCamera } = useCamera();
   const [value, setValue] = React.useState<models.IOCRResult | any>(null);
-  const { ocrImageState, ocrImageReset } = useOCR();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -36,23 +35,31 @@ const Content: React.FC<Props> = (props) => {
     refetchCompleteData,
     backToDataCompleteness,
     completeDataState,
+    uploadImageSecureState,
+    uploadSecureImageReset,
+    uploadSecureImage,
   } = useEasyRegistration();
   const [backHandle, setBackHandle] = React.useState(false);
   const { navigate } = useNavigation();
   const userData = completeDataState.data?.userData;
+  const isFocused = useIsFocused();
 
   React.useEffect(() => {
     if (userData) {
-      setValue({ idNumber: userData?.idNo, nameOnKtp: userData?.fullName });
+      setValue({
+        idNumber: userData?.idNo,
+        nameOnKtp: userData?.fullName,
+      });
     }
-    return ocrImageReset;
+    uploadSecureImageReset();
+    return uploadSecureImageReset;
   }, []);
 
   React.useEffect(() => {
-    if (updateCompleteDataState.data !== null) {
+    if (updateCompleteDataState.data !== null && isFocused) {
       refetchCompleteData();
       resetUpdateCompleteData();
-      ocrImageReset();
+      uploadSecureImageReset();
       if (backHandle) {
         backToDataCompleteness();
       } else {
@@ -61,16 +68,48 @@ const Content: React.FC<Props> = (props) => {
     }
   }, [updateCompleteDataState]);
 
-  function handleSubmit() {
-    if (
-      value.idNumber !== userData.idNo ||
-      value.nameOnKtp !== userData.fullName
-    ) {
-      updateCompleteData({
-        user: { idNo: value.idNumber, name: value.nameOnKtp },
-      });
+  React.useEffect(() => {
+    if (uploadImageSecureState?.data) {
+      const idNumberIsChanged = value.idNumber !== '' && value.idNumber !== userData.idNo;
+      const nameIsChanged = value.nameOnKtp !== '' && value.nameOnKtp !== userData.fullName;
+      const user: any = {
+        imageId: uploadImageSecureState?.data?.data?.id,
+      };
+      if (nameIsChanged) {
+        user.name = value?.nameOnKtp
+      }
+      if (idNumberIsChanged) {
+        user.idNo = value?.idNumber
+      }
+      updateCompleteData({ user });
+    }
+    if (uploadImageSecureState?.error) {
+      SnbToast.show('Gagal upload foto KTP', 2000);
+    }
+  }, [uploadImageSecureState]);
+
+  function handleSave(actionFrom: 'simpan' | 'back') {
+    const idNumberIsChanged = value.idNumber !== '' && value.idNumber !== userData.idNo;
+    const nameIsChanged = value.nameOnKtp !== '' && value.nameOnKtp !== userData.fullName;
+
+    actionFrom === 'back' && setBackHandle(true);
+
+    if (capturedImage?.data?.type === 'ktp') {
+      uploadSecureImageReset();
+      uploadSecureImage({ imageUrl: capturedImage.data?.url });
+    } else if (idNumberIsChanged || nameIsChanged) {
+      const user: any = {};
+      if (nameIsChanged) {
+        user.name = value.nameOnKtp
+      }
+      if (idNumberIsChanged) {
+        user.idNo = value?.idNumber
+      }
+      updateCompleteData({ user });
     } else {
-      navigate(DATA_DIRI_STEP_2_VIEW);
+      actionFrom === 'back'
+        ? backToDataCompleteness()
+        : navigate(DATA_DIRI_STEP_2_VIEW);
     }
   }
 
@@ -87,12 +126,13 @@ const Content: React.FC<Props> = (props) => {
             'Pastikan informasi KTP bisa terbaca dengan jelas',
             'Hindari tangan menutup KTP',
           ]}
-          action={() => openCameraWithOCR('ktp')}
+          action={() => openCamera('ktp')}
           type="vertical"
           resizeMode="contain"
           listType="number"
           blurRadius={2.2}
           isTiltImage
+          testID={'07.1'}
         />
       </View>
     );
@@ -113,26 +153,33 @@ const Content: React.FC<Props> = (props) => {
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               title={'Ubah Foto'}
-              onPress={() => openCameraWithOCR('ktp')}
+              onPress={() => openCamera('ktp')}
               disabled={false}
               size="medium"
               full
               outline
+              testID={'07.1'}
             />
           </View>
           <View style={{ marginHorizontal: layout.spacing.sm }} />
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               title={'Simpan'}
-              onPress={handleSubmit}
+              onPress={() => handleSave('simpan')}
               disabled={
                 value?.idNumber === '' ||
+                value?.idNumber?.length < 16 ||
                 value?.nameOnKtp === '' ||
-                updateCompleteDataState.loading
+                updateCompleteDataState.loading ||
+                uploadImageSecureState.loading
               }
-              loading={updateCompleteDataState.loading}
+              loading={
+                updateCompleteDataState.loading ||
+                uploadImageSecureState.loading
+              }
               size="medium"
               full
+              testID={'07.1'}
             />
           </View>
         </View>
@@ -140,52 +187,27 @@ const Content: React.FC<Props> = (props) => {
     );
   }
   const isImageAvailable =
-    ocrImageState.data !== null ||
+    capturedImage?.data?.type === 'ktp' ||
     completeDataState.data?.userData?.imageId !== null;
 
   return (
     <View style={{ flex: 1 }}>
       {renderIF(isImageAvailable, renderOCRResult(), renderUploadPhotoRules())}
-      <ModalBack
-        open={props.openModalBack}
-        closeModal={() => {
-          props.onCloseModalBack(false);
-        }}
-        confirm={() => {
-          if (value.idNumber === '' || value.nameOnKtp === '') {
-            backToDataCompleteness();
-          } else {
-            if (
-              value.idNumber !== userData.idNo ||
-              value.nameOnKtp !== userData.fullName
-            ) {
-              updateCompleteData({
-                user: {
-                  name: value.nameOnKtp,
-                  idNo: value.idNo,
-                },
-              });
-              setBackHandle(true);
-            } else {
-              backToDataCompleteness();
-            }
-          }
-        }}
-      />
+      <ModalBack ref={ref} confirm={() => handleSave('back')} />
     </View>
   );
-};
+});
 
 const DataDiriStep1View: React.FC = () => {
-  const [openModalStep, setOpenModalStep] = React.useState(false);
-  const [openModalBack, setOpenModalBack] = React.useState(false);
+  const refModalListOfStep = React.useRef<SnbBottomSheet2Ref>();
   const { completeDataState } = useEasyRegistration();
+  const refModalBack = React.useRef<SnbBottomSheet2Ref>();
 
   const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
-        setOpenModalBack(true);
+        refModalBack.current?.open();
         return true;
       },
     );
@@ -197,24 +219,19 @@ const DataDiriStep1View: React.FC = () => {
   return (
     <SnbContainer color="white">
       <SnbTopNav2.Type3
-        backAction={() => setOpenModalBack(true)}
+        backAction={() => refModalBack.current?.open()}
         title="Foto KTP"
         color="white"
+        testID={'07'}
       />
       <Stepper
         complete={completeDataState?.data?.userProgress?.completed}
         total={completeDataState?.data?.userProgress?.total}
-        onPress={() => setOpenModalStep(true)}
+        onPress={() => refModalListOfStep.current?.open()}
+        testID={'07'}
       />
-      <Content
-        openModalBack={openModalBack}
-        onCloseModalBack={setOpenModalBack}
-      />
-      <ListOfSteps
-        open={openModalStep}
-        type="user"
-        closeModal={() => setOpenModalStep(false)}
-      />
+      <Content ref={refModalBack} />
+      <ListOfSteps type="user" ref={refModalListOfStep} testID={'07.4'} />
     </SnbContainer>
   );
 };

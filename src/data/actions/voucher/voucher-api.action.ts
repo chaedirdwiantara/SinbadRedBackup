@@ -9,14 +9,16 @@ export const voucherDetailProcess = (
   contextDispatch({ type: types.VOUCHER_DETAIL_PROCESS, payload: data });
   return {
     type: types.VOUCHER_DETAIL_PROCESS,
-    payload: data,
+    payload: {
+      id: data.id.toString(),
+    },
     contextDispatch,
   };
 };
 /** => voucher detail success */
 export const voucherDetailSuccess = (
-  data: models.DetailSuccessProps<models.VoucherDetailProps>,
-): models.DetailSuccessAction<models.VoucherDetailProps> => {
+  data: models.DetailSuccessProps<models.VoucherCartDetailProps>,
+): models.DetailSuccessAction<models.VoucherCartDetailProps> => {
   return { type: types.VOUCHER_DETAIL_SUCCESS, payload: data };
 };
 /** => voucher detail failed */
@@ -33,8 +35,8 @@ export const voucherDetailReset = () => {
 /** => voucher cart list process */
 export const voucherCartListProcess = (
   contextDispatch: (action: any) => any,
-  data: models.DetailProcessProps,
-): models.DetailProcessAction => {
+  data: models.VoucherListProcessProps,
+): models.VoucherListProcessAction => {
   contextDispatch({ type: types.VOUCHER_CART_LIST_PROCESS, payload: data });
   return {
     type: types.VOUCHER_CART_LIST_PROCESS,
@@ -58,38 +60,30 @@ export const voucherCartListFailed = (
 export const voucherCartListReset = () => {
   return { type: types.VOUCHER_CART_LIST_RESET };
 };
-/** === COUNT ALL VOUCHER === */
-/** => count all voucher process */
-export const countAllVoucherProcess = (
+/** => cancel reserve voucher process */
+export const cancelVoucherProcess = (
   contextDispatch: (action: any) => any,
-  data: models.DetailProcessProps,
-): models.DetailProcessAction => {
-  contextDispatch({ type: types.COUNT_ALL_VOUCHER_PROCESS, payload: data });
+): Omit<models.DeleteProcessAction, 'payload'> => {
+  contextDispatch({ type: types.CANCEL_VOUCHER_PROCESS });
   return {
-    type: types.COUNT_ALL_VOUCHER_PROCESS,
-    payload: data,
+    type: types.CANCEL_VOUCHER_PROCESS,
     contextDispatch,
   };
 };
-/** => count all voucher success */
-export const countAllVoucherSuccess = (
-  data: models.DetailSuccessProps<models.CountAllVoucherProps>,
-): models.DetailSuccessAction<models.CountAllVoucherProps> => {
-  return { type: types.COUNT_ALL_VOUCHER_SUCCESS, payload: data };
+/** => cancel reserve voucher success */
+export const cancelVoucherSuccess = (
+  data: models.DeleteSuccessV3Props,
+): models.DeleteSuccessV3Action => {
+  return { type: types.CANCEL_VOUCHER_SUCCESS, payload: data };
 };
-/** => count all voucher failed */
-export const countAllVoucherFailed = (
+/** => cancel reserve voucher failed */
+export const cancelVoucherFailed = (
   data: models.ErrorProps,
-): models.DetailFailedAction => {
-  return { type: types.COUNT_ALL_VOUCHER_FAILED, payload: data };
+): models.DeleteFailedAction => {
+  return { type: types.CANCEL_VOUCHER_FAILED, payload: data };
 };
-/** => count all voucher reset */
-export const countAllVoucherReset = () => {
-  return { type: types.COUNT_ALL_VOUCHER_RESET };
-};
-/** === SAVE SELECTED VOUCHER (LOCAL DATA) === */
-export const saveSelectedVouchers = (
-  data: models.selectedVoucherDataProps | null,
-) => {
-  return { type: types.SAVE_SELECTED_VOUCHERS, payload: data };
+/** => cancel reserve voucher reset */
+export const cancelVoucherReset = (contextDispatch: (action: any) => any) => {
+  contextDispatch({ type: types.CANCEL_VOUCHER_RESET });
+  return { type: types.CANCEL_VOUCHER_RESET };
 };

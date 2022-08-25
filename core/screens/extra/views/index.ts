@@ -2,8 +2,9 @@
 import ForceUpdateView from './force-update.view';
 import MaintenanceView from './maintenance.view';
 import FirstView from './first.view';
+import BannedACcountView from './banned-account.view';
 /** === EXPORT ALL === */
-export { FirstView, ForceUpdateView, MaintenanceView };
+export { FirstView, ForceUpdateView, MaintenanceView, BannedACcountView };
 /**
  * ================================================================
  * NOTES

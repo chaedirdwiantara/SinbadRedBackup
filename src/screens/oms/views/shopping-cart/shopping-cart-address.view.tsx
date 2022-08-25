@@ -4,8 +4,14 @@ import { View } from 'react-native';
 import { SnbText2, SnbDivider2, colorV2 } from 'react-native-sinbad-ui';
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
+/** === INTERFACE ===  */
+interface ShoppingCartAddressProps {
+  testID: string;
+}
 /** === COMPONENT ===  */
-export const ShoppingCartAddress: FC = () => {
+export const ShoppingCartAddress: FC<ShoppingCartAddressProps> = ({
+  testID,
+}) => {
   /** => ACTION */
   const { stateCart } = React.useContext(contexts.CartContext);
   return (
@@ -15,7 +21,9 @@ export const ShoppingCartAddress: FC = () => {
         marginTop: 4,
         padding: 12,
       }}>
-      <SnbText2.Headline.Small color={colorV2.textColor.default}>
+      <SnbText2.Headline.Small
+        testID={`label.address.${testID}`}
+        color={colorV2.textColor.default}>
         Alamat Pengiriman
       </SnbText2.Headline.Small>
       <View style={{ marginVertical: 4 }}>
@@ -23,22 +31,25 @@ export const ShoppingCartAddress: FC = () => {
       </View>
       <View style={{ marginBottom: 4 }}>
         <SnbText2.Body.Small
+          testID={`buyerName.address.${testID}`}
           color={
             colorV2.textColor.default
-          }>{`${stateCart.buyerAddress.data?.buyerName}`}</SnbText2.Body.Small>
+          }>{`${stateCart.checkBuyer.data?.buyerName}`}</SnbText2.Body.Small>
       </View>
-      <SnbText2.Paragraph.Tiny color={colorV2.textColor.secondary}>
-        {stateCart.buyerAddress.data?.address}
-        {stateCart.buyerAddress.data?.urban ? ',' : null}{' '}
-        {stateCart.buyerAddress.data?.urban}
-        {stateCart.buyerAddress.data?.district ? ',' : null}{' '}
-        {stateCart.buyerAddress.data?.district}
-        {stateCart.buyerAddress.data?.city ? ',' : null}{' '}
-        {stateCart.buyerAddress.data?.city}
-        {stateCart.buyerAddress.data?.province ? ',' : null}{' '}
-        {stateCart.buyerAddress.data?.province}
-        {stateCart.buyerAddress.data?.zipCode ? ' ' : null}
-        {stateCart.buyerAddress.data?.zipCode}
+      <SnbText2.Paragraph.Tiny
+        testID={`fullAddress.address.${testID}`}
+        color={colorV2.textColor.secondary}>
+        {stateCart.checkBuyer.data?.address}
+        {stateCart.checkBuyer.data?.urban ? ',' : null}{' '}
+        {stateCart.checkBuyer.data?.urban}
+        {stateCart.checkBuyer.data?.district ? ',' : null}{' '}
+        {stateCart.checkBuyer.data?.district}
+        {stateCart.checkBuyer.data?.city ? ',' : null}{' '}
+        {stateCart.checkBuyer.data?.city}
+        {stateCart.checkBuyer.data?.province ? ',' : null}{' '}
+        {stateCart.checkBuyer.data?.province}
+        {stateCart.checkBuyer.data?.zipCode ? ' ' : null}
+        {stateCart.checkBuyer.data?.zipCode}
       </SnbText2.Paragraph.Tiny>
     </View>
   );

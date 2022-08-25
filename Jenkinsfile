@@ -15,7 +15,7 @@ def getSlackChannel(env) {
 pipeline {
     agent {
         node {
-            label 'worker'
+            label 'worker-frontend'
         }
     }
     options {

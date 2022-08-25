@@ -4,16 +4,19 @@ import SplashScreen from 'react-native-splash-screen';
 /** === IMPORT EXTERNAL FUNCTION === */
 import { useDataAuth, useDataPermanent } from '@core/redux/Data';
 import { useAuthCoreAction, useAdsID } from '@core/functions/auth';
+import { useCheckBannedAccount } from '@core/functions/firebase/flag-rtdb.function';
 import { NavigationAction } from '@navigation';
 import { useOTP } from '@screen/auth/functions';
 import { useIsFocused } from '@react-navigation/native';
 /** === COMPONENT === */
 const IntroSplashView: React.FC = () => {
   const isFocused = useIsFocused();
-  const { meV2 } = useDataAuth();
-  const { maintenance } = useDataPermanent();
+  const { meV2, me } = useDataAuth();
+  const { maintenance, userBanned } = useDataPermanent();
   const { getLocationPermissions } = useOTP();
   /** === HOOK === */
+  /** => this for check account is banned/not */
+  useCheckBannedAccount();
   const authCoreAction = useAuthCoreAction();
   // this for google ads ID
   const useAdsIDAction = useAdsID();
@@ -28,7 +31,12 @@ const IntroSplashView: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    if (meV2.data && !meV2.loading) {
+    if ((me.data?.user.id === userBanned?.userId) && userBanned?.isBanned) {
+      setTimeout(() => {
+        NavigationAction.resetToBannedAccount()
+        SplashScreen.hide()
+      }, 100)
+    } else if (meV2.data && !meV2.loading) {
       if (meV2.data?.data?.isBuyerCategoryCompleted) {
         setTimeout(() => {
           if (isFocused) {

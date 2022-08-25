@@ -10,6 +10,7 @@ import Toast from './core/components/Toast';
 import { BottomSheetModalProvider } from '@sinbad/react-native-sinbad-ui/src/utils/thirdParty';
 import MoengageCore from '@core/report/moengage/MoengageCore';
 import FirstLoad from '@core/components/FirstLoad';
+import BannedAccount from '@core/components/BannedAccount';
 
 const Main = () => {
   return (
@@ -21,6 +22,7 @@ const Main = () => {
             <PushNotification />
             <MainNavigator />
             <FirstLoad />
+            <BannedAccount />
             <Toast />
             <MoengageCore />
           </PersistGate>

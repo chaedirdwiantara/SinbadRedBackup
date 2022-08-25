@@ -5,11 +5,12 @@ import { VoucherApi } from '../apis/voucher.api';
 import * as ActionCreators from '@actions';
 import * as types from '@types';
 import * as models from '@models';
+import { DataSuccessUpdateV2Props } from '@models';
 /** === FUNCTION === */
 /** => voucher detail */
 function* voucherDetail(action: models.VoucherDetailProcessAction) {
   try {
-    const response: models.DetailSuccessProps<models.VoucherDetailProps> =
+    const response: models.DetailSuccessProps<models.VoucherCartDetailProps> =
       yield call(() => {
         return VoucherApi.voucherDetail(action.payload);
       });
@@ -21,11 +22,16 @@ function* voucherDetail(action: models.VoucherDetailProcessAction) {
   }
 }
 /** => voucher cart list */
-function* voucherCartList(action: models.DetailProcessAction) {
+function* voucherCartList(action: models.VoucherListProcessAction) {
   try {
     const response: models.DetailSuccessProps<models.VoucherCartListProps> =
       yield call(() => {
-        return VoucherApi.voucherCartList();
+        return VoucherApi.voucherCartList({
+          totalOrder: action.payload.totalOrder,
+          ...(action.payload.uniqueCode && {
+            uniqueCode: action.payload.uniqueCode,
+          }),
+        });
       });
     yield action.contextDispatch(
       ActionCreators.voucherCartListSuccess(response),
@@ -36,27 +42,75 @@ function* voucherCartList(action: models.DetailProcessAction) {
     yield put(ActionCreators.voucherCartListFailed(error));
   }
 }
-/** => count all voucher */
-function* countAllVoucher(action: models.DetailProcessAction) {
+/** => check sinbad voucher */
+function* checkSinbadVoucher(
+  action: models.CreateProcessAction<models.CheckSinbadVoucherPayload>,
+) {
   try {
-    const response: models.DetailSuccessProps<models.CountAllVoucherProps> =
+    const response: models.CreateSuccessV3Props<models.CheckSinbadVoucherResponse> =
       yield call(() => {
-        return VoucherApi.countAllVoucher();
+        return VoucherApi.checkSinbadVoucher(action.payload);
       });
     yield action.contextDispatch(
-      ActionCreators.countAllVoucherSuccess(response),
+      ActionCreators.checkSinbadVoucherSuccess(response),
     );
-    yield put(ActionCreators.countAllVoucherSuccess(response));
-  } catch (error: any) {
-    yield action.contextDispatch(ActionCreators.voucherCartListFailed(error));
-    yield put(ActionCreators.countAllVoucherFailed(error));
+    yield put(ActionCreators.checkSinbadVoucherSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.checkSinbadVoucherFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.checkSinbadVoucherFailed(error as models.ErrorProps),
+    );
+  }
+}
+/** => cancel reserve voucher */
+function* cancelVoucher(action: Omit<models.DeleteProcessAction, 'id'>) {
+  try {
+    const response: models.DeleteSuccessV3Props = yield call(() => {
+      return VoucherApi.cancelVoucher();
+    });
+    yield action.contextDispatch(ActionCreators.cancelVoucherSuccess(response));
+    yield put(ActionCreators.cancelVoucherSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.cancelVoucherFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.cancelVoucherFailed(error as models.ErrorProps));
+  }
+}
+/** => update voucher visibility */
+function* updateVisibilityVoucher(
+  action: models.UpdateProcessAction<{ id: string }>,
+) {
+  try {
+    const response: models.UpdateSuccessV3Props<DataSuccessUpdateV2Props> =
+      yield call(() => {
+        return VoucherApi.updateVisibilityVoucher(action.payload.data);
+      });
+    yield action.contextDispatch(
+      ActionCreators.updateVisibilityVoucherSuccess(response),
+    );
+    yield put(ActionCreators.updateVisibilityVoucherSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.updateVisibilityVoucherFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.updateVisibilityVoucherFailed(error as models.ErrorProps),
+    );
   }
 }
 /** === LISTEN FUNCTION === */
 function* VoucherSaga() {
   yield takeLatest(types.VOUCHER_DETAIL_PROCESS, voucherDetail);
   yield takeLatest(types.VOUCHER_CART_LIST_PROCESS, voucherCartList);
-  yield takeLatest(types.COUNT_ALL_VOUCHER_PROCESS, countAllVoucher);
+  yield takeLatest(types.CHECK_SINBAD_VOUCHER_PROCESS, checkSinbadVoucher);
+  yield takeLatest(types.CANCEL_VOUCHER_PROCESS, cancelVoucher);
+  yield takeLatest(
+    types.UPDATE_VISIBILITY_VOUCHER_PROCESS,
+    updateVisibilityVoucher,
+  );
 }
 
 export default VoucherSaga;

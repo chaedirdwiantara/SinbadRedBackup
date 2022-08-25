@@ -6,18 +6,15 @@ import { SnbContainer, SnbTopNav2 } from 'react-native-sinbad-ui';
 import RecentSearch from './RecentSearch';
 /** === IMPORT FUNCTION === */
 import { useDataAuth } from '@core/redux/Data';
-import {
-  goToHome,
-  goToSearch,
-  goToShoppingCart,
-  backToLogin,
-} from '@core/functions/product';
+import { backToLogin } from '@core/functions/product';
 import { contexts } from '@contexts';
 import {
   goBack,
   goToProduct,
   useInputText,
   useRecentSearch,
+  goToHome,
+  goToShoppingCart,
 } from '../functions';
 /** === COMPONENT === */
 const SearchView: FC = () => {
@@ -27,7 +24,6 @@ const SearchView: FC = () => {
     useRecentSearch();
   const { stateCart } = useContext(contexts.CartContext);
   const { me } = useDataAuth();
-
   /** => FUNCTION */
   const validateCartVisit = useCallback(() => {
     if (me.data === null) {
@@ -41,7 +37,7 @@ const SearchView: FC = () => {
     if (/^\s*$/.test(inputText)) return handleTextChange('');
     clearText();
     addKeyword(inputText);
-    goToProduct(inputText);
+    goToProduct(inputText, 'Keyword');
   }, [inputText]);
 
   /** === VIEW === */
@@ -68,7 +64,7 @@ const SearchView: FC = () => {
           onAllDelete={deleteAllKeywords}
           onKeywordPress={(keyword) => {
             clearText();
-            goToProduct(keyword);
+            goToProduct(keyword, 'Historical');
           }}
         />
       </View>

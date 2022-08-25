@@ -28,3 +28,7 @@ export const forceUpdateVersion = (
 export const maintenance = (payload: boolean): models.MaintenanceActions => {
   return { type: types.MAINTENANCE, payload };
 };
+/** => FOR BANNED ACCOUNT */
+export const bannedAccount = (payload: boolean): models.BannedAccountActions => {
+  return { type: types.BANNED_ACCOUNT, payload }
+}
