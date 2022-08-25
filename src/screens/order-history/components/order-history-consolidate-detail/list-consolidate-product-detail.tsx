@@ -142,7 +142,7 @@ const Card: FC<CardProps> = (props) => {
           ) : null}
           {data.isDisplayDelivered ? (
             <>
-              <View style={{ flex: 1 }}>
+              <View style={{ flex: 1, padding: 8, alignItems: 'center' }}>
                 <SnbButton2.Link
                   title="Lacak"
                   size="small"

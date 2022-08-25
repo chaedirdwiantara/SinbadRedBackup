@@ -10,7 +10,8 @@ import {
   resetToForceUpdate,
   resetToMaintenance,
   resetToBannedAccount,
-  restartApp
+  getRoutes,
+  restartApp,
 } from '../../navigations/RootNavigation';
 import {
   useGetNavParams,
@@ -28,11 +29,12 @@ export const NavigationAction = {
   resetToIntroSinbad,
   resetToForceUpdate,
   resetToMaintenance,
+  getRoutes,
   useGetNavParams,
   useCustomBackHardware,
   useFocusEffect,
   resetToBannedAccount,
-  restartApp
+  restartApp,
 };
 /**
  * ================================================================

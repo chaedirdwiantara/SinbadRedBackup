@@ -18,7 +18,7 @@ export interface PaymentMethod {
   isSelected: boolean;
   isActive: boolean;
   status: boolean;
-  collection: boolean;
+  isUseCollection: boolean;
 }
 
 export interface PaymentMethodGetWaitingPaymentOrder {
