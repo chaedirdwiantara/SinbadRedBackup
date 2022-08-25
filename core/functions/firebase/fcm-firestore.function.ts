@@ -31,7 +31,8 @@ const deleteFcmByDeviceId = async () => {
         .collection('fcm')
         .doc(data.id)
         .delete()
-        .then(() => true);
+        .then(() => true)
+        .catch(() => false);
     }
   });
 };
@@ -47,13 +48,14 @@ const setUserFCM = async (userId: number | null) => {
         .update({
           userId,
         })
-        .then(() => true);
+        .then(() => true)
+        .catch(() => false);
     }
   });
 };
 /** => save FCM not login */
 const saveFCMNotLogin = async (fcm: string) => {
-  firestore()
+  return firestore()
     .collection('sinbadRed')
     .doc('notifications')
     .collection('fcm')
@@ -63,9 +65,8 @@ const saveFCMNotLogin = async (fcm: string) => {
       fcm,
       userId: null,
     })
-    .then(() => {
-      console.log('User added!');
-    });
+    .then(() => true)
+    .catch(() => false);
 };
 /** === EXPORT === */
 export { getFcmByDeviceId, deleteFcmByDeviceId, saveFCMNotLogin, setUserFCM };
