@@ -217,7 +217,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
     return (
       <>
         <ThankYouPageCardDivider />
-        {data?.sinbadVoucherDiscountOrder != null ? (
+        {data?.sinbadVoucherDiscountOrder ? (
           <View>
             <View style={ThankYouPageStyle.OrderDetailItem}>
               <View>
