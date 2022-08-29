@@ -167,18 +167,20 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         cartData,
       });
 
-      const errorVoucherValidation =
+      const isErrorVoucherValidation =
         selectedVoucher !== null &&
         stateVoucher.checkSinbadVoucher.error !== null &&
         stateVoucher.checkSinbadVoucher.error.code === 50170000017;
 
       /** Show business error if and only if the data from those responses doesn't match with Cart Master  */
-      if (!validationResult) {
-        handleOpenErrorBusinessModal();
-      } else if (errorVoucherValidation) {
-        handleOpenErrorCheckVoucher();
+      if (!validationResult || !isErrorVoucherValidation) {
+        if (!validationResult) {
+          handleOpenErrorBusinessModal();
+        } else {
+          handleOpenErrorCheckVoucher();
+        }
       } else {
-        setMatchValid(validationResult && !errorVoucherValidation);
+        setMatchValid(validationResult && isErrorVoucherValidation);
       }
     }
   }, [
