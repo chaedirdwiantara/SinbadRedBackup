@@ -34,7 +34,7 @@ const PaymentInformation = () => {
             withFraction: false,
           })}
         />
-        {data?.sinbadVoucherDiscountOrder != null ? (
+        {data?.sinbadVoucherDiscountOrder ? (
           <Description
             title={'Potongan Voucher'}
             voucher={true}
