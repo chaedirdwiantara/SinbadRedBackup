@@ -1,34 +1,6 @@
 import * as models from '@models';
 import * as types from '@types';
 
-// CHECK PHONE NO AVAILABILITY
-export const checkPhoneNoAvailabilityProcess = (
-  data: models.ICheckPhoneNoAvailabilityProcess,
-): models.IRegisterAction<models.ICheckPhoneNoAvailabilityProcess> => {
-  return {
-    type: types.CHECK_PHONE_AVAILABILITY_PROCESS,
-    payload: data,
-  };
-};
-
-export const checkPhoneNoAvailabilitySuccess = (
-  data: models.ICheckPhoneNoAvailabilitySuccess,
-): models.IRegisterAction<models.ICheckPhoneNoAvailabilitySuccess> => {
-  return {
-    type: types.CHECK_PHONE_AVAILABILITY_SUCCESS,
-    payload: data,
-  };
-};
-
-export const checkPhoneNoAvailabilityFailed = (
-  data: models.ErrorProps | unknown,
-): models.IRegisterAction<models.ICheckPhoneNoAvailabilityFailed | unknown> => {
-  return {
-    type: types.CHECK_PHONE_AVAILABILITY_FAILED,
-    payload: data,
-  };
-};
-
 // CHECK EMAIL AVAILABILITY
 export const checkEmailAvailabilityProcess = (
   data: models.ICheckEmailAvailabilityProcess,
@@ -53,34 +25,6 @@ export const checkEmailAvailabilityFailed = (
 ): models.IRegisterAction<models.ICheckEmailAvailabilityFailed | unknown> => {
   return {
     type: types.CHECK_EMAIL_AVAILABILITY_FAILED,
-    payload: data,
-  };
-};
-
-// REGISTER MERCHANT ACTION
-export const merchantRegisterProcess = (
-  data: models.IMerchantData,
-): models.IRegisterAction<models.IMerchantData> => {
-  return {
-    type: types.REGISTER_MERCHANT_PROCESS,
-    payload: data,
-  };
-};
-
-export const merchantRegisterSuccess = (
-  data: models.IRegisterMerchantDetail,
-): models.IRegisterAction<models.IRegisterMerchantDetail> => {
-  return {
-    type: types.REGISTER_MERCHANT_SUCCESS,
-    payload: data,
-  };
-};
-
-export const merchantRegisterFailed = (
-  data: models.ErrorProps | unknown,
-): models.IRegisterAction<models.IRegisterMerchantFailed | unknown> => {
-  return {
-    type: types.REGISTER_MERCHANT_FAILED,
     payload: data,
   };
 };

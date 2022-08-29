@@ -1,57 +1,41 @@
-import * as models from '@models';
 /** === VOUCHER DETAIL === */
-export interface VoucherDetailProps {
-  id: number;
+export interface VoucherCartDetailProps {
+  id: string;
+  sinbadVoucherId: number;
+  name: string;
   imageUrl: string;
-  expiredAt: string;
-  voucherDescription: string;
-  termsAndCondition: string[];
-  instructions: string[];
-  voucherName: string;
-  voucherHeader: string;
-  uniqueCode: string;
+  descriptions: string;
+  termAndConditions: string[];
+  howToUse: string[];
 }
 export interface VoucherDataProps {
-  dataVouchers: selectedVoucherDataProps | null;
+  dataVoucher: EligibleVoucherProps | null;
 }
-/** === SELECTED VOUCHER DATA === */
-export interface selectedVoucherDataProps {
-  sinbadVoucher: models.SinbadVoucherProps | null;
-  sellerVouchers: models.SellerVoucherListProps[];
-}
+
 /** === VOUCHER CART LIST === */
 export interface VoucherCartListProps {
-  sinbadVouchers: SinbadVoucherProps[];
-  sellerVouchers: SellerVoucherProps[];
+  eligible: EligibleVoucherProps[];
+  notEligible: NotEligibleVoucherProps[];
 }
-export interface SinbadVoucherProps {
-  voucherId: number;
-  voucherName: string;
-  shortDescription: string;
-  benefitRebate: number;
-  expiredAt: string;
+export interface EligibleVoucherProps {
+  id: string;
+  sinbadVoucherId: number;
+  name: string;
+  endDate: string;
+  sinbadVoucherValue: number;
   remainingDay: number;
 }
-export interface SellerVoucherProps {
-  invoiceGroupId: number;
-  invoiceGroupName: string;
-  voucherList: SellerVoucherListProps[];
-}
-export interface SellerVoucherListProps {
-  id: number;
-  voucherId: number;
-  voucherName: string;
-  uniqueCode: string;
-  externalId: string;
-  shortDescription: string;
+export interface NotEligibleVoucherProps {
+  id: string;
+  sinbadVoucherId: number;
+  name: string;
+  endDate: string;
+  minOrderTransaction: number;
   remainingDay: number;
-  expiredAt: string;
-  invoiceGroupId: number;
-  invoiceGroupName: string;
-  benefitRebate: number;
-  benefitDiscout: number;
-  benefitType: 'amount' | 'percent';
+  sinbadVoucherValue: number;
 }
-export interface CountAllVoucherProps {
-  total: number;
+
+export interface SaveSelectedVoucher {
+  voucherId: number;
+  voucherValue: number;
 }

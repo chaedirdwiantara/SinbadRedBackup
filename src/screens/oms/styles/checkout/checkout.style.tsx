@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { color } from 'react-native-sinbad-ui';
+import { color, colorV2, spacingV2 } from 'react-native-sinbad-ui';
 
 export const CheckoutStyle = StyleSheet.create({
   invoiceGroupListContainer: {
@@ -158,6 +158,19 @@ export const CheckoutStyle = StyleSheet.create({
   image: {
     width: 240,
     height: 240,
+  },
+  totalOrderContainer: {
+    backgroundColor: colorV2.bgColor.light,
+    padding: spacingV2.spacing.lg,
+  },
+  totalOrderTextContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  totalOrderTextContainerNoMargin: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 

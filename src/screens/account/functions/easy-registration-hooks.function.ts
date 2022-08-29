@@ -123,6 +123,14 @@ export const useEasyRegistration = () => {
     };
   };
 
+  const uploadSecureImage = (data: any) => {
+    dispatch(Actions.uploadSecureImageProcess(data));
+  };
+
+  const uploadSecureImageReset = () => {
+    dispatch(Actions.uploadSecureImageReset());
+  };
+
   return {
     searchLocation,
     createBasicAccount,
@@ -146,5 +154,8 @@ export const useEasyRegistration = () => {
     completeDataConfirmationState: account.completeDataConfirmation,
     useGetUserMedea,
     useUpdateUserMedea,
+    uploadSecureImage,
+    uploadSecureImageReset,
+    uploadImageSecureState: account.uploadSecureImage
   };
 };

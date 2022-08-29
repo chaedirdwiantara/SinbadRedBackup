@@ -1,3 +1,4 @@
+import { testProps } from '@core/functions/global/test-props';
 import React, { FC, Ref } from 'react';
 import { Image, View } from 'react-native';
 import {
@@ -13,17 +14,20 @@ import { CheckoutStyle } from '../../styles';
 interface CheckoutBottomErrorModalProps {
   parentRef: Ref<SnbBottomSheet2Ref>;
   close: () => void;
+  testID: string;
 }
 /** === COMPONENT === */
 export const ModalValidationLimit: FC<CheckoutBottomErrorModalProps> = ({
   parentRef,
   close,
+  testID,
 }) => {
   /** => content item image */
   const contentItemImage = () => {
     return (
       <View style={CheckoutStyle.contentImageContainer}>
         <Image
+          {...testProps(`img.modalValidationLimit.${testID}`)}
           source={Images.pendingPayment}
           style={CheckoutStyle.image}
           resizeMode={'contain'}
@@ -36,6 +40,7 @@ export const ModalValidationLimit: FC<CheckoutBottomErrorModalProps> = ({
     return (
       <View style={CheckoutStyle.contentTitleContainer}>
         <SnbText2.Headline.Default
+          testID={`title.modalValidationLimit.${testID}`}
           color={colorV2.textColor.default}
           align={'center'}>
           Total Pembelian Terlalu Besar
@@ -48,6 +53,7 @@ export const ModalValidationLimit: FC<CheckoutBottomErrorModalProps> = ({
     return (
       <View style={CheckoutStyle.contentMessageContainer}>
         <SnbText2.Paragraph.Default
+          testID={`subTitle.modalValidationLimit.${testID}`}
           color={colorV2.textColor.secondary}
           align={'center'}>
           Kurangi produk di keranjang Anda hingga di bawah nominal Rp999.999.999
@@ -68,7 +74,11 @@ export const ModalValidationLimit: FC<CheckoutBottomErrorModalProps> = ({
   /** => button */
   const button = () => {
     return (
-      <FooterButton.Single title={'Kembali Ke Keranjang'} buttonPress={close} />
+      <FooterButton.Single
+        testID={`modalValidationLimit.${testID}`}
+        title={'Kembali Ke Keranjang'}
+        buttonPress={close}
+      />
     );
   };
   /** => content */

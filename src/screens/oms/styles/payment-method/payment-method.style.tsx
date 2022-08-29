@@ -4,7 +4,8 @@ import { colorV2 } from 'react-native-sinbad-ui';
 export const PaymentMethodStyle = StyleSheet.create({
   mainBodyContainer: {
     backgroundColor: colorV2.neutral.cloud10,
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
   },
   listContainer: {
     backgroundColor: colorV2.bgColor.light,
@@ -22,7 +23,7 @@ export const PaymentMethodStyle = StyleSheet.create({
     width: 55,
   },
   listName: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginLeft: 16,
   },
   detailContainer: {
@@ -41,12 +42,6 @@ export const PaymentMethodStyle = StyleSheet.create({
     marginBottom: 12,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  buttonFooter: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    left: 0,
   },
   modalComponentStyle: {
     marginBottom: 8,

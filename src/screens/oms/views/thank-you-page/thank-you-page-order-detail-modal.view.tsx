@@ -1,8 +1,22 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { toCurrency } from '@core/functions/global/currency-format';
-import React, { FC, useState, useEffect,forwardRef, useRef, useCallback, useImperativeHandle } from 'react';
+import React, {
+  FC,
+  useState,
+  useEffect,
+  forwardRef,
+  useRef,
+  useCallback,
+  useImperativeHandle,
+} from 'react';
 import { View, Dimensions, TouchableOpacity } from 'react-native';
-import { SnbText2, colorV2, SnbBottomSheet2, SnbBottomSheet2Ref, SnbBottomSheetPart } from 'react-native-sinbad-ui';
+import {
+  SnbText2,
+  colorV2,
+  SnbBottomSheet2,
+  SnbBottomSheet2Ref,
+  SnbBottomSheetPart,
+} from 'react-native-sinbad-ui';
 import * as models from '@models';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ThankYouPageCardDivider } from '@screen/oms/components/thank-you-page-card-divider.component';
@@ -21,11 +35,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
   SnbBottomSheet2Ref,
   ModalThankYouPageOrderDetail
 >((props, ref) => {
-  const {
-    isOpen,
-    close,
-    data,
-  } = props;
+  const { isOpen, close, data } = props;
   //ref
   const modalRef = useRef<SnbBottomSheet2Ref>(null);
   // register ref
@@ -56,15 +66,14 @@ export const ModalThankYouPageOrderDetail = forwardRef<
   // setExpandableLabelItemCount(count - 2)
 
   const [expanded, setExpanded] = useState(false);
-  const [modalHeight, setModalHeight] = useState(275)
+  const [modalHeight, setModalHeight] = useState(275);
   useEffect(() => {
-    if(expanded){
-      setModalHeight(424)
+    if (expanded) {
+      setModalHeight(424);
+    } else {
+      setModalHeight(275);
     }
-    else{
-      setModalHeight(275)
-    }
-  },[expanded])
+  }, [expanded]);
   const productPerSellerList = (sellerData: models.OrderSeller) => {
     if (expanded) {
       return sellerData.products.map((product) => (
@@ -112,7 +121,8 @@ export const ModalThankYouPageOrderDetail = forwardRef<
             <View>
               <View style={ThankYouPageStyle.OrderDetailItem}>
                 <View style={{ width: '50%' }}>
-                  <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+                  <SnbText2.Paragraph.Default
+                    color={colorV2.textColor.secondary}>
                     {sellerData.products[1]?.productName}
                   </SnbText2.Paragraph.Default>
                 </View>
@@ -206,14 +216,34 @@ export const ModalThankYouPageOrderDetail = forwardRef<
   const deliveryAndOtherCost = () => {
     return (
       <>
-      <ThankYouPageCardDivider />
+        <ThankYouPageCardDivider />
+        {data?.sinbadVoucherDiscountOrder ? (
+          <View>
+            <View style={ThankYouPageStyle.OrderDetailItem}>
+              <View>
+                <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+                  Potongan Voucher
+                </SnbText2.Paragraph.Default>
+              </View>
+              <View>
+                <SnbText2.Paragraph.Default color={colorV2.textColor.success}>
+                  {`-${toCurrency(data?.sinbadVoucherDiscountOrder, {
+                    withFraction: false,
+                  })}`}
+                </SnbText2.Paragraph.Default>
+              </View>
+            </View>
+          </View>
+        ) : null}
         <View>
           <View style={ThankYouPageStyle.OrderDetailItem}>
             <View>
-              <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>Biaya Pengiriman</SnbText2.Paragraph.Default>
+              <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+                Total Ongkos Kirim
+              </SnbText2.Paragraph.Default>
             </View>
             <View>
-              <SnbText2.Paragraph.Default color={colorV2.textColor.success}>
+              <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
                 {toCurrency(0, { withFraction: false })}
               </SnbText2.Paragraph.Default>
             </View>
@@ -222,7 +252,9 @@ export const ModalThankYouPageOrderDetail = forwardRef<
         <View>
           <View style={ThankYouPageStyle.OrderDetailItem}>
             <View>
-              <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>Biaya Layanan</SnbText2.Paragraph.Default>
+              <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+                Biaya Layanan
+              </SnbText2.Paragraph.Default>
             </View>
             <View>
               <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
@@ -241,7 +273,9 @@ export const ModalThankYouPageOrderDetail = forwardRef<
         <View>
           <View style={ThankYouPageStyle.OrderDetailItem}>
             <View>
-              <SnbText2.Headline.Small color={colorV2.textColor.default}>Total</SnbText2.Headline.Small>
+              <SnbText2.Headline.Small color={colorV2.textColor.default}>
+                Total
+              </SnbText2.Headline.Small>
             </View>
             <View>
               <SnbText2.Headline.Small color={colorV2.textColor.default}>

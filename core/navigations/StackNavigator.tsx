@@ -4,13 +4,28 @@ import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import Navigations from '../../src/navigations';
 import TabNavigator from './TabNavigator';
 /** => for intro view */
-import { IntroSplashView, IntroSinbadView } from '../screens/intro/views';
-import { ForceUpdateView, MaintenanceView } from '../screens/extra/views';
+import { IntroSplashView } from '../screens/intro/views';
+import {
+  FirstView,
+  ForceUpdateView,
+  MaintenanceView,
+  BannedACcountView
+} from '../screens/extra/views';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 enableScreens();
 
 const StackNavigator: React.FC = () => {
+  /** => this for maintenance app */
+  const BannedAccountNav = () => {
+    return (
+      <Screen
+        name="BannedAccount"
+        component={BannedACcountView}
+        options={{ headerShown: false, screenOrientation: 'portrait' }}
+      />
+    );
+  };
   /** => this for maintenance app */
   const MaintenanceNav = () => {
     return (
@@ -41,12 +56,12 @@ const StackNavigator: React.FC = () => {
       />
     );
   };
-  /** => this for intro sinbad */
-  const IntroSinbadNav = () => {
+  /** => this for first view */
+  const FirstNav = () => {
     return (
       <Screen
-        name="IntroSinbad"
-        component={IntroSinbadView}
+        name="First"
+        component={FirstView}
         options={{ headerShown: false, screenOrientation: 'portrait' }}
       />
     );
@@ -84,13 +99,14 @@ const StackNavigator: React.FC = () => {
   };
 
   return (
-    <Navigator initialRouteName={'Splash'}>
+    <Navigator initialRouteName={'First'}>
+      {FirstNav()}
       {MaintenanceNav()}
       {ForceUpdateNav()}
       {IntroSplashNav()}
-      {IntroSinbadNav()}
       {tabNav()}
       {projectNav()}
+      {BannedAccountNav()}
     </Navigator>
   );
 };

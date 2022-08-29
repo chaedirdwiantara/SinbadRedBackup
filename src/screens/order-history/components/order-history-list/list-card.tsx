@@ -1,10 +1,4 @@
-import React, {
-  FC,
-  memo,
-  useCallback,
-  useContext,
-  useState,
-} from 'react';
+import React, { FC, memo, useCallback, useContext, useState } from 'react';
 import { toCurrency } from '@core/functions/global/currency-format';
 import {
   SnbText2,
@@ -103,7 +97,7 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
         <View style={styles.information}>
           <SnbText2.Body.Small>Total Pesanan</SnbText2.Body.Small>
           <SnbText2.Body.Small>
-            {toCurrency(data.totalOrderParcelsAfterTax, {
+            {toCurrency(data.totalOrderPrice, {
               withFraction: false,
             })}
           </SnbText2.Body.Small>
@@ -128,7 +122,7 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
     </Pressable>
   );
 };
-const ParcelConsolidation = (dataParcels: any[], refresh: ()=> void) => {
+const ParcelConsolidation = (dataParcels: any[], refresh: () => void) => {
   const [state] = useContext(Context);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [confirmationOrderId, setConfirmationOrderId] = useState('');
@@ -448,11 +442,9 @@ const ListCard = () => {
         style={styles.main}
         data={historyListData}
         keyExtractor={(i) => i.orderId}
-        renderItem={({ item }) => 
-        <CardConsolidation 
-          data={item} 
-          onRefreshAction={() => onRefresh()} 
-        />}
+        renderItem={({ item }) => (
+          <CardConsolidation data={item} onRefreshAction={() => onRefresh()} />
+        )}
         onEndReached={onLoadMore}
         ListEmptyComponent={() =>
           historyListData.length == 0 ? (

@@ -1,4 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
+import React from 'react';
 import messaging from '@react-native-firebase/messaging';
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -13,18 +14,27 @@ import * as Actions from '@actions';
 const useGetTokenNotLogin = async () => {
   const data = useDataPermanent();
   const dispatch = useDispatch();
-  if (!data.isFCM) {
-    deleteFcmByDeviceId().then(async (d) => {
-      if (d || d === undefined) {
-        try {
-          saveFCMNotLogin(await messaging().getToken());
-          dispatch(Actions.isFCM(true));
-        } catch (err) {
-          console.error('get token failed', err);
+  React.useEffect(() => {
+    if (!data.isFCM) {
+      deleteFcmByDeviceId().then(async (d) => {
+        if (d || d === undefined) {
+          try {
+            saveFCMNotLogin(await messaging().getToken()).then((res) => {
+              if (res) {
+                dispatch(Actions.isFCM(true));
+              } else {
+                console.error('save token failed');
+              }
+            });
+          } catch (err) {
+            console.error('get token failed', err);
+          }
+        } else {
+          console.error('delete fcm error');
         }
-      }
-    });
-  }
+      });
+    }
+  }, [data.isFCM]);
 };
 /** === EXPORT === */
 export { useGetTokenNotLogin };

@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 import { RouteProp, useRoute } from '@react-navigation/native';
 /** === IMPORT COMPONENT === */
+import { Header } from '../components';
 import ProductListView from '@core/components/product/product-list/product-list.view';
 import CountProductList from '@core/components/product/product-list/count-product-list.view';
 import ModalAddToCartView from '@core/components/product/product-list/modal-add-to-cart.view';
@@ -13,10 +14,10 @@ import ModalNotInUrbanView from '@core/components/product/product-list/modal-not
 import ModalErrorStockView from '@core/components/product/product-list/modal-error-stock.view';
 import ModalErrorProductDetailView from '@core/components/product/product-list/modal-error-product-detail.view';
 import { ProductListProvider } from '@core/components/product/product-list/product-list.context';
-import { useProductListContext } from '@core/components/product/product-list/function/product-list.util';
 
-import { Header } from '../components';
 /** === IMPORT FUNCTIONS === */
+import { useProductListContext } from '@core/components/product/product-list/function/product-list.util';
+import { useSearchResultEventPageMoengage } from '../functions/search-result-moengage.function';
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { useProductListActions } from '@screen/product/functions';
 /** === TYPES === */
@@ -35,6 +36,8 @@ const testID = 'search-product';
 /** === COMPONENT === */
 const SearchProductView: FC = () => {
   /** === HOOKS === */
+  // listener search result page moengage
+  useSearchResultEventPageMoengage();
   const {
     params: { keyword },
   } = useRoute<SearchProductRouteProps>();

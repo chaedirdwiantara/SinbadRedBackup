@@ -152,3 +152,26 @@ export const completeDataConfirmationFailed = (data: any) => ({
 export const resetCompleteDataConfirmation = () => ({
   type: types.RESET_COMPLETE_DATA_CONFIRMATION,
 });
+
+export const uploadSecureImageProcess = (
+  data: any,
+): models.IAction<any> => ({
+  type: types.UPLOAD_SECURE_IMAGE_PROCESS,
+  payload: data,
+});
+
+export const uploadSecureImageSuccess = (
+  data: any,
+): models.IAction<any> => ({
+  type: types.UPLOAD_SECURE_IMAGE_SUCCESS,
+  payload: data,
+});
+
+export const uploadSecureImageFailed = (data: any): models.IAction<any> => ({
+  type: types.UPLOAD_SECURE_IMAGE_FAILED,
+  payload: data,
+});
+
+export const uploadSecureImageReset = () => ({
+  type: types.UPLOAD_SECURE_IMAGE_RESET,
+});

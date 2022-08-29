@@ -3,8 +3,9 @@ import {
   SnbContainer,
   SnbTopNav2,
   SnbTextField2,
-  SnbButton2,
   spacingV2 as layout,
+  SnbBottomSheet2Ref,
+  FooterButton,
 } from 'react-native-sinbad-ui';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { View, ScrollView, BackHandler, Image } from 'react-native';
@@ -23,8 +24,8 @@ const DataDiriStep4View: React.FC = () => {
     refetchCompleteData,
   } = useEasyRegistration();
   const [email, setEmail] = useState(completeDataState?.data?.userData?.email);
-  const [openModalStep, setOpenModalStep] = useState(false);
-  const [openModalBack, setOpenModalBack] = useState(false);
+  const refModalListOfStep = React.useRef<SnbBottomSheet2Ref>()
+  const refModalBack = React.useRef<SnbBottomSheet2Ref>()
   const [emailIsNotValid, setEmailIsNotValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [backHandle, setBackHandle] = useState(false);
@@ -36,7 +37,7 @@ const DataDiriStep4View: React.FC = () => {
   // HANDLE BACK DEVICE
   React.useEffect(() => {
     const backAction = () => {
-      setOpenModalBack(true);
+      refModalBack.current?.open()
       return true;
     };
     const backHandler = BackHandler.addEventListener(
@@ -103,6 +104,7 @@ const DataDiriStep4View: React.FC = () => {
       NavigationAction.navigate('EmailOtp', {
         type: 'email',
         data: email,
+        testID: '10.4',
       });
     }
   }, [stateMerchant]);
@@ -132,14 +134,16 @@ const DataDiriStep4View: React.FC = () => {
     <SnbContainer color="white">
       <ScrollView style={{ flex: 1 }}>
         <SnbTopNav2.Type3
-          backAction={() => setOpenModalBack(true)}
+          backAction={() => refModalBack.current?.open()}
           color="white"
           title="Alamat Email"
+          testID={'10'}
         />
         <Stepper
           complete={completeDataState?.data?.userProgress?.completed}
           total={completeDataState?.data?.userProgress?.total}
-          onPress={() => setOpenModalStep(true)}
+          onPress={() => refModalListOfStep.current?.open()}
+          testID={'10'}
         />
         <View
           style={{ alignItems: 'center', marginVertical: layout.spacing.lg }}>
@@ -158,32 +162,29 @@ const DataDiriStep4View: React.FC = () => {
             labelText={'Email'}
             mandatory
             valMsgError={errorMessage}
+            testID={'10'}
           />
         </View>
       </ScrollView>
-      <View style={{ padding: layout.spacing.lg }}>
-        <SnbButton2.Primary
-          title="Simpan"
-          disabled={
-            (emailIsNotValid && email) ||
+      <FooterButton.Single
+        title="Simpan"
+        buttonPress={() => confirm()}
+        disabled={
+          (emailIsNotValid && email) ||
             updateCompleteDataState.loading ||
             stateMerchant.changeEmail.loading ||
             email === '' ||
             email === null
-              ? true
-              : false
-          }
-          onPress={() => confirm()}
-          loading={
-            updateCompleteDataState.loading || stateMerchant.changeEmail.loading
-          }
-          size="medium"
-          full
-        />
-      </View>
+            ? true
+            : false
+        }
+        loadingButton={
+          updateCompleteDataState.loading || stateMerchant.changeEmail.loading
+        }
+        testID={'10'}
+      />
       <ModalBack
-        open={openModalBack}
-        closeModal={() => setOpenModalBack(false)}
+        ref={refModalBack}
         confirm={() => {
           if (email && email !== '' && !emailIsNotValid) {
             setBackHandle(true);
@@ -194,9 +195,9 @@ const DataDiriStep4View: React.FC = () => {
         }}
       />
       <ListOfSteps
-        open={openModalStep}
         type="user"
-        closeModal={() => setOpenModalStep(false)}
+        ref={refModalListOfStep}
+        testID={'10.3'}
       />
     </SnbContainer>
   );

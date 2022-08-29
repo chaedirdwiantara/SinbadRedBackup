@@ -18,6 +18,7 @@ import {
   SnbTextField2,
   SnbToast,
   SnbProgress,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import * as models from '@models';
 import {
@@ -56,8 +57,7 @@ const Content: React.FC = () => {
     React.useState<any>(null);
   let mapRef = React.useRef<MapView>(null);
   const [type, setType] = React.useState<models.ITypeList>('');
-  const [openModalSelection, setOpenModalSelection] =
-    React.useState<boolean>(false);
+  const refModalSelection = React.useRef<SnbBottomSheet2Ref>()
   const [latLng, setLatLng] = React.useState<LatLng | any>(null);
   const [streetName, setStreetName] = React.useState();
   const [staticAddress, setStaticAddress] = React.useState(
@@ -266,7 +266,7 @@ const Content: React.FC = () => {
                     type: 'listVehicleAccess',
                   });
                 }
-                setOpenModalSelection(true);
+                refModalSelection.current?.open()
               }}
               rightType="icon"
               rightIcon="chevron_right"
@@ -292,7 +292,7 @@ const Content: React.FC = () => {
                     type: 'listVehicleAccessAmount',
                   });
                 }
-                setOpenModalSelection(true);
+                refModalSelection.current?.open()
               }}
               rightType="icon"
               rightIcon="chevron_right"
@@ -356,7 +356,7 @@ const Content: React.FC = () => {
       </View>
       <ModalSelection
         type={type}
-        open={openModalSelection}
+        ref={refModalSelection}
         onCloseModalSelection={(result: any) => {
           if (result) {
             switch (result.type as models.ITypeList) {
@@ -373,7 +373,7 @@ const Content: React.FC = () => {
             }
             onSelectedItem(result.item);
           }
-          setOpenModalSelection(false);
+          refModalSelection.current?.close();
           resetGetSelection();
           resetSelectedItem();
         }}

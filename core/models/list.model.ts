@@ -26,6 +26,7 @@ export interface ListProcessDefaultProps {
   sort?: 'asc' | 'desc';
   sortBy?: string;
   keyword?: string;
+  sellerIds: string;
 }
 
 export type ListProcessProps<T = object> = ListProcessDefaultProps & T;
