@@ -58,6 +58,7 @@ export interface CheckoutResponse {
   sinbadVoucherDiscountOrder: number;
   buyerAddress: CheckoutBuyerAddressPayload;
   totalOrderQtyProduct: number;
+  totalOrderAfterSinbadVoucher: number;
   sellers: CheckoutCartResponse[];
   createdAt: string;
   updatedAt: string;

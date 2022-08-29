@@ -157,10 +157,11 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     if (
       stateCart.postCheckProduct.data !== null &&
       stateCart.postCheckSeller.data !== null &&
-      stateCart.postCheckStock.data !== null
+      stateCart.postCheckStock.data !== null &&
+      !stateVoucher.checkSinbadVoucher.loading
     ) {
       /** Check whether cart and several check responses match */
-      const validationResult = matchCartWithCheckData({
+      const isValidationPass = matchCartWithCheckData({
         checkProductData: stateCart.postCheckProduct.data ?? [],
         checkSellerData: stateCart.postCheckSeller.data ?? [],
         checkStockData: stateCart.postCheckStock.data ?? [],
@@ -173,14 +174,14 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         stateVoucher.checkSinbadVoucher.error.code === 50170000017;
 
       /** Show business error if and only if the data from those responses doesn't match with Cart Master  */
-      if (!validationResult || !isErrorVoucherValidation) {
-        if (!validationResult) {
+      if (!isValidationPass || isErrorVoucherValidation) {
+        if (!isValidationPass) {
           handleOpenErrorBusinessModal();
         } else {
           handleOpenErrorCheckVoucher();
         }
       } else {
-        setMatchValid(validationResult && isErrorVoucherValidation);
+        setMatchValid(isValidationPass && !isErrorVoucherValidation);
       }
     }
   }, [

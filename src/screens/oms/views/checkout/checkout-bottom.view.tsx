@@ -1,10 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { FooterButton } from 'react-native-sinbad-ui';
-import {
-  totalPayment,
-  totalPaymentWithoutCurrency,
-} from '../../functions/checkout';
 /** === TYPE === */
 import * as models from '@models';
 
@@ -21,11 +17,6 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   testID,
   handleOpenValidationLimitModal,
 }) => {
-  const totalPaymentFull = totalPayment(data.sellers);
-  const totalPaymentNumber = totalPaymentWithoutCurrency(data.sellers);
-
-  // const dataToPaymentMethod = { totalPaymentNumber, expiredTime };
-
   const pressButton = () => {
     handleOpenValidationLimitModal();
   };
@@ -35,11 +26,12 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
       <FooterButton.Checkout
         testID={testID}
         titleButton="Pilih Pembayaran"
-        value={totalPaymentFull}
+        value={data.totalOrderAfterSinbadVoucher}
         buttonPress={
-          totalPaymentNumber > 999999999 ? pressButton : goToPaymentMethod
+          data.totalOrderAfterSinbadVoucher > 999999999
+            ? pressButton
+            : goToPaymentMethod
         }
-        type={'checkout'}
       />
     </React.Fragment>
   );
