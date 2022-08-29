@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import { LogBox } from 'react-native';
+import { LogBox, View } from 'react-native';
 import React, { FC, useEffect, useState, useContext, useRef } from 'react';
 import { SnbContainer } from '@sinbad/react-native-sinbad-ui';
 import { contexts } from '@contexts';

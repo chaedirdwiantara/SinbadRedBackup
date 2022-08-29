@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { PaymentMethodStyle } from '@screen/oms/styles';
+import { View } from 'react-native';
 import { Payment } from '@sinbad/react-native-sinbad-ui';
 import { toCurrency } from '@core/functions/global/currency-format';
 import * as models from '@models';
@@ -28,52 +28,55 @@ const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
       : 0;
 
   return (
-    <Payment.PaymentSummary
-      firstTitle={`Total Barang (${dataFromCheckout.totalQtyCheckout})`}
-      firstValue={toCurrency(dataFromCheckout.totalPaymentNumber, {
-        withFraction: false,
-      })}
-      voucher={data?.sinbadVoucherDiscountOrder != 0 ? true : false}
-      secondTitle={`Potongan Voucher`}
-      secondValue={`-${toCurrency(data?.sinbadVoucherDiscountOrder, {
-        withFraction: false,
-      })}`}
-      thirdTitle={`Total Ongkos Kirim`}
-      thirdValue={toCurrency(0, {
-        withFraction: false,
-      })}
-      fourthTitle={`Biaya Layanan`}
-      fourthValue={
-        dataChoose != null
-          ? toCurrency(dataChoose.serviceFeeDeduct, {
-              withFraction: false,
-            })
-          : isSelected != [] && isSelected[0] && dataChoose == null
-          ? toCurrency(isSelected[0].serviceFeeDeduct, {
-              withFraction: false,
-            })
-          : 'Rp -'
-      }
-      totalTitle={`Total Pembayaran`}
-      totalValue={
-        dataChoose != null
-          ? toCurrency(
-              dataFromCheckout.totalPaymentNumber +
-                dataChoose.serviceFeeDeduct -
-                sinbadVoucherDiscountOrder,
-              {
+    <View>
+      <Payment.PaymentSummary
+        firstTitle={`Total Barang (${dataFromCheckout.totalQtyCheckout})`}
+        firstValue={toCurrency(dataFromCheckout.totalPaymentNumber, {
+          withFraction: false,
+        })}
+        voucher={data?.sinbadVoucherDiscountOrder != 0 ? true : false}
+        secondTitle={'Potongan Voucher'}
+        secondValue={`-${toCurrency(data?.sinbadVoucherDiscountOrder, {
+          withFraction: false,
+        })}`}
+        thirdTitle={'Total Ongkos Kirim'}
+        thirdValue={toCurrency(0, {
+          withFraction: false,
+        })}
+        fourthTitle={'Biaya Layanan'}
+        fourthValue={
+          dataChoose != null
+            ? toCurrency(dataChoose.serviceFeeDeduct, {
                 withFraction: false,
-              },
-            )
-          : toCurrency(
-              dataFromCheckout.totalPaymentNumber - sinbadVoucherDiscountOrder,
-              {
+              })
+            : isSelected != [] && isSelected[0] && dataChoose == null
+            ? toCurrency(isSelected[0].serviceFeeDeduct, {
                 withFraction: false,
-              },
-            )
-      }
-      testID="paymentSummary.payment"
-    />
+              })
+            : 'Rp -'
+        }
+        totalTitle={'Total Pembayaran'}
+        totalValue={
+          dataChoose != null
+            ? toCurrency(
+                dataFromCheckout.totalPaymentNumber +
+                  dataChoose.serviceFeeDeduct -
+                  sinbadVoucherDiscountOrder,
+                {
+                  withFraction: false,
+                },
+              )
+            : toCurrency(
+                dataFromCheckout.totalPaymentNumber -
+                  sinbadVoucherDiscountOrder,
+                {
+                  withFraction: false,
+                },
+              )
+        }
+        testID="paymentSummary.payment"
+      />
+    </View>
   );
 };
 
