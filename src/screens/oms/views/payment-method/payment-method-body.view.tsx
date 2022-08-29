@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import React, { FC, useState } from 'react';
 import { PaymentMethodStyle } from '@screen/oms/styles';
 import { SnbText, Payment } from '@sinbad/react-native-sinbad-ui';
@@ -35,26 +35,30 @@ const PaymentMethodBody: FC<PaymentMethodBodyProps> = ({
 
   return (
     <>
-      {data?.map((i) => (
-        <View style={PaymentMethodStyle.mainBodyContainer}>
-          <SnbText.B2>{i?.displayLabel}</SnbText.B2>
+      <View style={{ flex: 1 }}>
+        <ScrollView>
+          {data?.map((i) => (
+            <View style={PaymentMethodStyle.mainBodyContainer}>
+              <SnbText.B2>{i?.displayLabel}</SnbText.B2>
 
-          <Payment.PaymentOption
-            payMethod={i?.paymentMethods}
-            onSelectMethod={handleSelect}
-            dataChoosen={handleDataChoosen}
-            dataSelected={dataSelected?.displayLabel || ''}
-            testID="paymentOption.payment"
-            disabledDesc="Tidak tersedia untuk transaksi ini"
+              <Payment.PaymentOption
+                payMethod={i?.paymentMethods}
+                onSelectMethod={handleSelect}
+                dataChoosen={handleDataChoosen}
+                dataSelected={dataSelected?.displayLabel || ''}
+                testID="paymentOption.payment"
+                disabledDesc="Tidak tersedia untuk transaksi ini"
+              />
+            </View>
+          ))}
+
+          <PaymentMethodDetail
+            dataFromCheckout={dataFromCheckout}
+            dataChoose={dataSelected}
+            isSelected={isSelected}
           />
-        </View>
-      ))}
-
-      <PaymentMethodDetail
-        dataFromCheckout={dataFromCheckout}
-        dataChoose={dataSelected}
-        isSelected={isSelected}
-      />
+        </ScrollView>
+      </View>
     </>
   );
 };

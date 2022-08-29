@@ -43,12 +43,6 @@ export const PaymentMethodStyle = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonFooter: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    left: 0,
-  },
   modalComponentStyle: {
     marginBottom: 8,
     marginTop: -40,
