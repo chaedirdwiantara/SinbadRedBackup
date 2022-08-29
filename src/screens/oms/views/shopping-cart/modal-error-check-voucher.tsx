@@ -38,7 +38,7 @@ export const ModalErrorCheckVoucher: FC<ModalErrorCheckVoucherProps> = ({
       <FooterButton.Single
         testID={`modalErrorCheckVoucher.${testID}`}
         title={'Kembali Ke Keranjang'}
-        buttonPress={handleClose}
+        buttonPress={() => handleClose()}
       />
     );
   };
