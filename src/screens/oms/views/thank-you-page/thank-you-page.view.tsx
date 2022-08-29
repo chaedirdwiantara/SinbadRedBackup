@@ -472,7 +472,9 @@ const OmsThankYouPageView: FC = () => {
           ? renderPaymentDetailV2()
           : paymentDetailCod()}
         {renderPaymentGuide()}
-        {invoiceInformation()}
+        {params.section == 'orderHistory' && 
+          invoiceInformation() 
+        }
         {renderOrderNotes()}
       </>
     </ScrollView>
