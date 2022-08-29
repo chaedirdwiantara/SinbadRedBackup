@@ -6,7 +6,6 @@ import {
   SnbToast2,
   SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
-// import { cloneDeep, isEqual } from 'lodash';
 /** === IMPORT INTERNAL COMPONENT HERE === */
 import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartAddress } from './shopping-cart-address.view';
