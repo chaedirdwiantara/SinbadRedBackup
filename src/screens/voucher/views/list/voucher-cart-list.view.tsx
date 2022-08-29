@@ -28,7 +28,7 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
   const getSubtitle = (remainingDay: number) => {
     if (remainingDay > 0) {
       if (remainingDay > 30) {
-        return 'Berakhir >30 hari lagi!';
+        return 'Berakhir dalam >30 hari lagi!';
       }
       return `Berakhir dalam ${remainingDay} hari lagi!`;
     }

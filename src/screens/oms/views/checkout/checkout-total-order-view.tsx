@@ -41,18 +41,20 @@ export const CheckoutTotalOrderView: FC<CheckoutTotalOrderViewProps> = ({
           {toCurrency(totalProductsValue, { withFraction: false })}
         </SnbText2.Paragraph.Default>
       </View>
-      <View style={CheckoutStyle.totalOrderTextContainer}>
-        <SnbText2.Paragraph.Default
-          testID={`voucherDiscountLabel.totalOrder.${testID}`}
-          color={colorV2.textColor.secondary}>
-          {'Potongan Voucher'}
-        </SnbText2.Paragraph.Default>
-        <SnbText2.Paragraph.Default
-          testID={`voucherDiscountValue.totalOrder.${testID}`}
-          color={colorV2.textColor.success}>
-          {`-${toCurrency(discountVoucher, { withFraction: false })}`}
-        </SnbText2.Paragraph.Default>
-      </View>
+      {discountVoucher ? (
+        <View style={CheckoutStyle.totalOrderTextContainer}>
+          <SnbText2.Paragraph.Default
+            testID={`voucherDiscountLabel.totalOrder.${testID}`}
+            color={colorV2.textColor.secondary}>
+            {'Potongan Voucher'}
+          </SnbText2.Paragraph.Default>
+          <SnbText2.Paragraph.Default
+            testID={`voucherDiscountValue.totalOrder.${testID}`}
+            color={colorV2.textColor.success}>
+            {`-${toCurrency(discountVoucher, { withFraction: false })}`}
+          </SnbText2.Paragraph.Default>
+        </View>
+      ) : null}
       <View style={CheckoutStyle.totalOrderTextContainer}>
         <SnbText2.Paragraph.Default
           testID={`totalDeliveryLabel.totalOrder.${testID}`}
