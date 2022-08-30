@@ -80,7 +80,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
                   productIndex % 2 === 0 && (
                     <GridLayoutCard
                       testID={testID}
-                      key={product.id}
+                      key={`${product.id}_${product.warehouseOriginId}`}
                       product={product}
                       index={productIndex}
                       onCardPress={onCardPress}
@@ -95,7 +95,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
                   productIndex % 2 === 1 && (
                     <GridLayoutCard
                       testID={testID}
-                      key={product.id}
+                      key={`${product.id}_${product.warehouseOriginId}`}
                       product={product}
                       index={productIndex}
                       onCardPress={onCardPress}
