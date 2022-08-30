@@ -1,42 +1,19 @@
 // #COMPONENT DEPRECATED
 
 /** === IMPORT PACKAGES === */
-import React, { FC, memo, useMemo } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import React, { FC, memo } from 'react';
 /** === IMPORT COMPONENT === */
 import { ProductCard } from '@sinbad/react-native-sinbad-ui';
 /** === IMPORT FUNCTIONS === */
 import { toCurrency } from '@core/functions/global/currency-format';
+import { useProductCardUtil } from '@core/functions/product';
 /** === TYPE === */
-interface ProductListCardProps {
-  testID: string;
-  name: string;
-  imageUrl: string;
-  qtySoldLabel: string;
-  priceAfterTax: number;
-  hasBulkPrice: boolean;
-  isExclusive?: boolean;
-  onCardPress?: () => void;
-  withOrderButton?: boolean;
-  onOrderPress: () => void;
-}
+import * as models from '@models';
 
-const ProductList: FC<ProductListCardProps> = (props) => {
-  const badge = useMemo(() => {
-    if (props.hasBulkPrice)
-      return {
-        title: 'Harga Grosir',
-        type: 'information',
-        iconName: 'cart',
-      };
-    if (props.isExclusive)
-      return {
-        title: 'Exclusive',
-        type: 'warning',
-        iconName: 'stars',
-      };
-    return undefined;
-  }, [props.isExclusive, props.hasBulkPrice]);
+const ProductList: FC<models.ProductCard> = (props) => {
+  // util helper value
+  const { badge, buttonOutline, outOfStock } = useProductCardUtil(props);
+
   return (
     <ProductCard.List
       testID={`list-product-${props.name}.${props.testID}`}
@@ -47,6 +24,8 @@ const ProductList: FC<ProductListCardProps> = (props) => {
       })}
       soldBy={props.qtySoldLabel}
       badgeProps={badge}
+      outOfStock={outOfStock}
+      buttonOutline={buttonOutline}
       buttonText={props.withOrderButton ? 'Pesan' : undefined}
       onCardPress={props.onCardPress}
       onButtonPress={props.onOrderPress}
