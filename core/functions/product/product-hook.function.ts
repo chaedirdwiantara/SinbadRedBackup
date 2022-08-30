@@ -280,3 +280,36 @@ export const useProductTags = (
 
   return { tags, selectedTags, handleTagPress };
 };
+// shorthand function known is type boolean
+const isBoolean = (status?: boolean) => typeof status == 'boolean';
+// util helper for proudct type grid & list
+export const useProductCardUtil = (product: models.ProductCard) => {
+  // define the badge
+  const badge = useMemo(() => {
+    if (product.hasBulkPrice)
+      return {
+        title: 'Harga Grosir',
+        type: 'information',
+        iconName: 'cart',
+      };
+    if (product.isExclusive)
+      return {
+        title: 'Exclusive',
+        type: 'warning',
+        iconName: 'stars',
+      };
+    return undefined;
+  }, [product.isExclusive, product.hasBulkPrice]);
+  // check condition is stock available
+  const outOfStock = useMemo(() => {
+    if (isBoolean(product.isStockAvailable)) {
+      return !product.isStockAvailable;
+    }
+    // false outOfStock = product ada
+    return false;
+  }, [product.isStockAvailable]);
+  // make outline button if out of stock
+  const buttonOutline = useMemo(() => outOfStock, [outOfStock]);
+
+  return { badge, outOfStock, buttonOutline };
+};
