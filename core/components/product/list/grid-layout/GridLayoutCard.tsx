@@ -46,6 +46,7 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
         priceAfterTax={product.priceAfterTax}
         hasBulkPrice={product.hasBulkPrice}
         isBundle={product.isBundle}
+        isStockAvailable={product.isStockAvailable}
         isPromo={product.isPromo}
         isExclusive={product.isExclusive}
         onCardPress={() => {

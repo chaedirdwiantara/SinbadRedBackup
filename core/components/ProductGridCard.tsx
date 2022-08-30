@@ -1,43 +1,20 @@
 // #COMPONENT DEPRECATED
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useMemo, memo } from 'react';
+import React, { FC, memo } from 'react';
 /** === IMPORT COMPONENT === */
 import { ProductCard } from '@sinbad/react-native-sinbad-ui';
 /** === IMPORT FUNCTION === */
 import { toCurrency } from '@core/functions/global/currency-format';
+import { useProductCardUtil } from '@core/functions/product';
 /** === TYPES === */
-interface ProductGridCardProps {
-  testID: string;
-  name: string;
-  imageUrl: string;
-  priceAfterTax: number;
-  hasBulkPrice: boolean;
-  qtySoldLabel: string;
-  isExclusive?: boolean;
-  onCardPress?: () => void;
-  withOrderButton?: boolean;
-  onOrderPress?: () => void;
-}
+import * as models from '@models';
 
-const ProductGrid: FC<ProductGridCardProps> = (props) => {
-  const badge = useMemo(() => {
-    if (props.hasBulkPrice)
-      return {
-        title: 'Harga Grosir',
-        type: 'information',
-        iconName: 'cart',
-      };
-    if (props.isExclusive)
-      return {
-        title: 'Exclusive',
-        type: 'warning',
-        iconName: 'stars',
-      };
-    return undefined;
-  }, [props.isExclusive, props.hasBulkPrice]);
+const ProductGrid: FC<models.ProductCard> = (props) => {
+  const { badge, buttonOutline, outOfStock } = useProductCardUtil(props);
+
   return (
     <ProductCard.Grid
-      testID={`list-product-${props.name}.${props.testID}`}
+      testID={`grid-product-${props.name}.${props.testID}`}
       name={props.name}
       imageUrl={props.imageUrl}
       currentPrice={toCurrency(props.priceAfterTax, {
@@ -46,6 +23,8 @@ const ProductGrid: FC<ProductGridCardProps> = (props) => {
       type="normal"
       soldBy={props.qtySoldLabel}
       badgeProps={badge}
+      outOfStock={outOfStock}
+      buttonOutline={buttonOutline}
       buttonText={props.withOrderButton ? 'Pesan' : undefined}
       onCardPress={props.onCardPress}
       onButtonPress={props.onOrderPress}
