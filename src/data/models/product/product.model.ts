@@ -15,6 +15,7 @@ export interface ProductList {
   qtySoldLabel: string;
   qtySoldValue: number;
   warehouseOriginId: string;
+  isStockAvailable: boolean;
 }
 
 export interface ProductListProcessProps extends models.ListProcessV3Props {
@@ -149,4 +150,18 @@ export interface ProductListProcessAction extends models.ListProcessV3Action {
 export interface DetailProductProcess {
   id: string;
   warehouseId: string;
+}
+
+export interface ProductCard {
+  testID: string;
+  name: string;
+  imageUrl: string;
+  qtySoldLabel: string;
+  priceAfterTax: number;
+  hasBulkPrice: boolean;
+  isExclusive?: boolean;
+  onCardPress?: () => void;
+  withOrderButton?: boolean;
+  onOrderPress: () => void;
+  isStockAvailable?: boolean;
 }
