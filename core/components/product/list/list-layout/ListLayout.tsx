@@ -63,6 +63,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
           testID={testID}
           name={item.name}
           imageUrl={item.thumbnail}
+          isStockAvailable={item.isStockAvailable}
           priceAfterTax={item.priceAfterTax}
           hasBulkPrice={item.hasBulkPrice}
           qtySoldLabel={item.qtySoldValue ? `Terjual ${item.qtySoldLabel}` : ''}
@@ -125,7 +126,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
         }}
         data={products}
         renderItem={renderListCard}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => `${item.id}_${item.warehouseOriginId}`}
         onEndReachedThreshold={0.1}
         onEndReached={onLoadMore}
         showsVerticalScrollIndicator={true}
