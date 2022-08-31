@@ -19,16 +19,18 @@ function* productList(action: models.ProductListProcessAction) {
     yield action.contextDispatch(ActionCreators.productListSuccess(response));
     yield put(ActionCreators.productListSuccess(response));
     // call stock reminder list api
-    const dataStockReminder = response.data.map((i) => ({
-      productId: i.id,
-      warehouseId: Number(i.warehouseOriginId),
-    }));
-    yield put(
-      ActionCreators.stockReminderListProcess(
-        action.contextDispatchStockReminder,
-        dataStockReminder,
-      ),
-    );
+    if (action.payload.isLogin) {
+      const dataStockReminder = response.data.map((i) => ({
+        productId: i.id,
+        warehouseId: Number(i.warehouseOriginId),
+      }));
+      yield put(
+        ActionCreators.stockReminderListProcess(
+          action.contextDispatchStockReminder,
+          dataStockReminder,
+        ),
+      );
+    }
   } catch (error) {
     yield action.contextDispatch(
       ActionCreators.productListFailed(error as models.ErrorProps),
