@@ -145,6 +145,7 @@ export type ProductSubModule = 'recommendations' | undefined;
 
 export interface ProductListProcessAction extends models.ListProcessV3Action {
   subModule?: ProductSubModule;
+  contextDispatchStockReminder: (action: any) => any;
 }
 
 export interface DetailProductProcess {
@@ -158,10 +159,13 @@ export interface ProductCard {
   imageUrl: string;
   qtySoldLabel: string;
   priceAfterTax: number;
+  id: string;
+  warehouseOriginId: string;
   hasBulkPrice: boolean;
   isExclusive?: boolean;
   onCardPress?: () => void;
   withOrderButton?: boolean;
   onOrderPress: () => void;
+  onStockReminderPress: () => void;
   isStockAvailable?: boolean;
 }
