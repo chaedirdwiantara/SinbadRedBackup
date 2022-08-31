@@ -27,6 +27,7 @@ export interface ProductListProcessProps extends models.ListProcessV3Props {
   maxPrice?: number;
   sellerId?: string;
   perPage?: number;
+  isLogin?: boolean;
 }
 
 export type ProductListQueryOptions = Omit<
@@ -143,7 +144,12 @@ export interface ProductDetail {
 
 export type ProductSubModule = 'recommendations' | undefined;
 
-export interface ProductListProcessAction extends models.ListProcessV3Action {
+interface queryPrductList {
+  isLogin?: boolean;
+}
+
+export interface ProductListProcessAction
+  extends models.ListProcessV3Action<queryPrductList> {
   subModule?: ProductSubModule;
   contextDispatchStockReminder: (action: any) => any;
 }

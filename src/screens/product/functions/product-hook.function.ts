@@ -5,6 +5,7 @@ import { useStockReminderContext } from 'src/data/contexts/product';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
 import * as models from '@models';
+import { useDataAuth } from '@core/redux/Data';
 
 /** === TYPES === */
 type ProductDetailId = { id: string; warehouseId: string };
@@ -36,6 +37,7 @@ const page = 1;
 const useProductListActions = (subModule?: models.ProductSubModule) => {
   const dispatch = useDispatch();
   const { dispatchStockReminder } = useStockReminderContext();
+  const { meV2 } = useDataAuth();
   const fetch = useCallback(
     (
       contextDispatch: (action: any) => any,
@@ -51,12 +53,12 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
           true,
           page,
           perPage,
-          queryOptions,
+          { ...queryOptions, isLogin: Boolean(meV2.data) },
           subModule,
         ),
       );
     },
-    [subModule],
+    [subModule, meV2.data],
   );
 
   const refresh = useCallback(
@@ -72,12 +74,12 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
           true,
           page,
           perPage,
-          queryOptions,
+          { ...queryOptions, isLogin: Boolean(meV2.data) },
           subModule,
         ),
       );
     },
-    [subModule],
+    [subModule, meV2.data],
   );
 
   const loadMore = useCallback(
@@ -91,6 +93,7 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
           ...queryOptions,
           page: state.page + 1,
           perPage: state.perPage,
+          isLogin: Boolean(meV2.data),
         };
 
         contextDispatch(Actions.productListLoadMore());
@@ -107,7 +110,7 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
         );
       }
     },
-    [subModule],
+    [subModule, meV2.data],
   );
 
   const clearContents = useCallback((contextDispatch: (action: any) => any) => {
