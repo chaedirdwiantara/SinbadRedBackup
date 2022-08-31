@@ -39,6 +39,8 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
       queryOptions?: models.ProductListQueryOptions,
     ) => {
       contextDispatch(Actions.productListReset());
+      // reset state stock remider
+      contextDispatch(Actions.stockReminderListReset());
       dispatch(
         callProcessAction(
           contextDispatch,

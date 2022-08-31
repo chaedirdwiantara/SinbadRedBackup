@@ -21,6 +21,10 @@ import {
   ReserveStockContext,
 } from './product/reserve-stock/ReserveStockProvider';
 import { StockProvider, StockContext } from './product/stock/StockProvider';
+import {
+  StockReminderProvider,
+  StockReminderContext,
+} from './product/stock-reminder/StockReminderProvider';
 import { QuestProvider, QuestContext } from './quest/QuestProvider';
 import { CartProvider, CartContext } from './oms/cart/CartProvider';
 import {
@@ -63,6 +67,7 @@ export const providers = [
   SupplierProvider,
   ReserveStockProvider,
   StockProvider,
+  StockReminderProvider,
   QuestProvider,
   CartProvider,
   CheckoutProvider,
@@ -89,6 +94,7 @@ export const contexts = {
   SupplierContext,
   ReserveStockContext,
   StockContext,
+  StockReminderContext,
   QuestContext,
   CartContext,
   CheckoutContext,
