@@ -14,6 +14,7 @@ import {
   borderV2,
   SnbBottomSheetPart,
   SnbBottomSheet2Ref,
+  FooterButton,
 } from 'react-native-sinbad-ui';
 import ImageEditor from '@sinbad/image-editor';
 import { renderIF } from '@screen/auth/functions';
@@ -41,20 +42,24 @@ const KtpPhotoFrame = () => (
 );
 
 const CameraWithOCRView = () => {
+  const [retake, setRetake] = React.useState<boolean>(false);
+  const [isImageProcessed, setIsImageProcessed] = React.useState(false);
+  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
+  const [contentHeight, setContentHeight] = React.useState(0);
+  const [isMounted, setIsMounted] = React.useState(true)
   const { goBack } = useNavigation();
   const { params }: any = useRoute();
-  const [retake, setRetake] = React.useState<boolean>(false);
   const { processImage, ocrImageState, resetOcrStatusRtdb, ocrImageReset } =
     useOCR(true);
   const { ocrStatus } = useDataFlagRTDB() || {};
   useCheckFlagByTask('ocrStatus');
-  const [isImageProcessed, setIsImageProcessed] = React.useState(false);
-  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
-  const [contentHeight, setContentHeight] = React.useState(0);
 
   React.useEffect(() => {
     resetOcrStatusRtdb();
-    return resetOcrStatusRtdb;
+    return () => {
+      setIsMounted(false)
+      resetOcrStatusRtdb();
+    }
   }, []);
 
   const handleBackButton = React.useCallback(() => {
@@ -108,6 +113,7 @@ const CameraWithOCRView = () => {
   return (
     <View style={{ flex: 1 }}>
       <Camera
+        testID='03.0'
         title={params?.title}
         subtitle={params?.subtitle}
         type={'back'}
@@ -154,23 +160,28 @@ const CameraWithOCRView = () => {
         }
         close={() => {
           resetOcrStatusRtdb();
-          setRetake(true);
+          isMounted && setRetake(true);
         }}
         content={renderContent()}
         button={
-          <View style={{ padding: layout.spacing.lg }}>
-            <SnbButton2.Primary
-              title="Saya Mengerti"
-              onPress={() => {
-                resetOcrStatusRtdb();
-                setRetake(true);
-                bottomSheetRef.current?.close();
-              }}
-              disabled={false}
-              size="medium"
-              full
-            />
-          </View>
+          <FooterButton.Dual
+            testID='03.1'
+            title1='Lanjutkan'
+            button1Press={() => {
+              resetOcrStatusRtdb();
+              setRetake(true);
+              bottomSheetRef.current?.close()
+              setTimeout(() => {
+                goBack()
+              }, 100)
+            }}
+            title2='Foto Ulang'
+            button2Press={() => {
+              resetOcrStatusRtdb();
+              setRetake(true);
+              bottomSheetRef.current?.close();
+            }}
+          />
         }
       />
       {renderIF(
