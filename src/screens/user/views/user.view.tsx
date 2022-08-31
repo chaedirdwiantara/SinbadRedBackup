@@ -199,13 +199,9 @@ const UserView: FC = ({ start }: any) => {
   };
   React.useEffect(() => {
     if (openModalCompleteConfirmation === true) {
-      console.log('disini');
-
       refModalCompletenessConfirmation?.current?.open;
     }
   }, []);
-  console.log('disini:', refModalCompletenessConfirmation?.current?.open);
-  
   /** === VIEW === */
   /** => header */
   const header = () => {
