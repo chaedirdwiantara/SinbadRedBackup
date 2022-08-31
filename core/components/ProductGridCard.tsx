@@ -1,6 +1,6 @@
 // #COMPONENT DEPRECATED
 /** === IMPORT PACKAGES ===  */
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useCallback } from 'react';
 /** === IMPORT COMPONENT === */
 import { ProductCard } from '@sinbad/react-native-sinbad-ui';
 /** === IMPORT FUNCTION === */
@@ -10,7 +10,15 @@ import { useProductCardUtil } from '@core/functions/product';
 import * as models from '@models';
 
 const ProductGrid: FC<models.ProductCard> = (props) => {
-  const { badge, buttonOutline, outOfStock } = useProductCardUtil(props);
+  // util helper product card
+  const {
+    badge,
+    buttonOutline,
+    outOfStock,
+    buttonText,
+    buttonType,
+    onButtonPress,
+  } = useProductCardUtil(props, 'grid');
 
   return (
     <ProductCard.Grid
@@ -25,9 +33,10 @@ const ProductGrid: FC<models.ProductCard> = (props) => {
       badgeProps={badge}
       outOfStock={outOfStock}
       buttonOutline={buttonOutline}
-      buttonText={props.withOrderButton ? 'Pesan' : undefined}
+      buttonText={props.withOrderButton ? buttonText : undefined}
+      buttonType={buttonType}
       onCardPress={props.onCardPress}
-      onButtonPress={props.onOrderPress}
+      onButtonPress={onButtonPress}
     />
   );
 };

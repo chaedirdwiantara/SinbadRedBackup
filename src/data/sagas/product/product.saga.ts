@@ -25,7 +25,7 @@ function* productList(action: models.ProductListProcessAction) {
     }));
     yield put(
       ActionCreators.stockReminderListProcess(
-        action.contextDispatch,
+        action.contextDispatchStockReminder,
         dataStockReminder,
       ),
     );

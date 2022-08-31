@@ -37,17 +37,19 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
         marginBottom: spacing.lg,
       }}>
       <ProductGridCard
+        {...product}
         testID={testID}
         name={product.name}
         imageUrl={`${product.thumbnail}?tr=w-${imageKitWidth}`}
         qtySoldLabel={
           product.qtySoldValue ? `Terjual ${product.qtySoldLabel}` : ''
         }
+        onStockReminderPress={() => {
+          alert('stock reminder grid');
+        }}
         priceAfterTax={product.priceAfterTax}
         hasBulkPrice={product.hasBulkPrice}
-        isBundle={product.isBundle}
         isStockAvailable={product.isStockAvailable}
-        isPromo={product.isPromo}
         isExclusive={product.isExclusive}
         onCardPress={() => {
           goToProductDetail({
