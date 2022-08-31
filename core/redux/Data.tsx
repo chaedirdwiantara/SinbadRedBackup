@@ -19,6 +19,10 @@ const useDataFlagRTDB = (): models.FlagRTDB => {
 const useDataUpdateApp = (): models.updateApp => {
   return useSelector((state: RootState) => state.globalCore.updateApp);
 };
+/** => global data */
+const useDataNotificationQuit = (): models.notificationQuit => {
+  return useSelector((state: RootState) => state.globalCore.notificationQuit);
+};
 /** => for auth data */
 const useDataAuth = (): AuthProps => {
   return useSelector((state: RootState) => state.authCore);
@@ -26,7 +30,7 @@ const useDataAuth = (): AuthProps => {
 const useDataGlobal = () => {
   return useSelector((state: RootState) => state.permanent.global);
 };
-const useDataVoucher = (): models.VoucherDataProps => {
+const useDataVoucher = (): models.VoucherLocalData => {
   return useSelector((state: RootState) => state.voucher);
 };
 const useDataTotalNotification = () => {
@@ -41,6 +45,7 @@ export {
   useDataAuth,
   useDataTotalNotification,
   useDataUpdateApp,
+  useDataNotificationQuit,
 };
 /**
  * ================================================================

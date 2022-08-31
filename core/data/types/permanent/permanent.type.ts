@@ -10,3 +10,5 @@ export const SAVE_APP_VERSION = 'saveAppVersion';
 export const FORCE_UPDATE_VERSION = 'forceUpdateVersion';
 /** FOR MAINTENANCE */
 export const MAINTENANCE = 'maintenance';
+/** FOR BANNED ACCOUNT */
+export const BANNED_ACCOUNT = 'bannedAccount'

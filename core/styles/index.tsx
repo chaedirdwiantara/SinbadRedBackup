@@ -5,3 +5,4 @@ export * from './product-skeleton.style';
 export * from './empty-state.style';
 export * from './unavailable-sku-flag';
 export * from './accordion.style';
+export * from './voucher-card.style';

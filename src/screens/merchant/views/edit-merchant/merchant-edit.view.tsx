@@ -42,6 +42,7 @@ const MerchantEditView: FC<Props> = (props) => {
           editMerchantAction.reset(dispatchSupplier);
           editProfileAction.reset(dispatchSupplier);
         }}
+        testID={props.route.params.testID}
       />
     );
   };
@@ -54,6 +55,7 @@ const MerchantEditView: FC<Props> = (props) => {
         sourceData={props.route.params.sourceData}
         showButton
         originFrom={props.route.params?.originFrom}
+        testID={props.route.params.testID}
       />
     );
   };

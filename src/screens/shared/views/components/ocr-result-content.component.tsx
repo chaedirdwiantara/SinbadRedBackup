@@ -10,30 +10,29 @@ import {
 import { View, Image } from 'react-native';
 import { IOCRResult } from '@model/global';
 import * as models from '@models';
-import { useOCR } from '@screen/auth/functions/global-hooks.functions';
+import { useCamera } from '@screen/auth/functions/global-hooks.functions';
 import apiHost from '@core/services/apiHost';
 import { useEasyRegistration } from '@screen/account/functions';
 interface Props {
   onChangeValue: (result: IOCRResult) => void;
   value: models.IOCRResult | null;
+  testID?: string;
 }
 
-const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
-  const { ocrImageResult, resetOcrDataRtdb } = useOCR(true);
+const OCRResultContent: React.FC<Props> = ({
+  onChangeValue,
+  value,
+  testID,
+}) => {
   const nameOnKtp = useInput('');
   const idNumber = useInput('', 'number-only');
   const { completeDataState } = useEasyRegistration();
+  const { capturedImage, resetCamera } = useCamera()
 
   React.useEffect(() => {
-    return resetOcrDataRtdb;
+    return resetCamera
   }, []);
 
-  React.useEffect(() => {
-    if (ocrImageResult) {
-      nameOnKtp.setValue(ocrImageResult?.nameOnKtp);
-      idNumber.setValue(ocrImageResult?.idNumber);
-    }
-  }, [ocrImageResult]);
 
   React.useEffect(() => {
     if (value?.nameOnKtp) {
@@ -50,24 +49,24 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
     if (idNumber && nameOnKtp) {
       onChangeValue({ idNumber: idNumber.value, nameOnKtp: nameOnKtp.value });
     }
-    if (!nameOnKtp.value) {
-      nameOnKtp.setMessageError('Bagian ini belum diisi');
-      nameOnKtp.setType('error');
-    }
   }, [nameOnKtp.value, idNumber.value]);
 
+  const isImageCaptured = capturedImage?.data?.type === 'ktp';
+  let source: any | undefined = '';
+  if (isImageCaptured) {
+    source = { uri: capturedImage?.data?.url }
+  } else {
+    source = {
+      uri: `${apiHost.base}/common/api/v1/shared/public/secure-files/${completeDataState.data?.userData?.imageId}`,
+      headers: { 'x-platform': 'sinbad-app' },
+    }
+  }
   return (
     <View style={{ flex: 1, padding: layout.spacing.lg }}>
       <SnbText2.Headline.Small>Foto KTP Diupload</SnbText2.Headline.Small>
       <View style={{ marginVertical: layout.spacing.xxsm }} />
       <Image
-        source={{
-          uri: `${apiHost.base}/common/api/v1/shared/public/secure-files/${
-            ocrImageResult?.imageUid ||
-            completeDataState.data?.userData?.imageId
-          }`,
-          headers: { 'x-platform': 'sinbad-app' },
-        }}
+        source={source}
         resizeMode="contain"
         style={{
           height: 200,
@@ -86,6 +85,7 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
         labelText="Nama pada KTP"
         placeholder="Masukkan nama pada KTP"
         maxLength={200}
+        testID={testID}
       />
       <View style={{ padding: layout.spacing.lg }} />
       <SnbTextField2.Text
@@ -108,6 +108,7 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
             idNumber.setMessageError('Nomor KTP harus 16 Digit');
           }
         }}
+        testID={testID}
       />
       <View
         style={{

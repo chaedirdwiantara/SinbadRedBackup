@@ -11,7 +11,7 @@ const loginUserName = (data: models.LoginUserName) => {
 /** => check phone */
 const checkPhoneLogin = (data: models.ICheckPhoneLogin) => {
   const path = 'login/check-phone';
-  return apiAuth<models.ICheckPhoneLoginSuccess>(path, 'v2', 'POST', data);
+  return apiAuth<models.ICheckPhoneLoginSuccess>(path, 'v3', 'POST', data);
 };
 
 /** => request OTP */

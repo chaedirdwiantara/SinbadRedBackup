@@ -3,6 +3,8 @@
 export const CHANGE_FLAG_RTDB = 'ChangeFlagRTDB';
 /** => flag update */
 export const UPDATE_APP = 'UpdateApp';
+/** => flag for notification */
+export const IS_NOTIFICATION = 'IsNotification';
 /**
  * ================================================================
  * NOTES

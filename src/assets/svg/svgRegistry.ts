@@ -8,6 +8,9 @@ import call from './call.svg';
 import whatsapp from './whatsapp.svg';
 import mail from './mail.svg';
 import expand_less from './expand_less.svg';
+import shield from './shield.svg';
+import shield_blue from './shield_blue.svg';
+import error from './error.svg';
 // history tracking icon
 import packed from './packed.svg';
 import shiped from './shiped.svg';
@@ -36,6 +39,10 @@ import check_circle from './check_circle.svg';
 import x_circle from './x_circle.svg';
 // product no in urban
 import kategori_toko from './kategori_toko.svg';
+// voucher
+import reward_voucher from './reward_voucher.svg';
+import reward_voucher_not_eligible from './reward_voucher_not_eligible.svg';
+import reward_voucher_yellow from './reward_voucher_yellow.svg';
 
 export const SvgRegistery = {
   penguin,
@@ -73,4 +80,10 @@ export const SvgRegistery = {
   check_circle,
   x_circle,
   kategori_toko,
+  shield,
+  shield_blue,
+  error,
+  reward_voucher,
+  reward_voucher_not_eligible,
+  reward_voucher_yellow,
 };

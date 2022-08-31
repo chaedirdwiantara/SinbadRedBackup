@@ -75,6 +75,14 @@ export const resetToMaintenance = () => {
   );
 };
 /** => reset to maintenance page */
+export const resetToBannedAccount = () => {
+  navigationRef.current?.dispatch(
+    CommonActions.reset({
+      index: 0,
+      routes: [{ name: 'BannedAccount' }],
+    }),
+  );
+};
 export const restartApp = () => {
   navigationRef.current?.dispatch(
     CommonActions.reset({
@@ -82,4 +90,8 @@ export const restartApp = () => {
       routes: [{ name: 'Splash' }],
     }),
   );
+};
+/** => history routes stack */
+export const getRoutes = () => {
+  return navigationRef.current?.getRootState().routes;
 };

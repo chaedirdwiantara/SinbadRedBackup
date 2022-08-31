@@ -3,6 +3,7 @@ import {
   borderV2,
   colorV2,
   Content,
+  FooterButton,
   SnbBottomSheet2,
   SnbBottomSheet2Ref,
   SnbBottomSheetPart,
@@ -13,9 +14,10 @@ import {
   SnbText2,
   spacingV2 as layout,
 } from '@sinbad/react-native-sinbad-ui';
-import MapView, { LatLng, Marker } from 'react-native-maps';
+import MapView, { LatLng } from 'react-native-maps';
 import {
   Image,
+  LogBox,
   PermissionsAndroid,
   StyleSheet,
   TouchableHighlight,
@@ -84,7 +86,7 @@ const MapsViewType2: React.FC = () => {
   const { getLocation, locations, resetLocation } = useLocations();
   const [loadingGetAddress, setLoadingGetAddress] = React.useState(false);
   const { params } = useRoute();
-  const { onMapsResult, action, currentLatLng, originFrom }: any =
+  const { onMapsResult, action, currentLatLng, originFrom, testID }: any =
     params || {};
 
   React.useEffect(() => {
@@ -214,6 +216,7 @@ const MapsViewType2: React.FC = () => {
     } catch (error) {}
   }
 
+  LogBox.ignoreLogs(['Non-serializable values were found in the navigation state.'])
 
   return (
     <SnbContainer color="white">
@@ -221,12 +224,14 @@ const MapsViewType2: React.FC = () => {
         <MapView
           initialRegion={{
             ...latLng,
-            ...REGION_OPTIONS
+            ...REGION_OPTIONS,
           }}
           showsMyLocationButton={false}
           ref={refMaps}
           onRegionChangeComplete={handleOnChangeRegionComplete}
-          style={{ flex: 1 }} />
+          style={{ flex: 1 }}
+          testID={'13.1.1'}
+        />
         <View style={styles.markerFixed}>
           <Image style={styles.marker} source={require('@image/pin_point.png')} />
         </View>
@@ -254,6 +259,7 @@ const MapsViewType2: React.FC = () => {
               justifyContent: 'space-between',
               flexDirection: 'row',
               alignItems: 'center',
+              marginBottom: layout.spacing.md
             }}>
             <View style={{ flex: 1 }}>
               {renderIF(
@@ -278,12 +284,13 @@ const MapsViewType2: React.FC = () => {
                 ),
               )}
             </View>
-            <View style={{ marginRight: -layout.spacing.md }}>
+            <View>
               <SnbButton2.Link
                 title="Cari Lokasi"
                 onPress={() => navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW)}
                 disabled={false}
                 size="small"
+                testID={'13.1.1'}
               />
             </View>
           </View>
@@ -302,36 +309,36 @@ const MapsViewType2: React.FC = () => {
               addressResult.length > 0,
               <SnbText2.Paragraph.Small
                 align="justify"
-                color={colorV2.textColor.secondary}>
+                color={colorV2.textColor.secondary}
+                testID={'13.1.1'}>
                 {addressResult[0]?.formatted_address}
               </SnbText2.Paragraph.Small>,
-              <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
+              <SnbText2.Paragraph.Small
+                color={colorV2.textColor.secondary}
+                testID={'13.1.1'}>
                 Alamat tidak ditemukan
               </SnbText2.Paragraph.Small>,
             ),
           )}
         </View>
-        <View style={{ padding: layout.spacing.lg }}>
-          <SnbButton2.Primary
-            title="Pilih Lokasi ini"
-            disabled={loadingGetAddress || locations.loading}
-            loading={locations.loading}
-            onPress={() => {
-              if (addressResult.length === 0) {
-                bottomSheetRef.current?.open();
-              } else {
-                const address = extractAddress(
-                  addressResult[0]?.address_components,
-                );
-                getLocation({
-                  params: `province=${address.province}&city=${address.city}&district=${address.district}&urban=${address.urban}`,
-                });
-              }
-            }}
-            full
-            size="medium"
-          />
-        </View>
+        <FooterButton.Single
+          title="Pilih Lokasi ini"
+          disabled={loadingGetAddress || locations.loading}
+          loadingButton={locations.loading}
+          buttonPress={() => {
+            if (addressResult.length === 0) {
+              bottomSheetRef.current?.open();
+            } else {
+              const address = extractAddress(
+                addressResult[0]?.address_components,
+              );
+              getLocation({
+                params: `province=${address.province}&city=${address.city}&district=${address.district}&urban=${address.urban}`,
+              });
+            }
+          }}
+          testID={'13.1.1'}
+        />
       </View>
       <SnbBottomSheet2
         ref={bottomSheetRef}
@@ -357,20 +364,14 @@ const MapsViewType2: React.FC = () => {
           </View>
         }
         button={
-          <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
-            <View style={{ flex: 1 }}>
-              <SnbButton2.Primary
-                onPress={() => {
-                  bottomSheetRef.current?.close();
-                  navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW);
-                }}
-                title="Masukkan Lokasi Manual"
-                disabled={false}
-                full
-                size="medium"
-              />
-            </View>
-          </View>
+          <FooterButton.Single
+            buttonPress={() => {
+              bottomSheetRef.current?.close();
+              navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW);
+            }}
+            title="Masukkan Lokasi Manual"
+            testID={'13.1.1'}
+          />
         }
       />
     </SnbContainer>

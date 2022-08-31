@@ -1,20 +1,39 @@
 import React from 'react';
-import { colorV2, SnbText2, SnbDivider2 } from '@sinbad/react-native-sinbad-ui';
+import { colorV2, Text, SnbButton2 } from '@sinbad/react-native-sinbad-ui';
 import { View, StyleSheet } from 'react-native';
 
 type HeaderProps = {
   title: string;
+  testID?: string;
 };
 
 export const Header = (props: HeaderProps) => {
-  const { title } = props;
+  const { title, testID } = props;
+  return <Text.Title text={title} withDivider={true} testID={testID} />;
+};
+
+type HeaderLinkProps = {
+  title: string;
+  linkTitle: string;
+  testID?: string;
+  linkOnPress: () => void;
+};
+
+export const HeaderWithLink = (props: HeaderLinkProps) => {
+  const { title, linkTitle, testID, linkOnPress } = props;
   return (
-    <>
-      <SnbText2.Headline.Small>{title}</SnbText2.Headline.Small>
-      <View style={{ marginVertical: 8 }}>
-        <SnbDivider2 type="solid" />
-      </View>
-    </>
+    <Text.Title
+      text={title}
+      withDivider={true}
+      testID={testID}
+      actionComponent={
+        <SnbButton2.Link
+          title={linkTitle}
+          size="medium"
+          onPress={linkOnPress}
+        />
+      }
+    />
   );
 };
 
@@ -27,16 +46,7 @@ export const Description = (props: DescProps) => {
   const { value, title } = props;
   return (
     <View style={styles.desc}>
-      <View style={styles.text}>
-        <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-          {title}
-        </SnbText2.Paragraph.Default>
-      </View>
-      <View style={[styles.text, { alignItems: 'flex-end' }]}>
-        <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-          {value}
-        </SnbText2.Paragraph.Default>
-      </View>
+      <Text.DetailPrice type="item" label={title} value={value} />
     </View>
   );
 };
@@ -46,7 +56,6 @@ export const Divider = () => <View style={styles.div} />;
 const styles = StyleSheet.create({
   text: { flex: 1 },
   desc: {
-    flexDirection: 'row',
     marginTop: 8,
   },
   div: {
