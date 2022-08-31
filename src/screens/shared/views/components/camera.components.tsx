@@ -1,5 +1,4 @@
 /** === IMPORT LIB HERE === */
-import { camelize } from '@core/functions/global/camelize';
 import { testProps } from '@core/functions/global/test-props';
 import {
   borderV2,
