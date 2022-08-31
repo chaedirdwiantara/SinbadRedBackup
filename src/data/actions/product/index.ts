@@ -4,3 +4,4 @@ export * from './tag-list-api.action';
 export * from './reserve-stock-api.action';
 export * from './stock-validation-api.action';
 export * from './stock-information-api.action';
+export * from './stock-reminder-list-api.action';
