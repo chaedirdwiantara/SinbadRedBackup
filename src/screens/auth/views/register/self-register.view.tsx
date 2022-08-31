@@ -110,7 +110,6 @@ const SelfRegisterView: React.FC = () => {
           <View style={{ padding: layout.spacing.lg }}>
             <SnbTextField2.Text
               testID={'02'}
-              // {...referal}
               value={referal}
               onChangeText={(text) => {
                 setReferal(text);
