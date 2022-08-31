@@ -60,6 +60,10 @@ const ListLayout: FC<ProductLayoutProps> = ({
           marginBottom: spacing.xl,
         }}>
         <ProductListCard
+          {...item}
+          onStockReminderPress={() => {
+            alert('stock reminder list');
+          }}
           testID={testID}
           name={item.name}
           imageUrl={item.thumbnail}

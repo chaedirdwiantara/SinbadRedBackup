@@ -2,7 +2,10 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 /** === IMPORT FUNCTIONS ===  */
 import { goToCategory } from '@screen/category/functions';
-import { useTagContext } from 'src/data/contexts/product';
+import {
+  useStockReminderContext,
+  useTagContext,
+} from 'src/data/contexts/product';
 /** === IMPORT TYPES ===  */
 import * as models from '@models';
 import {
@@ -283,7 +286,22 @@ export const useProductTags = (
 // shorthand function known is type boolean
 const isBoolean = (status?: boolean) => typeof status == 'boolean';
 // util helper for proudct type grid & list
-export const useProductCardUtil = (product: models.ProductCard) => {
+export const useProductCardUtil = (
+  product: models.ProductCard,
+  layout: 'grid' | 'list',
+) => {
+  // hooks stock reminder list
+  const {
+    stateStockReminder: { list: stockReminderList },
+  } = useStockReminderContext();
+  // find stock product
+  const stockReminder = useMemo(() => {
+    return stockReminderList.data.find(
+      (i) =>
+        `${i.productId}${i.warehouseId}` ==
+        `${product.id}${product.warehouseOriginId}`,
+    );
+  }, [stockReminderList.data]);
   // define the badge
   const badge = useMemo(() => {
     if (product.hasBulkPrice)
@@ -308,8 +326,57 @@ export const useProductCardUtil = (product: models.ProductCard) => {
     // false outOfStock = product ada
     return false;
   }, [product.isStockAvailable]);
+  // check condition is have stock reminder
+  const isHaveStockReminder = useMemo(() => {
+    if (isBoolean(stockReminder?.stockRemind)) {
+      return stockReminder?.stockRemind;
+    }
+    // false outOfStock = product ada
+    return false;
+  }, [stockReminder?.stockRemind]);
+  const deleteReminderLabel = useMemo(
+    () => (layout === 'grid' ? 'Hapus Pengingat' : 'Hapus'),
+    [layout],
+  );
+  const addReminderLabel = useMemo(
+    () => (layout === 'grid' ? 'Ingatkan Saya' : 'Ingatkan'),
+    [layout],
+  );
+  // button text label
+  const buttonText = useMemo(() => {
+    if (outOfStock) {
+      return isHaveStockReminder ? deleteReminderLabel : addReminderLabel;
+    }
+    return 'Pesan';
+  }, [
+    stockReminder?.stockRemind,
+    outOfStock,
+    deleteReminderLabel,
+    addReminderLabel,
+  ]);
   // make outline button if out of stock
   const buttonOutline = useMemo(() => outOfStock, [outOfStock]);
+  // make button grey if have stock reminder
+  const buttonType: 'secondary' | 'primary' = useMemo(
+    () => (isHaveStockReminder ? 'secondary' : 'primary'),
+    [isHaveStockReminder],
+  );
+  // callback button order & reminder
+  const onButtonPress = useCallback(() => {
+    if (outOfStock) {
+      console.log(product.onStockReminderPress());
+      product.onStockReminderPress();
+      return void 0;
+    }
+    product.onOrderPress();
+  }, [outOfStock, product.onStockReminderPress, product.onOrderPress]);
 
-  return { badge, outOfStock, buttonOutline };
+  return {
+    badge,
+    outOfStock,
+    buttonOutline,
+    buttonText,
+    buttonType,
+    onButtonPress,
+  };
 };

@@ -1,6 +1,7 @@
 /** === IMPORT PACKAGES === */
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useStockReminderContext } from 'src/data/contexts/product';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
 import * as models from '@models';
@@ -11,6 +12,7 @@ type ProductDetailId = { id: string; warehouseId: string };
 /** === Fetch Product Related === */
 const callProcessAction = (
   contextDispatch: (action: any) => any,
+  contextDispatchStockReminder: (action: any) => any,
   loading: boolean,
   page: number,
   perPage: number,
@@ -19,6 +21,7 @@ const callProcessAction = (
 ) => {
   return Actions.productListProcess(
     contextDispatch,
+    contextDispatchStockReminder,
     {
       ...queryOptions,
       loading,
@@ -32,7 +35,7 @@ const perPage = 10;
 const page = 1;
 const useProductListActions = (subModule?: models.ProductSubModule) => {
   const dispatch = useDispatch();
-
+  const { dispatchStockReminder } = useStockReminderContext();
   const fetch = useCallback(
     (
       contextDispatch: (action: any) => any,
@@ -44,6 +47,7 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
       dispatch(
         callProcessAction(
           contextDispatch,
+          dispatchStockReminder,
           true,
           page,
           perPage,
@@ -64,6 +68,7 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
       dispatch(
         callProcessAction(
           contextDispatch,
+          dispatchStockReminder,
           true,
           page,
           perPage,
@@ -92,6 +97,7 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
         dispatch(
           callProcessAction(
             contextDispatch,
+            dispatchStockReminder,
             false,
             query.page,
             perPage,

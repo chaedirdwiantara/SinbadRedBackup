@@ -11,8 +11,15 @@ import { useProductCardUtil } from '@core/functions/product';
 import * as models from '@models';
 
 const ProductList: FC<models.ProductCard> = (props) => {
-  // util helper value
-  const { badge, buttonOutline, outOfStock } = useProductCardUtil(props);
+  // util helper product card
+  const {
+    badge,
+    buttonOutline,
+    outOfStock,
+    buttonText,
+    buttonType,
+    onButtonPress,
+  } = useProductCardUtil(props, 'list');
 
   return (
     <ProductCard.List
@@ -26,9 +33,10 @@ const ProductList: FC<models.ProductCard> = (props) => {
       badgeProps={badge}
       outOfStock={outOfStock}
       buttonOutline={buttonOutline}
-      buttonText={props.withOrderButton ? 'Pesan' : undefined}
+      buttonText={props.withOrderButton ? buttonText : undefined}
       onCardPress={props.onCardPress}
-      onButtonPress={props.onOrderPress}
+      buttonType={buttonType}
+      onButtonPress={onButtonPress}
     />
   );
 };
