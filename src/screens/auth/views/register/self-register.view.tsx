@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, StyleSheet, ScrollView, Image, Keyboard } from 'react-native';
 import {
   SnbContainer,
@@ -17,6 +17,7 @@ import {
 } from '@screen/auth/functions';
 import { useDataPermanent } from '@core/redux/Data';
 import { ModalOTPMethod, ModalSalesman } from '../shared';
+import { debounce } from 'lodash';
 
 const SelfRegisterView: React.FC = () => {
   const { navigate } = useNavigation();
@@ -30,12 +31,15 @@ const SelfRegisterView: React.FC = () => {
 
   const refModalOTP = React.useRef<SnbBottomSheet2Ref>(null);
   const refModalSalesman = React.useRef<SnbBottomSheet2Ref>(null);
+  const [referal, setReferal] = React.useState('');
+  const [loadingReferal, setLoadingReferal] = React.useState(false);
+  const [statusReferal, setStatusReferal] = React.useState('default');
 
   React.useEffect(() => {
     if (checkPhoneRegistrationState?.data !== null) {
       if (checkPhoneRegistrationState?.data?.phoneNumberAvailable) {
         //SHOW MODAL SEND OTP DAN NAVIGATE KE OTP PAGE
-        refModalOTP.current?.open()
+        refModalOTP.current?.open();
       } else if (checkPhoneRegistrationState?.data?.isUserAgent) {
         phone.clearText();
         checkPhoneRegistrationReset();
@@ -62,6 +66,19 @@ const SelfRegisterView: React.FC = () => {
       phone.clearText();
     };
   }, []);
+
+  const handleOnChangeReferal = useCallback(
+    debounce((text) => {
+      setLoadingReferal(false);
+      if (text > 5) {
+        setStatusReferal('error');
+      } else {
+        setStatusReferal('success');
+      }
+    }, 1500),
+    [referal],
+  );
+
   const header = () => {
     return (
       <SnbTopNav2.Type3
@@ -88,6 +105,31 @@ const SelfRegisterView: React.FC = () => {
               testID={'02'}
               {...phone}
               keyboardType="phone-pad"
+            />
+          </View>
+          <View style={{ padding: layout.spacing.lg }}>
+            <SnbTextField2.Text
+              testID={'02'}
+              value={referal}
+              onChangeText={(text) => {
+                setReferal(text);
+                setStatusReferal('default');
+                setLoadingReferal(true);
+                handleOnChangeReferal(text);
+              }}
+              helperText={loadingReferal ? 'Pengecekan Kode...' : ''}
+              keyboardType="default"
+              labelText="Masukkan Kode Referal (Optional)"
+              placeholder="Masukkan kode referal jika ada"
+              type={
+                statusReferal === 'error'
+                  ? 'error'
+                  : statusReferal === 'success'
+                  ? 'success'
+                  : 'default'
+              }
+              valMsgError={'Kode referal tidak ditemukan'}
+              valMsgSuccess={'Kode referal dapat digunakan'}
             />
           </View>
         </View>
