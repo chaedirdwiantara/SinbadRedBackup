@@ -85,7 +85,7 @@ const CameraWithOCRView = () => {
     } else if (ocrStatus === 'processing') {
       ocrTimeout = setTimeout(() => {
         bottomSheetRef.current?.open();
-      }, 15 * 1000);
+      }, 40 * 1000);
     }
     return () => {
       clearTimeout(ocrTimeout);
