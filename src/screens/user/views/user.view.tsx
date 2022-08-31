@@ -30,6 +30,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Svg from '@svg';
 import ModalLogout from './shared/modal-logout.component';
+import ModalCompletnessConfirmation from './modal-completness-confirmation.view';
 
 const CopilotView = walkthroughable(View);
 
@@ -50,6 +51,10 @@ const UserView: FC = ({ start }: any) => {
   const [clickFromCart, setClickFromCart] = useState(false);
   const { updateBadgeProfile, resetUpdateBadgeProfile } =
     UserHookFunc.useUpdateBadgeProfile();
+  const refModalCompletenessConfirmation =
+    React.useRef<SnbBottomSheet2Ref>(null);
+  const [openModalCompleteConfirmation, setOpenModalCompleteConfirmation] =
+    React.useState(true);
 
   const dataHeader = [
     {
@@ -192,6 +197,11 @@ const UserView: FC = ({ start }: any) => {
         break;
     }
   };
+  React.useEffect(() => {
+    if (openModalCompleteConfirmation === true) {
+      refModalCompletenessConfirmation?.current?.open;
+    }
+  }, []);
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -655,6 +665,7 @@ const UserView: FC = ({ start }: any) => {
     <View style={{ flex: 1 }}>
       <SnbContainer color={'grey'}>{content()}</SnbContainer>
       <ModalLogout ref={refModalLogout} />
+      <ModalCompletnessConfirmation open={true} />
     </View>
   );
 };
