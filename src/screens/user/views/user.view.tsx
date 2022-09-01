@@ -51,11 +51,6 @@ const UserView: FC = ({ start }: any) => {
   const [clickFromCart, setClickFromCart] = useState(false);
   const { updateBadgeProfile, resetUpdateBadgeProfile } =
     UserHookFunc.useUpdateBadgeProfile();
-  const refModalCompletenessConfirmation =
-    React.useRef<SnbBottomSheet2Ref>(null);
-  const [openModalCompleteConfirmation, setOpenModalCompleteConfirmation] =
-    React.useState(true);
-
   const dataHeader = [
     {
       id: 1,
@@ -197,11 +192,6 @@ const UserView: FC = ({ start }: any) => {
         break;
     }
   };
-  React.useEffect(() => {
-    if (openModalCompleteConfirmation === true) {
-      refModalCompletenessConfirmation?.current?.open;
-    }
-  }, []);
   /** === VIEW === */
   /** => header */
   const header = () => {

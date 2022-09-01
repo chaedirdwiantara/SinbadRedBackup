@@ -13,7 +13,10 @@ import {
   SnbTopNav2,
   SnbToast,
   spacingV2 as layout,
+  SnbTextField2,
+  FooterButton,
 } from 'react-native-sinbad-ui';
+import { useInputFormat } from '@screen/auth/functions';
 
 function setRules(type: string) {
   switch (type) {
@@ -90,6 +93,11 @@ const MerchantEditPhotoView = () => {
     contexts.GlobalContext,
   );
   const [imageUrl, setImageUrl] = React.useState<string | undefined>(' ');
+  const npwp = useInputFormat(
+    stateUser.detail.data?.ownerData?.profile?.taxNo || '',
+    'number-only',
+    'npwp',
+  );
 
   React.useEffect(() => {
     editProfileAction.reset(dispatchSupplier);
@@ -220,6 +228,33 @@ const MerchantEditPhotoView = () => {
     } else {
       uri = imageUrl;
     }
+    console.log('params:', npwp.type);
+
+    const handleSaveNpwp = () => {
+      const npwpIsChanged =
+        npwp.value !== '' &&
+        npwp.value.replace(/[^0-9]/g, '') !==
+          stateUser.detail.data?.ownerData?.profile?.taxNo;
+      const data = {
+        user: {
+          taxNo: npwp.value?.replace(/[^0-9]/g, ''),
+        },
+      };
+
+      if (capturedImage?.data?.type === 'npwp') {
+        if (npwpIsChanged) {
+          upload(dispatchGlobal, capturedImage.data.url);
+          editProfileAction.editProfile(dispatchSupplier, { data });
+        } else {
+          upload(dispatchGlobal, capturedImage.data.url);
+        }
+      }
+      if (npwpIsChanged) {
+        editProfileAction.editProfile(dispatchSupplier, { data });
+      }
+      console.log('dataNpwp:', npwpIsChanged);
+    };
+
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
@@ -234,35 +269,70 @@ const MerchantEditPhotoView = () => {
                 params?.type === 'selfie'
                   ? 6 / 5
                   : params?.type === 'store'
-                    ? 8 / 7
-                    : 8 / 5,
+                  ? 8 / 7
+                  : 8 / 5,
               marginTop: 24,
             }}
           />
-          <View style={{ justifyContent: 'space-between' }}>
-            <View style={{ padding: layout.spacing.lg, alignItems: 'center' }}>
-              <SnbButton2.Link
-                size="small"
-                title="Ubah Foto"
-                onPress={() => {
-                  openCamera(params?.type);
-                }}
-                disabled={false}
-                full
-              />
-            </View>
+          <View>
+            {params?.type === 'npwp' ? (
+              <View style={{ margin: layout.spacing.lg }}>
+                <SnbTextField2.Text
+                  {...npwp}
+                  labelText={'Nomor NPWP'}
+                  placeholder={'Masukkan Nomor NPWP'}
+                  keyboardType="number-pad"
+                  maxLength={20}
+                />
+              </View>
+            ) : null}
           </View>
+          {params?.type !== 'npwp' ? (
+            <View style={{ justifyContent: 'space-between' }}>
+              <View
+                style={{ padding: layout.spacing.lg, alignItems: 'center' }}>
+                <SnbButton2.Link
+                  size="small"
+                  title="Ubah Foto"
+                  onPress={() => {
+                    openCamera(params?.type);
+                  }}
+                  disabled={false}
+                  full
+                />
+              </View>
+            </View>
+          ) : null}
         </View>
-        <View style={{ padding: layout.spacing.lg }}>
-          <SnbButton2.Primary
-            title={'Simpan'}
-            onPress={action}
-            loading={stateGlobal.uploadImage.loading}
-            disabled={stateGlobal.uploadImage.loading || !isImageCaptured}
-            size="medium"
-            full
+        {params?.type !== 'npwp' ? (
+          <View style={{ padding: layout.spacing.lg }}>
+            <SnbButton2.Primary
+              title={'Simpan'}
+              onPress={action}
+              loading={stateGlobal.uploadImage.loading}
+              disabled={stateGlobal.uploadImage.loading || !isImageCaptured}
+              size="medium"
+              full
+            />
+          </View>
+        ) : (
+          <FooterButton.Dual
+            title2={capturedImage?.data?.url ? 'Ulangi' : 'Ubah Foto'}
+            button2Press={() => openCamera(params?.type)}
+            disabled={
+              stateGlobal.uploadImage.loading ||
+              stateMerchant.profileEdit.loading ||
+              npwp.type === 'error'
+            }
+            title1={'Simpan'}
+            button1Press={handleSaveNpwp}
+            loadingButton={
+              stateGlobal.uploadImage.loading ||
+              stateMerchant.profileEdit.loading
+            }
+            testID={'12.3'}
           />
-        </View>
+        )}
       </View>
     );
   };
