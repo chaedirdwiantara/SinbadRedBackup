@@ -8,7 +8,6 @@ import {
   colorV2,
   SnbBottomSheet2,
   SnbText2,
-  SnbButton2,
   SnbProgress,
   spacingV2 as layout,
   borderV2,
@@ -49,7 +48,7 @@ const CameraWithOCRView = () => {
   const [isMounted, setIsMounted] = React.useState(true)
   const { goBack } = useNavigation();
   const { params }: any = useRoute();
-  const { processImage, ocrImageState, setOcrStatusRtdb, ocrImageReset, ocrTimeout } =
+  const { processImage, ocrImageState, setOcrStatusRtdb, ocrImageReset } =
     useOCR(true);
   const { ocrStatus } = useDataFlagRTDB() || {};
   useCheckFlagByTask('ocrStatus');
