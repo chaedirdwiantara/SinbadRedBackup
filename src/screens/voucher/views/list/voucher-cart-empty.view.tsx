@@ -10,7 +10,7 @@ export const VoucherCartEmpty = () => {
         image={require('../../../../assets/images/voucher_not_found.png')}
         imageStyle={VoucherCartListStyles.emptyImage}
         title="Voucher Tidak Ditemukan"
-        description="Silahkan ulangi pencarian atau pilih voucher dari halaman utama"
+        description="Maaf, saat ini voucher tidak tersedia atau telah habis"
       />
     </View>
   );
