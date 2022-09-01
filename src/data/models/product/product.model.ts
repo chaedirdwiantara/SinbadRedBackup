@@ -172,6 +172,5 @@ export interface ProductCard {
   onCardPress?: () => void;
   withOrderButton?: boolean;
   onOrderPress: () => void;
-  onStockReminderPress: () => void;
   isStockAvailable?: boolean;
 }
