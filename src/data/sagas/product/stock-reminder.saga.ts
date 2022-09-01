@@ -1,6 +1,8 @@
 /** === IMPORT PACKAGES === */
+import { StatusBar } from 'react-native';
 import { put, call, takeLatest } from 'redux-saga/effects';
 /** === IMPORT INTERNAL === */
+import { SnbToast2 } from '@sinbad/react-native-sinbad-ui';
 import { stockReminderApi } from 'src/data/apis/product/stock-reminder.api';
 import * as ActionCreators from '@actions';
 import * as models from '@models';
@@ -28,10 +30,48 @@ function* stockReminderList(action: models.StockReminderListProcessAction) {
     );
   }
 }
+// create stock reminder
+function* createStockReminder(action: models.CreateStockReminderSuccessAction) {
+  try {
+    const { productId, warehouseId } = action.payload;
+    const response: models.CreateSuccessProps = yield call(() =>
+      stockReminderApi.crateReminder({ productId, warehouseId }),
+    );
+    const payloadResponse = { ...response, productId, warehouseId };
+    yield action.contextDispatch(
+      ActionCreators.createStockReminderSuccess(
+        action.contextDispatch,
+        payloadResponse,
+      ),
+    );
+    yield put(
+      ActionCreators.createStockReminderSuccess(
+        action.contextDispatch,
+        payloadResponse,
+      ),
+    );
+    SnbToast2.show('Pengingat berhasil ditambahkan!', 2000, {
+      position: 'top',
+      positionValue: StatusBar.currentHeight,
+    });
+  } catch (error) {
+    SnbToast2.show('Pengingat gagal ditambahkan, silahkan coba lagi!', 2000, {
+      position: 'top',
+      positionValue: StatusBar.currentHeight,
+    });
+    yield action.contextDispatch(
+      ActionCreators.createStockReminderFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.createStockReminderFailed(error as models.ErrorProps),
+    );
+  }
+}
 
 /** === LISTENER === */
 function* stockReminderSaga() {
   yield takeLatest(types.STOCK_REMINDER_LIST_PROCESS, stockReminderList);
+  yield takeLatest(types.CREATE_STOCK_REMINDER_PROCESS, createStockReminder);
 }
 
 export default stockReminderSaga;

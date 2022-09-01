@@ -29,8 +29,23 @@ export interface StockReminderListProcessAction {
   contextDispatch: (action: any) => any;
 }
 
-// export interface StockReminderProcessProps extends models.ListProcessV3Props {
-//   data: Array<StockReminderGetProps>;
-// }
+export interface CreateStockReminderProcessAction {
+  type: string;
+  payload: StockReminderGetProps;
+  contextDispatch: (action: any) => any;
+}
+
+interface payloadCreateStockSuccessAction
+  extends models.CreateSuccessProps,
+    StockReminderGetProps {}
+export interface CreateStockReminderSuccessAction {
+  type: string;
+  payload: payloadCreateStockSuccessAction;
+  contextDispatch: (action: any) => any;
+}
+
+export interface CreateStockReminderSuccessProps
+  extends models.CreateSuccessProps,
+    StockReminderGetProps {}
 
 export type StockReminderProcessProps = Array<StockReminderGetProps>;
