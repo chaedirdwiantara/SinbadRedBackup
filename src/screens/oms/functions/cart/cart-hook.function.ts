@@ -332,7 +332,7 @@ const useCheckStockAction = () => {
   const dispatch = useDispatch();
   return {
     fetch: (contextDispatch: (action: any) => any, isReserved: boolean) => {
-      if (stateCart.get.data !== null) {
+      if (stateCart.get.data !== null && stateCart.checkBuyer.data !== null) {
         // format payload from redux master
         const data: models.CheckStockPayloadCarts[] = [];
         stateCart.get.data?.sellers.map((sellerItem) => {
@@ -347,6 +347,7 @@ const useCheckStockAction = () => {
         dispatch(
           Actions.checkStockProcess(contextDispatch, {
             data: {
+              locationId: stateCart.checkBuyer.data.locationId,
               cartId: stateCart.get.data.id,
               reserved: isReserved,
               carts: data,
@@ -362,13 +363,14 @@ const useCheckStockAction = () => {
 };
 /** => post check stock action */
 const usePostCheckStockAction = () => {
+  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
     fetch: (
       contextDispatch: (action: any) => any,
       cartData: models.CartMaster,
     ) => {
-      if (cartData?.sellers !== null) {
+      if (cartData?.sellers !== null && stateCart.checkBuyer.data !== null) {
         // format payload from redux master
         const data: models.CheckStockPayloadCarts[] = [];
         cartData.sellers.map((sellerItem) => {
@@ -385,6 +387,7 @@ const usePostCheckStockAction = () => {
         dispatch(
           Actions.postCheckStockProcess(contextDispatch, {
             data: {
+              locationId: stateCart.checkBuyer.data.locationId,
               cartId: cartData.id,
               reserved: true,
               carts: data,
