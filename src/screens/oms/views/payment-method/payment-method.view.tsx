@@ -19,7 +19,6 @@ import PaymentMethodBody from './payment-method-body.view';
 import PaymentMethodExpiredTimeModal from './payment-method-expired-time.modal.view';
 import { goToShoppingCart } from '@core/functions/product';
 import { useUpdateCartAction, useCheckoutAction } from '../../functions';
-import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { PaymentStatusModal } from './payment-method-payment-status.modal.view';
 import PaymentMethodErrorModal from './payment-method-error-modal.view';
 import * as models from '@models';
