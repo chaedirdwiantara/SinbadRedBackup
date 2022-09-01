@@ -19,7 +19,6 @@ import PaymentMethodBody from './payment-method-body.view';
 import PaymentMethodExpiredTimeModal from './payment-method-expired-time.modal.view';
 import { goToShoppingCart } from '@core/functions/product';
 import { useUpdateCartAction, useCheckoutAction } from '../../functions';
-import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { PaymentStatusModal } from './payment-method-payment-status.modal.view';
 import PaymentMethodErrorModal from './payment-method-error-modal.view';
 import * as models from '@models';
@@ -78,7 +77,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     contexts.CheckoutContext,
   );
   const checkoutContextData = stateCheckout.checkout.data;
-  const idSeller = findIdSeller(checkoutContextData?.sellers);
+  // const idSeller = findIdSeller(checkoutContextData?.sellers);
   /** => Get payment method  */
   const { statePaymentMethod } = useContext(contexts.PaymentMethodContext); //get id to sub rtdb
 
@@ -93,22 +92,22 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const dataCheckout = props.route.params.data;
 
   /** => handle payment method */
-  const payloadPaymentMethod: any = {
-    amount: dataCheckout?.totalPaymentNumber,
-    page: 1,
-    perPage: 10,
-    keyword: '',
-    sort: 'desc',
-    sortBy: '',
-    sellerIds: idSeller,
-  };
-  const getPaymentMethodListContent = usePaymentMethodListContent();
-  const handlePaymentMethodList = () => {
-    getPaymentMethodListContent.paymentMethodListContentGet(
-      dispatchPaymentMethod,
-      payloadPaymentMethod,
-    );
-  };
+  // const payloadPaymentMethod: any = {
+  //   amount: dataCheckout?.totalPaymentNumber,
+  //   page: 1,
+  //   perPage: 10,
+  //   keyword: '',
+  //   sort: 'desc',
+  //   sortBy: '',
+  //   sellerIds: idSeller,
+  // };
+  // const getPaymentMethodListContent = usePaymentMethodListContent();
+  // const handlePaymentMethodList = () => {
+  //   getPaymentMethodListContent.paymentMethodListContentGet(
+  //     dispatchPaymentMethod,
+  //     payloadPaymentMethod,
+  //   );
+  // };
 
   let intervalCheckStatus = useRef<any>(null);
 
@@ -165,11 +164,11 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   };
 
   /** => call payment method list */
-  useFocusEffect(
-    React.useCallback(() => {
-      handlePaymentMethodList();
-    }, []),
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     handlePaymentMethodList();
+  //   }, []),
+  // );
 
   /** => sub payment method create order for data Id*/
   useFocusEffect(
