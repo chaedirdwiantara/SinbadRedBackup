@@ -50,7 +50,6 @@ const updateCart = (
     'v2',
     'UPDATE',
     {
-      buyerName: data.data.buyerName,
       carts: data.data.carts,
     },
   );
