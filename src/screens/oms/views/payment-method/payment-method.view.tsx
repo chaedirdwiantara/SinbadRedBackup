@@ -78,7 +78,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     contexts.CheckoutContext,
   );
   const checkoutContextData = stateCheckout.checkout.data;
-  const idSeller = findIdSeller(checkoutContextData?.sellers);
   /** => Get payment method  */
   const { statePaymentMethod } = useContext(contexts.PaymentMethodContext); //get id to sub rtdb
 
@@ -91,24 +90,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** => data from checkout */
   const dataCheckout = props.route.params.data;
-
-  /** => handle payment method */
-  const payloadPaymentMethod: any = {
-    amount: dataCheckout?.totalPaymentNumber,
-    page: 1,
-    perPage: 10,
-    keyword: '',
-    sort: 'desc',
-    sortBy: '',
-    sellerIds: idSeller,
-  };
-  const getPaymentMethodListContent = usePaymentMethodListContent();
-  const handlePaymentMethodList = () => {
-    getPaymentMethodListContent.paymentMethodListContentGet(
-      dispatchPaymentMethod,
-      payloadPaymentMethod,
-    );
-  };
 
   let intervalCheckStatus = useRef<any>(null);
 
@@ -163,13 +144,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     checkoutAction.reset(dispatchCheckout);
     goToThankYouPage('payment', Number(dataOrder?.id));
   };
-
-  /** => call payment method list */
-  useFocusEffect(
-    React.useCallback(() => {
-      handlePaymentMethodList();
-    }, []),
-  );
 
   /** => sub payment method create order for data Id*/
   useFocusEffect(
