@@ -37,6 +37,7 @@ import {
   DEFAULT_LONGITUDE,
   getStreetName,
   REGION_OPTIONS,
+  removePlusCode,
 } from '@screen/auth/functions/auth-utils.functions';
 import { debounce } from 'lodash';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -117,7 +118,7 @@ const MapsViewType2: React.FC = () => {
     if (locations.data) {
       if (locations.data.id !== null) {
         const formattedAddress =
-          addressResult.length > 0 ? addressResult[0].formatted_address : '';
+          addressResult.length > 0 ? removePlusCode(addressResult[0].formatted_address) : '';
         const street =
           addressResult.length > 0
             ? getStreetName(addressResult[0].address_components)
@@ -346,7 +347,7 @@ const MapsViewType2: React.FC = () => {
                 align="justify"
                 color={colorV2.textColor.secondary}
                 testID={'13.1.1'}>
-                {addressResult[0]?.formatted_address}
+                {removePlusCode(addressResult[0]?.formatted_address)}
               </SnbText2.Paragraph.Small>,
               <SnbText2.Paragraph.Small
                 color={colorV2.textColor.secondary}
