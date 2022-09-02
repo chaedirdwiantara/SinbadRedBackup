@@ -2,6 +2,7 @@
 import simplifyReducer from '@core/redux/simplifyReducer';
 import * as models from '@models';
 import * as types from '@types';
+import { isNumber } from 'lodash';
 /** === TYPE === */
 export type StockReminderInitialProps = models.StockReminderListItemProps;
 /** === INITIAL STATE === */
@@ -67,6 +68,26 @@ export const stockReminderListReducer = simplifyReducer(
       return {
         ...stockReminderListInitialState,
         loading: true,
+      };
+    },
+    /** => success create reminder */
+    [types.CREATE_STOCK_REMINDER_SUCCESS](
+      state = stockReminderListInitialState,
+      { payload }: models.CreateStockReminderSuccessAction,
+    ) {
+      // reoder list stock reminder to set stockRemind to true by findIndex
+      const dataListStockReminder = [...state.data];
+      const findByIndexList = dataListStockReminder.findIndex(
+        (i) =>
+          `${i.productId}${i.warehouseId}` ==
+          `${payload.productId}${payload.warehouseId}`,
+      );
+      if (isNumber(findByIndexList)) {
+        dataListStockReminder[findByIndexList].stockRemind = true;
+      }
+      return {
+        ...state,
+        data: dataListStockReminder,
       };
     },
   },

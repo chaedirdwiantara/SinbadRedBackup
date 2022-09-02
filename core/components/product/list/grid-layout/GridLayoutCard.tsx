@@ -44,9 +44,6 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
         qtySoldLabel={
           product.qtySoldValue ? `Terjual ${product.qtySoldLabel}` : ''
         }
-        onStockReminderPress={() => {
-          alert('stock reminder grid');
-        }}
         priceAfterTax={product.priceAfterTax}
         hasBulkPrice={product.hasBulkPrice}
         isStockAvailable={product.isStockAvailable}

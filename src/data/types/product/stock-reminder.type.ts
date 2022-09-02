@@ -7,3 +7,9 @@ export const STOCK_REMINDER_LIST_RESET = 'StockReminderListReset';
 export const STOCK_REMINDER_LIST_LOADMORE = 'StockReminderListLoadMore';
 export const STOCK_REMINDER_LIST_CLEAR_CONTENTS =
   'StockReminderListClearContents';
+
+/** => Create Stock Reminder */
+export const CREATE_STOCK_REMINDER_PROCESS = 'CreateStockReminderProcess';
+export const CREATE_STOCK_REMINDER_SUCCESS = 'CreateStockReminderSuccess';
+export const CREATE_STOCK_REMINDER_FAILED = 'CreateStockReminderFailed';
+export const CREATE_STOCK_REMINDER_RESET = 'CreateStockReminderReset';

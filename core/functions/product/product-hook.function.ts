@@ -6,6 +6,7 @@ import {
   useStockReminderContext,
   useTagContext,
 } from 'src/data/contexts/product';
+import { useStockReminderActions } from '@screen/product/functions';
 /** === IMPORT TYPES ===  */
 import * as models from '@models';
 import {
@@ -293,7 +294,12 @@ export const useProductCardUtil = (
   // hooks stock reminder list
   const {
     stateStockReminder: { list: stockReminderList },
+    dispatchStockReminder,
   } = useStockReminderContext();
+  const { createReminder } = useStockReminderActions({
+    warehouseId: Number(product.warehouseOriginId),
+    productId: product.id,
+  });
   // find stock product
   const stockReminder = useMemo(() => {
     return stockReminderList.data.find(
@@ -364,12 +370,16 @@ export const useProductCardUtil = (
   // callback button order & reminder
   const onButtonPress = useCallback(() => {
     if (outOfStock) {
-      console.log(product.onStockReminderPress());
-      product.onStockReminderPress();
+      if (isHaveStockReminder) {
+        alert('delete reminder');
+      } else {
+        // action call create reminder
+        createReminder(dispatchStockReminder);
+      }
       return void 0;
     }
     product.onOrderPress();
-  }, [outOfStock, product.onStockReminderPress, product.onOrderPress]);
+  }, [outOfStock, product.onOrderPress, isHaveStockReminder]);
 
   return {
     badge,

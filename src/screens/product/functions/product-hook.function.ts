@@ -344,6 +344,19 @@ const useStockInformationAction = () => {
   };
 };
 
+const useStockReminderActions = (props: models.StockReminderGetProps) => {
+  const dispatch = useDispatch();
+
+  const createReminder = useCallback(
+    (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.createStockReminderProcess(contextDispatch, props));
+    },
+    [props],
+  );
+
+  return { createReminder };
+};
+
 export {
   useProductListActions,
   useOrderQuantity,
@@ -356,4 +369,5 @@ export {
   useStockInformationAction,
   useProductDetailCartAction,
   useAddToCartDetailActions,
+  useStockReminderActions,
 };
