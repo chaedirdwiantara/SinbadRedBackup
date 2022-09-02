@@ -446,8 +446,8 @@ const styles = StyleSheet.create({
   iconSearchBar: {
     backgroundColor: colorV2.bgColor.light,
     marginBottom: 5,
-    borderTopLeftRadius: borderV2.radius.sm,
-    borderBottomLeftRadius: borderV2.radius.sm,
+    borderTopLeftRadius: borderV2.radius.md,
+    borderBottomLeftRadius: borderV2.radius.md,
     justifyContent: 'center',
     paddingLeft: layout.spacing.md,
     paddingRight: layout.spacing.xxsm

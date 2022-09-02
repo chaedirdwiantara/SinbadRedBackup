@@ -95,7 +95,7 @@ export function removePlusCode(data: string) {
   if (data?.toLowerCase().includes('regency')) {
     return 'Alamat tidak ditemukan'
   } else if (/\s*\w*[+]\w*/g.test(data)) {
-    return data.split(',').slice(1).join(',').trim()
+    return data.split(' ').slice(1).join(' ').trim()
   }
   return data
 }
