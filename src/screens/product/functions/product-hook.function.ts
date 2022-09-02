@@ -354,7 +354,13 @@ const useStockReminderActions = (props: models.StockReminderGetProps) => {
     [props],
   );
 
-  return { createReminder };
+  const deleteReminder = useCallback(
+    (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.deleteStockReminderProcess(contextDispatch, props));
+    },
+    [props],
+  );
+  return { createReminder, deleteReminder };
 };
 
 export {

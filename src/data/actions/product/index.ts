@@ -6,3 +6,4 @@ export * from './stock-validation-api.action';
 export * from './stock-information-api.action';
 export * from './stock-reminder-list-api.action';
 export * from './stock-reminder-create-api.action';
+export * from './stock-reminder-delete-api.action';

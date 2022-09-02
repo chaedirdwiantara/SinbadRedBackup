@@ -90,5 +90,25 @@ export const stockReminderListReducer = simplifyReducer(
         data: dataListStockReminder,
       };
     },
+    /** => delete create reminder */
+    [types.DELETE_STOCK_REMINDER_SUCCESS](
+      state = stockReminderListInitialState,
+      { payload }: models.CreateStockReminderSuccessAction,
+    ) {
+      // reoder list stock reminder to set stockRemind to true by findIndex
+      const dataListStockReminder = [...state.data];
+      const findByIndexList = dataListStockReminder.findIndex(
+        (i) =>
+          `${i.productId}${i.warehouseId}` ==
+          `${payload.productId}${payload.warehouseId}`,
+      );
+      if (isNumber(findByIndexList)) {
+        dataListStockReminder[findByIndexList].stockRemind = false;
+      }
+      return {
+        ...state,
+        data: dataListStockReminder,
+      };
+    },
   },
 );
