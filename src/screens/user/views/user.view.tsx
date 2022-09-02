@@ -281,7 +281,7 @@ const UserView: FC = ({ start }: any) => {
               });
             }
           }}
-          loading={
+          loadingButton={
             item.type === 'upgradeVipProcess' ||
             item.type === 'upgradeVipSuccess'
               ? stateUser?.updateBadgeProfile.loading
