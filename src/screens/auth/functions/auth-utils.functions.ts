@@ -19,7 +19,7 @@ export const formatter = (string = '', gaps: number[], spacer: string) => {
       if (index === 0) {
         return '';
       }
-      const start = offsets[index - 1];
+      const start: any = offsets[index - 1];
       return string.substr(start, end - start);
     })
     .filter((part) => part !== '');
@@ -89,6 +89,15 @@ export function getStreetName(data: any) {
     }
   });
   return streetName;
+}
+
+export function removePlusCode(data: string) {
+  if (data?.toLowerCase().includes('regency')) {
+    return 'Alamat tidak ditemukan'
+  } else if (/\s*\w*[+]\w*/g.test(data)) {
+    return data.split(',').slice(1).join(',').trim()
+  }
+  return data
 }
 
 export const setErrorMessage = (code: number, message?: string) => {

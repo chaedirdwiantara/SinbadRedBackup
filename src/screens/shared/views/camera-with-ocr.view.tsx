@@ -8,7 +8,6 @@ import {
   colorV2,
   SnbBottomSheet2,
   SnbText2,
-  SnbButton2,
   SnbProgress,
   spacingV2 as layout,
   borderV2,
@@ -49,16 +48,16 @@ const CameraWithOCRView = () => {
   const [isMounted, setIsMounted] = React.useState(true)
   const { goBack } = useNavigation();
   const { params }: any = useRoute();
-  const { processImage, ocrImageState, resetOcrStatusRtdb, ocrImageReset } =
+  const { processImage, ocrImageState, setOcrStatusRtdb, ocrImageReset } =
     useOCR(true);
   const { ocrStatus } = useDataFlagRTDB() || {};
   useCheckFlagByTask('ocrStatus');
 
   React.useEffect(() => {
-    resetOcrStatusRtdb();
+    setOcrStatusRtdb('none');
     return () => {
       setIsMounted(false)
-      resetOcrStatusRtdb();
+      setOcrStatusRtdb('none');
     }
   }, []);
 
@@ -84,8 +83,9 @@ const CameraWithOCRView = () => {
       goBack();
     } else if (ocrStatus === 'processing') {
       ocrTimeout = setTimeout(() => {
+        setOcrStatusRtdb('none')
         bottomSheetRef.current?.open();
-      }, 40 * 1000);
+      }, 15 * 1000);
     }
     return () => {
       clearTimeout(ocrTimeout);
@@ -159,7 +159,7 @@ const CameraWithOCRView = () => {
           />
         }
         close={() => {
-          resetOcrStatusRtdb();
+          setOcrStatusRtdb('none');
           isMounted && setRetake(true);
         }}
         content={renderContent()}
@@ -168,7 +168,7 @@ const CameraWithOCRView = () => {
             testID='03.1'
             title1='Lanjutkan'
             button1Press={() => {
-              resetOcrStatusRtdb();
+              setOcrStatusRtdb('none');
               setRetake(true);
               bottomSheetRef.current?.close()
               setTimeout(() => {
@@ -177,7 +177,7 @@ const CameraWithOCRView = () => {
             }}
             title2='Foto Ulang'
             button2Press={() => {
-              resetOcrStatusRtdb();
+              setOcrStatusRtdb('none');
               setRetake(true);
               bottomSheetRef.current?.close();
             }}

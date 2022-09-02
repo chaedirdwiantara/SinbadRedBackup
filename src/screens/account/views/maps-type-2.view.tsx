@@ -7,7 +7,6 @@ import {
   SnbBottomSheet2,
   SnbBottomSheet2Ref,
   SnbBottomSheetPart,
-  SnbButton2,
   SnbContainer,
   SnbIcon,
   SnbSkeletonAnimator,
@@ -23,10 +22,7 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import {
-  DATA_TOKO_STEP_3_VIEW,
-  INPUT_MANUAL_LOCATION_MODAL_VIEW,
-} from '../functions/screens_name';
+import { DATA_TOKO_STEP_3_VIEW, } from '../functions/screens_name';
 import {
   StackActions,
   useNavigation,
@@ -41,8 +37,12 @@ import {
   DEFAULT_LONGITUDE,
   getStreetName,
   REGION_OPTIONS,
+  removePlusCode,
 } from '@screen/auth/functions/auth-utils.functions';
 import { debounce } from 'lodash';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import Config from 'react-native-config';
+
 
 interface IconButtonProps {
   icon: string;
@@ -78,7 +78,7 @@ const MapsViewType2: React.FC = () => {
     longitude: DEFAULT_LONGITUDE,
   });
   const refMaps = React.useRef<MapView>(null);
-  const { navigate, goBack, dispatch } = useNavigation();
+  const { goBack, dispatch } = useNavigation();
   const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
   const [contentHeight, setContentHeight] = React.useState(0);
   const [addressResult, setAddressResult] = React.useState<any[]>([]);
@@ -118,7 +118,7 @@ const MapsViewType2: React.FC = () => {
     if (locations.data) {
       if (locations.data.id !== null) {
         const formattedAddress =
-          addressResult.length > 0 ? addressResult[0].formatted_address : '';
+          addressResult.length > 0 ? removePlusCode(addressResult[0].formatted_address) : '';
         const street =
           addressResult.length > 0
             ? getStreetName(addressResult[0].address_components)
@@ -164,7 +164,7 @@ const MapsViewType2: React.FC = () => {
         setLoadingGetAddress(false);
         setAddressResult(results);
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async function getUserLocation() {
@@ -213,7 +213,7 @@ const MapsViewType2: React.FC = () => {
       } else {
         getUserLocation();
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   LogBox.ignoreLogs(['Non-serializable values were found in the navigation state.'])
@@ -221,6 +221,51 @@ const MapsViewType2: React.FC = () => {
   return (
     <SnbContainer color="white">
       <View style={{ flex: 0.7 }}>
+        <GooglePlacesAutocomplete
+          placeholder='Cari alamat toko Anda di sini'
+          fetchDetails
+          numberOfLines={2}
+          minLength={3}
+          debounce={750}
+          GooglePlacesDetailsQuery={{ fields: "geometry" }}
+          keepResultsAfterBlur
+          textInputProps={{ multiline: true }}
+          isRowScrollable={false}
+          onPress={(_, details = null) => {
+            if (details?.geometry?.location) {
+              refMaps.current?.animateToRegion({
+                latitude: details?.geometry?.location.lat,
+                longitude: details?.geometry?.location.lng,
+                ...REGION_OPTIONS,
+              });
+            }
+          }}
+          query={{
+            key: Config.GOOGLE_MAPS_API_KEY,
+            language: 'id',
+            components: 'country:id',
+          }}
+          renderLeftButton={() => (
+            <View style={styles.iconSearchBar}>
+              <SnbIcon name="search" size={16} />
+            </View>
+          )}
+          renderRow={({ description, id }) => (
+            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+              <SnbIcon name="location_store" size={16} color={colorV2.iconColor.default} />
+              <View style={{ marginHorizontal: layout.spacing.xxsm }} />
+              <View style={{ flex: 1 }}>
+                <SnbText2.Body.Default key={id} numberOfLines={2}>
+                  {description}
+                </SnbText2.Body.Default>
+              </View>
+            </View>
+          )}
+          styles={{
+            container: styles.searchBarContainer,
+            textInput: styles.searchBarTextInput
+          }}
+        />
         <MapView
           initialRegion={{
             ...latLng,
@@ -284,15 +329,6 @@ const MapsViewType2: React.FC = () => {
                 ),
               )}
             </View>
-            <View>
-              <SnbButton2.Link
-                title="Cari Lokasi"
-                onPress={() => navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW)}
-                disabled={false}
-                size="small"
-                testID={'13.1.1'}
-              />
-            </View>
           </View>
           {renderIF(
             loadingGetAddress,
@@ -311,7 +347,7 @@ const MapsViewType2: React.FC = () => {
                 align="justify"
                 color={colorV2.textColor.secondary}
                 testID={'13.1.1'}>
-                {addressResult[0]?.formatted_address}
+                {removePlusCode(addressResult[0]?.formatted_address)}
               </SnbText2.Paragraph.Small>,
               <SnbText2.Paragraph.Small
                 color={colorV2.textColor.secondary}
@@ -343,9 +379,15 @@ const MapsViewType2: React.FC = () => {
       <SnbBottomSheet2
         ref={bottomSheetRef}
         name="modal-area-not-found"
-        title={<SnbBottomSheetPart.Title title="" swipeIndicator />}
+        title={<SnbBottomSheetPart.Title title="" />}
+        navigation={
+          <SnbBottomSheetPart.Navigation
+            iconRight1Name="x"
+            onRight1Action={bottomSheetRef.current?.close}
+          />
+        }
         type="content"
-        contentHeight={contentHeight + 100}
+        contentHeight={contentHeight + 56}
         content={
           <View
             onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}>
@@ -358,20 +400,9 @@ const MapsViewType2: React.FC = () => {
                 marginVertical: layout.spacing.lg,
               }}
               title="Area Tidak Ditemukan"
-              description="Coba cek ulang posisi titik lokasi Anda atau masukkan lokasi
-              manual."
+              description="Coba cek ulang posisi titik lokasi Anda atau Anda dapat hubungi tim CS"
             />
           </View>
-        }
-        button={
-          <FooterButton.Single
-            buttonPress={() => {
-              bottomSheetRef.current?.close();
-              navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW);
-            }}
-            title="Masukkan Lokasi Manual"
-            testID={'13.1.1'}
-          />
         }
       />
     </SnbContainer>
@@ -412,5 +443,27 @@ const styles = StyleSheet.create({
     width: 64,
     resizeMode: 'contain'
   },
+  iconSearchBar: {
+    backgroundColor: colorV2.bgColor.light,
+    marginBottom: 5,
+    borderTopLeftRadius: borderV2.radius.sm,
+    borderBottomLeftRadius: borderV2.radius.sm,
+    justifyContent: 'center',
+    paddingLeft: layout.spacing.md,
+    paddingRight: layout.spacing.xxsm
+  },
+  searchBarContainer: {
+    position: 'absolute',
+    zIndex: 999,
+    left: 0,
+    right: 0,
+    marginTop: layout.spacing['3xl'],
+    marginHorizontal: layout.spacing.lg
+  },
+  searchBarTextInput: {
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+    backgroundColor: colorV2.bgColor.light
+  }
 });
 export default MapsViewType2;
