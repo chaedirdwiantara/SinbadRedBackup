@@ -6,7 +6,7 @@ import { renderIF, useCamera } from '@screen/auth/functions';
 import { MerchantHookFunc } from '@screen/merchant/function';
 import { UserHookFunc } from '@screen/user/functions';
 import React from 'react';
-import { Image, View } from 'react-native';
+import { Image, View, ScrollView } from 'react-native';
 import {
   SnbButton2,
   SnbContainer,
@@ -228,7 +228,6 @@ const MerchantEditPhotoView = () => {
     } else {
       uri = imageUrl;
     }
-    console.log('params:', npwp.type);
 
     const handleSaveNpwp = () => {
       const npwpIsChanged =
@@ -252,31 +251,43 @@ const MerchantEditPhotoView = () => {
       if (npwpIsChanged) {
         editProfileAction.editProfile(dispatchSupplier, { data });
       }
-      console.log('dataNpwp:', npwpIsChanged);
+    };
+
+    const checkNpwp = () => {
+      if (params?.type === 'npwp') {
+        if (
+          npwp.value === stateUser.detail.data?.ownerData?.profile?.taxNo ||
+          !npwp.value
+        ) {
+          return true;
+        }
+      }
     };
 
     return (
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>
-          <Image
-            resizeMode="contain"
-            source={{ uri }}
+        <View
+          style={{
+            flex: 1,
+          }}>
+          <ScrollView
             style={{
-              resizeMode: 'contain',
-              height: undefined,
-              width: '100%',
-              aspectRatio:
-                params?.type === 'selfie'
-                  ? 6 / 5
-                  : params?.type === 'store'
-                  ? 8 / 7
-                  : 8 / 5,
-              marginTop: 24,
-            }}
-          />
-          <View>
-            {params?.type === 'npwp' ? (
-              <View style={{ margin: layout.spacing.lg }}>
+              flex: 1,
+              paddingHorizontal: layout.spacing.xl,
+              maxHeight: 370,
+            }}>
+            <Image
+              resizeMode="contain"
+              source={{ uri }}
+              borderRadius={4}
+              style={{
+                height: 200,
+                width: undefined,
+                marginBottom: layout.spacing.md,
+              }}
+            />
+            <View>
+              {params?.type === 'npwp' ? (
                 <SnbTextField2.Text
                   {...npwp}
                   labelText={'Nomor NPWP'}
@@ -284,9 +295,10 @@ const MerchantEditPhotoView = () => {
                   keyboardType="number-pad"
                   maxLength={20}
                 />
-              </View>
-            ) : null}
-          </View>
+              ) : null}
+            </View>
+          </ScrollView>
+
           {params?.type !== 'npwp' ? (
             <View style={{ justifyContent: 'space-between' }}>
               <View
@@ -322,7 +334,8 @@ const MerchantEditPhotoView = () => {
             disabled={
               stateGlobal.uploadImage.loading ||
               stateMerchant.profileEdit.loading ||
-              npwp.type === 'error'
+              npwp.type === 'error' ||
+              checkNpwp()
             }
             title1={'Simpan'}
             button1Press={handleSaveNpwp}
