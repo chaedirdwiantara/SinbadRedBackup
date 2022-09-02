@@ -35,7 +35,7 @@ function* createStockReminder(action: models.CreateStockReminderSuccessAction) {
   try {
     const { productId, warehouseId } = action.payload;
     const response: models.CreateSuccessProps = yield call(() =>
-      stockReminderApi.crateReminder({ productId, warehouseId }),
+      stockReminderApi.createReminder({ productId, warehouseId }),
     );
     const payloadResponse = { ...response, productId, warehouseId };
     yield action.contextDispatch(
@@ -67,11 +67,49 @@ function* createStockReminder(action: models.CreateStockReminderSuccessAction) {
     );
   }
 }
+// delete stock reminder
+function* deleteStockReminder(action: models.CreateStockReminderSuccessAction) {
+  try {
+    const { productId, warehouseId } = action.payload;
+    const response: models.CreateSuccessProps = yield call(() =>
+      stockReminderApi.deleteReminder({ productId, warehouseId }),
+    );
+    const payloadResponse = { ...response, productId, warehouseId };
+    yield action.contextDispatch(
+      ActionCreators.deleteStockReminderSuccess(
+        action.contextDispatch,
+        payloadResponse,
+      ),
+    );
+    yield put(
+      ActionCreators.deleteStockReminderSuccess(
+        action.contextDispatch,
+        payloadResponse,
+      ),
+    );
+    SnbToast2.show('Pengingat dihapus!', 2000, {
+      position: 'top',
+      positionValue: StatusBar.currentHeight,
+    });
+  } catch (error) {
+    SnbToast2.show('Pengingat gagal dihapus, silahkan coba lagi!', 2000, {
+      position: 'top',
+      positionValue: StatusBar.currentHeight,
+    });
+    yield action.contextDispatch(
+      ActionCreators.deleteStockReminderFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.deleteStockReminderFailed(error as models.ErrorProps),
+    );
+  }
+}
 
 /** === LISTENER === */
 function* stockReminderSaga() {
   yield takeLatest(types.STOCK_REMINDER_LIST_PROCESS, stockReminderList);
   yield takeLatest(types.CREATE_STOCK_REMINDER_PROCESS, createStockReminder);
+  yield takeLatest(types.DELETE_STOCK_REMINDER_PROCESS, deleteStockReminder);
 }
 
 export default stockReminderSaga;

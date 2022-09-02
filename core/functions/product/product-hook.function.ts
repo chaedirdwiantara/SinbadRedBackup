@@ -296,7 +296,7 @@ export const useProductCardUtil = (
     stateStockReminder: { list: stockReminderList },
     dispatchStockReminder,
   } = useStockReminderContext();
-  const { createReminder } = useStockReminderActions({
+  const { createReminder, deleteReminder } = useStockReminderActions({
     warehouseId: Number(product.warehouseOriginId),
     productId: product.id,
   });
@@ -371,7 +371,8 @@ export const useProductCardUtil = (
   const onButtonPress = useCallback(() => {
     if (outOfStock) {
       if (isHaveStockReminder) {
-        alert('delete reminder');
+        // action call remove reminder
+        deleteReminder(dispatchStockReminder);
       } else {
         // action call create reminder
         createReminder(dispatchStockReminder);

@@ -16,11 +16,23 @@ const getList = (data: models.StockReminderGetProps[]) => {
   );
 };
 // create stock reminder, if success then reorder from reducer context
-const crateReminder = (data: models.StockReminderGetProps) => {
+const createReminder = (data: models.StockReminderGetProps) => {
   return apiMapping('auth', path, 'warehouse', 'v1', 'CREATE', data);
+};
+
+// delete stock reminder, if success then reorder from reducer context
+const deleteReminder = (data: models.StockReminderGetProps) => {
+  return apiMapping(
+    'auth',
+    `${path}?warehouseId=${data.warehouseId}&productId=${data.productId}`,
+    'warehouse',
+    'v1',
+    'DELETE',
+  );
 };
 
 export const stockReminderApi = {
   getList,
-  crateReminder,
+  createReminder,
+  deleteReminder,
 };
