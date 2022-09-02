@@ -353,13 +353,13 @@ export const useOCR = (isRTDBOpenConnection = false) => {
   }, []);
 
   const resetOcrDataRtdb = React.useCallback(() => {
-    ref.child('ocrData').set(null);
+    ref.child('userData/ocrData').set(null);
   }, []);
 
   React.useEffect(() => {
     if (isRTDBOpenConnection) {
       const flag = database()
-        .ref(`sinbadApp/${uniqueId}/ocrData`)
+        .ref(`sinbadApp/${uniqueId}/userData/ocrData`)
         .on('value', (data) => {
           if (data.val()?.idNumber) {
             setOcrImageResult(data.val());

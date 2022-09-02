@@ -83,7 +83,8 @@ const CameraWithOCRView = () => {
       goBack();
     } else if (ocrStatus === 'processing') {
       ocrTimeout = setTimeout(() => {
-        setOcrStatusRtdb('error')
+        setOcrStatusRtdb('none')
+        bottomSheetRef.current?.open();
       }, 15 * 1000);
     }
     return () => {
