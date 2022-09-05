@@ -400,7 +400,7 @@ const MapsViewType2: React.FC = () => {
                 marginVertical: layout.spacing.lg,
               }}
               title="Area Tidak Ditemukan"
-              description="Coba cek ulang posisi titik lokasi Anda atau Anda dapat hubungi tim CS"
+              description="Silakan cek ulang posisi titik lokasi Anda atau Anda dapat hubungi tim CS"
             />
           </View>
         }
