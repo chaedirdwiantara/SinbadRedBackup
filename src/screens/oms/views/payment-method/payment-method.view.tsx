@@ -245,14 +245,14 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     statePaymentMethod.subOrderRtdb.data,
   ]);
 
-  /** => call 10 second checkout */
-  // React.useEffect(() => {
-  //   if (isLoading == true) {
-  //     setTimeout(() => {
-  //       setHandleStatusPayment(true);
-  //     }, 10000);
-  //   }
-  // }, [isLoading]);
+  /** => call if there's error */
+  React.useEffect(() => {
+    if (isLoading == true) {
+      if(statePaymentMethod.createOrder.error != null){
+        setHandleStatusPayment(true);
+      }     
+    }
+  }, [isLoading,statePaymentMethod.createOrder.error]);
 
   //==> dispatch create order
   React.useEffect(() => {
