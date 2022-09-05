@@ -7,6 +7,7 @@ import {
   SnbToast2,
   spacingV2,
   FooterButton,
+  SnbInfoBox2,
 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
@@ -410,6 +411,14 @@ const ProductDetailView: FC = () => {
             />
           }>
           <ProductDetailCarousel images={dataProduct?.images!} />
+          <SnbInfoBox2
+            full
+            testID={testID}
+            color="yellow"
+            title="Stock Habis"
+            leftIcon="info"
+            description="Dapatkan pemberitahuan saat produk tersedia kembali dengan menekan ‘Ingatkan Saya’."
+          />
           <ProductDetailMainInfo
             name={dataProduct?.name!}
             priceAfterTax={dataProduct?.priceAfterTax!}
