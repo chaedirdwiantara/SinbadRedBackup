@@ -108,6 +108,19 @@ export interface IUpdateUserMedeaSuccess {
   message: string;
 }
 
+export interface ICheckReferralProcess {
+  code: string;
+}
+
+export interface ICheckReferralSuccess {
+  data: {
+    id: Number;
+    createdAt: string;
+    updatedAt: string;
+  };
+  message: string;
+}
+
 // FAILED MODEL
 export interface IUserMedeaFailed {}
 export interface ICheckPhoneNoAvailabilityFailed {}

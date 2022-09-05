@@ -14,6 +14,7 @@ import {
   useInputPhone,
   useCheckPhoneRegistrationV3,
   setErrorMessage,
+  useCheckReferralCode,
 } from '@screen/auth/functions';
 import { useDataPermanent } from '@core/redux/Data';
 import { ModalOTPMethod, ModalSalesman } from '../shared';
@@ -34,6 +35,7 @@ const SelfRegisterView: React.FC = () => {
   const [referal, setReferal] = React.useState('');
   const [loadingReferal, setLoadingReferal] = React.useState(false);
   const [statusReferal, setStatusReferal] = React.useState('default');
+  const { checkReferralCode, checkReferralCodeData, resetReferralCode } = useCheckReferralCode();
 
   React.useEffect(() => {
     if (checkPhoneRegistrationState?.data !== null) {
@@ -67,14 +69,19 @@ const SelfRegisterView: React.FC = () => {
     };
   }, []);
 
+  React.useEffect(() => {
+    if (checkReferralCodeData.data !== null) {
+      setStatusReferal('success');
+    }
+    if (checkReferralCodeData.error !== null){
+      setStatusReferal('error');
+    }
+  }, [checkReferralCodeData]);
+
   const handleOnChangeReferal = useCallback(
     debounce((text) => {
       setLoadingReferal(false);
-      if (text > 5) {
-        setStatusReferal('error');
-      } else {
-        setStatusReferal('success');
-      }
+      checkReferralCode({ code: text });
     }, 1500),
     [referal],
   );
@@ -117,7 +124,11 @@ const SelfRegisterView: React.FC = () => {
                 setLoadingReferal(true);
                 handleOnChangeReferal(text);
               }}
-              helperText={loadingReferal ? 'Pengecekan Kode...' : ''}
+              helperText={
+                loadingReferal || checkReferralCodeData.loading
+                  ? 'Pengecekan Kode...'
+                  : ''
+              }
               keyboardType="default"
               labelText="Masukkan Kode Referal (Optional)"
               placeholder="Masukkan kode referal jika ada"
