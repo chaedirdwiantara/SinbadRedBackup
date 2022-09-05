@@ -121,8 +121,11 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value, testID }) => 
           marginTop: layout.spacing.lg,
         }}>
         <SnbText2.Paragraph.Small color={colorV2.textColor.link}>
-          Nama secara otomatis diambil dari foto KTP yang anda upload. Periksa
-          kembali nama anda bila terjadi kesalahan.
+          {ocrImageResult !== null
+            ? "Nama secara otomatis diambil dari foto KTP yang anda upload. Periksa kembali nama anda bila terjadi kesalahan."
+            : "Isi Nama & NIK anda sesuai dengan KTP dan Periksa kembali nama anda bila terjadi kesalahan."
+          }
+
         </SnbText2.Paragraph.Small>
       </View>
     </View>
