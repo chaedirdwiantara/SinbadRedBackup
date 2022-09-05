@@ -258,7 +258,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
             </View>
             <View>
               <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-                {toCurrency(0, { withFraction: false })}
+                {toCurrency(data?.paymentServiceFeeDeduct, { withFraction: false })}
               </SnbText2.Paragraph.Default>
             </View>
           </View>
