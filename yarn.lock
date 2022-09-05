@@ -1612,10 +1612,10 @@
   resolved "http://lib.sinbad.web.id/@sinbad%2fimage-editor/-/image-editor-2.3.1.tgz#0b517c411026ed3a015792e6be68646d3ee511c4"
   integrity sha512-KjBqHNalgPXr8DRPqNjWhvVBVWbwzb6SvzHDXu+Rxbyx7rY/XQa+G2s0/VDMLr5SQiJ+CTzZj35P1SCwNLaTUw==
 
-"@sinbad/react-native-sinbad-ui@1.0.97":
-  version "1.0.97"
-  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.97.tgz#da2911ec210b82b9dafcd02868fd3c1ae6ed51aa"
-  integrity sha512-NGfPG/hFR/80o3nSyiBIsOEBm3dddqDGCmAVbcicEpn0Skq5BzShyZeSi+/c0K3iLio+lOuRfeJikNZV5xD6gw==
+"@sinbad/react-native-sinbad-ui@1.0.99":
+  version "1.0.99"
+  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.99.tgz#67f8d5df225d21e1aee97d80a6b014af8b2228e8"
+  integrity sha512-7StWvsFhOHEUvCa9gKDixvSVxnm8GgSKmGJYbixLcc9HAf/qYQDfVcd45lBh3tQnyrmSRa21actRswNyPFeRBA==
   dependencies:
     "@sinbad/design-token" "0.0.1"
     lodash "4.17.21"

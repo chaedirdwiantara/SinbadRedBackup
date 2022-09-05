@@ -58,6 +58,7 @@ const Header: FC<HeaderProps> = () => {
 
   return (
     <SnbTopNav2.Type10
+      testID="home"
       placeholder="Cari di sinbad"
       icon1Name="cart"
       icon2Name="notification"
