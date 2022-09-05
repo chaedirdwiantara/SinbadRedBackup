@@ -483,10 +483,12 @@ const ProductDetailView: FC = () => {
             shadow={false}
             loading={loadingButton}
             loadingButton={loadingButton}
-            disabled={
-              me.data !== null &&
-              defaultProperties.stock < (dataProduct?.minQty ?? 1)
-            }
+            // disabled={
+            //   me.data !== null &&
+            //   defaultProperties.stock < (dataProduct?.minQty ?? 1)
+            // }
+            button1Type="secondary-outline"
+            icon1Button="notification"
             button1Press={handleOrderPress}
             button2Press={onOpenWhatsApp}
             iconButton="chat"
