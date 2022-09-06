@@ -361,12 +361,15 @@ export const useProductCardUtil = (
     addReminderLabel,
   ]);
   // make outline button if out of stock
-  const buttonOutline = useMemo(() => outOfStock, [outOfStock]);
+  const buttonOutline = useMemo(() => {
+    if (product.isStockAvailable) return false;
+    return outOfStock;
+  }, [outOfStock, product.isStockAvailable]);
   // make button grey if have stock reminder
-  const buttonType: 'secondary' | 'primary' = useMemo(
-    () => (isHaveStockReminder ? 'secondary' : 'primary'),
-    [isHaveStockReminder],
-  );
+  const buttonType: 'secondary' | 'primary' = useMemo(() => {
+    if (product.isStockAvailable) return 'primary';
+    return isHaveStockReminder ? 'secondary' : 'primary';
+  }, [isHaveStockReminder, product.isStockAvailable]);
   // callback button order & reminder
   const onButtonPress = useCallback(() => {
     if (outOfStock) {
