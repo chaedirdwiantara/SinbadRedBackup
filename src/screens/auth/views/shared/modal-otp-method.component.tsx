@@ -18,12 +18,14 @@ import { LOGIN_OTP_VIEW, REGISTER_OTP_VIEW } from '@screen/auth/functions/screen
 import { useAuthCoreAction } from '@core/functions/auth';
 import { testProps } from '@core/functions/global/test-props';
 import { camelize } from '@core/functions/global/camelize';
+import { useCheckReferralCode } from '@screen/auth/functions';
 
 interface Props {
   ref: any,
   phone: string,
   action: 'register' | 'login',
-  onResetField: () => void
+  onResetField: () => void,
+  referralCode?: string;
 }
 
 interface RadioButtonProps {
@@ -73,13 +75,14 @@ const RadioButton: React.FC<RadioButtonProps> = ({ label, onPress, selected, ico
   )
 }
 
-const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone, action, onResetField }, ref: any) => {
+const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone, action, onResetField, referralCode }, ref: any) => {
   const [contentHeight, setContentHeight] = React.useState(0);
   const [otpMethod, setOtpMethod] = React.useState('')
   const { requestOTP, resetRequestOTP } = useAuthCoreAction()
   const { otpHash } = useOTP()
   const { requestOTP: requestOTPState } = useDataAuth()
   const { navigate } = useNavigation()
+  const { resetReferralCode } = useCheckReferralCode();
 
   React.useEffect(() => {
     return resetRequestOTP
@@ -89,10 +92,11 @@ const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone, action, onRes
     if (requestOTPState.data !== null) {
       ref.current?.close()
       const navigateTo = action === 'login' ? LOGIN_OTP_VIEW : REGISTER_OTP_VIEW
-      const params = { mobilePhone: phone, otpHash, type: otpMethod }
+      const params = { mobilePhone: phone, otpHash, type: otpMethod, salesmanReferralCode: referralCode }
       navigate(navigateTo, params);
       resetRequestOTP()
       onResetField()
+      resetReferralCode()
     }
   }, [requestOTPState])
 

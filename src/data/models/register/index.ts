@@ -12,6 +12,7 @@ export interface ICheckEmailAvailabilitySuccess {}
 export interface IVerifyOTPRegister {
   mobilePhoneNo: string | undefined;
   otp: string;
+  salesmanReferralCode: string;
 }
 
 export interface ISendOTP {

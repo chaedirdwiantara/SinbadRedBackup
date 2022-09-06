@@ -11,7 +11,7 @@ const checkEmailAvailability = (
 
 const verifyOTPRegister = (data: models.IVerifyOTPRegister) => {
   const path = 'validate-otp';
-  return apiAuth(path, 'v3', 'POST', data);
+  return apiAuth(path, 'v4', 'POST', data);
 };
 
 const checkPhoneV2 = (data: models.ICheckPhoneV2Process) => {
