@@ -95,6 +95,7 @@ const ProductDetailView: FC = () => {
     buttonTypeReminder,
     iconReminder,
     stockReminder,
+    onCreateReminder,
   } = useOutOfStockUtil({ id, warehouseId });
 
   /** => for bulk price */
@@ -109,7 +110,7 @@ const ProductDetailView: FC = () => {
     onFunctionActions,
   } = useCheckDataSupplier(setOrderModalVisible);
 
-  /** => action from button order */
+  // function
   const handleOrderPress = useCallback(() => {
     if (me.data !== null) {
       if (me.data.approvalStatus === 'verified') {
@@ -122,6 +123,23 @@ const ProductDetailView: FC = () => {
       setModalNeedToLogin(true);
     }
   }, [me.data]);
+
+  const handleOnReminderPress = useCallback(() => {
+    if (stockReminder?.stockRemind) {
+      alert('remove reminder');
+    } else {
+      onCreateReminder();
+    }
+  }, []);
+
+  /** => action from button order */
+  const onPressMainFooterButton = useCallback(() => {
+    if (dataProduct?.isStockAvailable) {
+      handleOrderPress();
+    } else {
+      handleOnReminderPress();
+    }
+  }, [dataProduct?.isStockAvailable, handleOrderPress, handleOnReminderPress]);
 
   /** => action close modal add to cart */
   const handleCloseModal = () => {
@@ -408,7 +426,8 @@ const ProductDetailView: FC = () => {
               full
               testID={testID}
               color="yellow"
-              title="Stock Habis"
+              title="Stok Habis"
+              leftIconSize={24}
               leftIcon="info"
               description={infoBoxReminderLabel}
             />
@@ -483,7 +502,7 @@ const ProductDetailView: FC = () => {
             // }
             button1Type={buttonTypeReminder}
             icon1Button={iconReminder}
-            button1Press={handleOrderPress}
+            button1Press={onPressMainFooterButton}
             button2Press={onOpenWhatsApp}
             iconButton="chat"
           />
