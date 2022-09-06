@@ -21,7 +21,7 @@ import {
 import { useDataAuth } from '@core/redux/Data';
 import { useAuthCoreAction } from '@core/functions/auth';
 
-const RegisterOTPView: React.FC = () => {
+const RegisterOTPView: React.FC = ({ route }: any) => {
   const {
     verifyOTPRegister,
     verifyOTP,
@@ -104,6 +104,9 @@ const RegisterOTPView: React.FC = () => {
             verifyOTPRegister({
               mobilePhoneNo: mobilePhone,
               otp,
+              salesmanReferralCode: route.params.salesmanReferralCode
+                ? route.params.salesmanReferralCode
+                : null,
             });
           }}
           resend={() => {

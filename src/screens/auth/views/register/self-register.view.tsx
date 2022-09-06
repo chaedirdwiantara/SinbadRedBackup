@@ -35,7 +35,8 @@ const SelfRegisterView: React.FC = () => {
   const [referal, setReferal] = React.useState('');
   const [loadingReferal, setLoadingReferal] = React.useState(false);
   const [statusReferal, setStatusReferal] = React.useState('default');
-  const { checkReferralCode, checkReferralCodeData, resetReferralCode } = useCheckReferralCode();
+  const { checkReferralCode, checkReferralCodeData, resetReferralCode } =
+    useCheckReferralCode();
 
   React.useEffect(() => {
     if (checkPhoneRegistrationState?.data !== null) {
@@ -61,6 +62,9 @@ const SelfRegisterView: React.FC = () => {
 
   React.useEffect(() => {
     checkPhoneRegistrationReset();
+    resetReferralCode();
+    setReferal('');
+    setStatusReferal('default');
     phone.setMessageError('');
     phone.setType('default');
     return () => {
@@ -72,19 +76,32 @@ const SelfRegisterView: React.FC = () => {
   React.useEffect(() => {
     if (checkReferralCodeData.data !== null) {
       setStatusReferal('success');
+      setLoadingReferal(false);
     }
-    if (checkReferralCodeData.error !== null){
-      setStatusReferal('error');
+    if (checkReferralCodeData.error !== null) {
+      if (referal !== '') {
+        setStatusReferal('error');
+      } else {
+        setStatusReferal('default');
+      }
+      setLoadingReferal(false);
     }
   }, [checkReferralCodeData]);
 
   const handleOnChangeReferal = useCallback(
     debounce((text) => {
-      setLoadingReferal(false);
-      checkReferralCode({ code: text });
+      if (text) {
+        checkReferralCode({ code: text });
+      }
     }, 1500),
     [referal],
   );
+
+  React.useEffect(() => {
+    if (referal === '') {
+      setStatusReferal('default');
+    }
+  }, [referal]);
 
   const header = () => {
     return (
@@ -171,7 +188,9 @@ const SelfRegisterView: React.FC = () => {
           disabled={
             phone.value === '' ||
             phone.valMsgError !== '' ||
-            checkPhoneRegistrationState.loading
+            checkPhoneRegistrationState.loading ||
+            loadingReferal ||
+            checkReferralCodeData.loading
           }
           loadingButton={checkPhoneRegistrationState.loading}
         />
@@ -189,6 +208,7 @@ const SelfRegisterView: React.FC = () => {
         phone={phone.value}
         action="register"
         onResetField={phone.clearText}
+        referralCode={statusReferal === 'success' ? referal : undefined}
       />
       <ModalSalesman ref={refModalSalesman} />
     </SnbContainer>
