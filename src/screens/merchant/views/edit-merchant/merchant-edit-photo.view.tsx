@@ -294,6 +294,7 @@ const MerchantEditPhotoView = () => {
                   placeholder={'Masukkan Nomor NPWP'}
                   keyboardType="number-pad"
                   maxLength={20}
+                  helperText={'Abaikan bila sudah sesuai dengan NPWP'}
                 />
               ) : null}
             </View>
