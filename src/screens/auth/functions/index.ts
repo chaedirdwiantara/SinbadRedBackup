@@ -9,6 +9,7 @@ import {
   useCheckPhoneV2,
   useCheckAutoLogin,
   useCheckPhoneRegistrationV3,
+  useCheckReferralCode,
 } from './register-hooks.functions';
 import {
   useInputPhone,
@@ -34,4 +35,5 @@ export {
   useCheckPhoneV2,
   useCheckAutoLogin,
   useCheckPhoneRegistrationV3,
+  useCheckReferralCode,
 };

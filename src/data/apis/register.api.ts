@@ -46,6 +46,11 @@ const UpdateUserMedea = (data: models.IUpdateUserMedeaProcess) => {
   );
 };
 
+const checkReferralCode = (data: models.ICheckReferralProcess) => {
+  const path = `referral-code?code=${data.code}`;
+  return apiAuth(path, 'v1', 'GET');
+};
+
 export const registerApi = {
   checkEmailAvailability,
   verifyOTPRegister,
@@ -54,4 +59,5 @@ export const registerApi = {
   checkPhoneRegistrationV3,
   getUserMedea,
   UpdateUserMedea,
+  checkReferralCode,
 };

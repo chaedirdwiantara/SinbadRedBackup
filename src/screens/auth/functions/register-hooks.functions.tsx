@@ -45,3 +45,16 @@ export const useCheckPhoneRegistrationV3 = () => {
     checkPhoneRegisterV3,
   };
 };
+export const useCheckReferralCode = () => {
+  const dispatch = useDispatch();
+  const { checkReferralCodeData } = useSelector((state: any) => state.register);
+  return {
+    checkReferralCode: (data: models.ICheckReferralProcess) => {
+      dispatch(Actions.checkReferralCodeProcess(data));
+    },
+    resetReferralCode: () => {
+      dispatch(Actions.checkReferralCodeReset());
+    },
+    checkReferralCodeData,
+  };
+};

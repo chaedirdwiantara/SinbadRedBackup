@@ -212,3 +212,34 @@ export const updateUserMedeaFailed = (
 export const updateUserMedeaReset = () => {
   return { type: types.UPDATE_USER_MEDEA_RESET };
 };
+// CHECK REFERRAL
+export const checkReferralCodeProcess = (
+  data: models.ICheckReferralProcess,
+): models.IRegisterAction<models.ICheckReferralProcess> => {
+  return {
+    type: types.CHECK_REFERRAL_CODE_PROCESS,
+    payload: data,
+  };
+};
+
+export const checkReferralCodeSuccess = (
+  data: models.ICheckReferralSuccess,
+): models.IRegisterAction<models.ICheckReferralSuccess> => {
+  return {
+    type: types.CHECK_REFERRAL_CODE_SUCCESS,
+    payload: data,
+  };
+};
+
+export const checkReferralCodeFailed = (
+  data: models.ErrorProps | unknown,
+): models.IRegisterAction<models.ICheckAutoLoginFailed | unknown> => {
+  return {
+    type: types.CHECK_REFERRAL_CODE_FAILED,
+    payload: data,
+  };
+};
+
+export const checkReferralCodeReset = () => {
+  return { type: types.CHECK_REFERRAL_CODE_RESET };
+};
