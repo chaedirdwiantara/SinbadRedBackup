@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useStockReminderContext } from 'src/data/contexts/product';
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { useStockReminderActions } from './product-hook.function';
@@ -8,10 +8,11 @@ type Props = {
   warehouseId: string;
 };
 export const useOutOfStockUtil = (props: Props) => {
-  const { getBulkReminder } = useStockReminderActions({
-    productId: props.id,
-    warehouseId: Number(props.warehouseId),
-  });
+  const { getBulkReminder, createReminder, deleteReminder } =
+    useStockReminderActions({
+      productId: props.id,
+      warehouseId: Number(props.warehouseId),
+    });
   const {
     stateProduct: {
       detail: { data: dataProduct },
@@ -60,6 +61,12 @@ export const useOutOfStockUtil = (props: Props) => {
       return 'primary';
     return 'secondary-outline';
   }, [dataProduct?.isStockAvailable, stockReminder?.stockRemind]);
+
+  // function
+  // create reminder
+  const onCreateReminder = useCallback(() => {
+    createReminder(dispatchStockReminder);
+  }, []);
   // side effect get bulk reminder if product detail not have stock reminder
   useEffect(() => {
     if (!stockReminder) {
@@ -76,5 +83,6 @@ export const useOutOfStockUtil = (props: Props) => {
     iconReminder,
     buttonLabelReminder,
     buttonTypeReminder,
+    onCreateReminder,
   };
 };
