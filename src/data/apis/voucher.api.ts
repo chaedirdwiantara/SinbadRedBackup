@@ -38,7 +38,7 @@ const checkSinbadVoucher = ({
     'auth',
     path,
     'voucher',
-    'v1',
+    'v2',
     'CREATE',
     data,
   );
