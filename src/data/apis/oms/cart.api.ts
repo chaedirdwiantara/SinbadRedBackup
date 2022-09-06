@@ -108,7 +108,7 @@ const checkStock = ({
     'auth',
     path,
     'warehouse',
-    'v1',
+    'v2',
     'CREATE',
     data,
   );
