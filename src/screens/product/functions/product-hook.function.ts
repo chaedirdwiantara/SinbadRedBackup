@@ -347,6 +347,16 @@ const useStockInformationAction = () => {
 const useStockReminderActions = (props: models.StockReminderGetProps) => {
   const dispatch = useDispatch();
 
+  const getBulkReminder = useCallback(
+    (
+      contextDispatch: (action: any) => any,
+      payload: models.StockReminderGetProps[],
+    ) => {
+      dispatch(Actions.stockReminderListProcess(contextDispatch, payload));
+    },
+    [],
+  );
+
   const createReminder = useCallback(
     (contextDispatch: (action: any) => any) => {
       dispatch(Actions.createStockReminderProcess(contextDispatch, props));
@@ -360,7 +370,7 @@ const useStockReminderActions = (props: models.StockReminderGetProps) => {
     },
     [props],
   );
-  return { createReminder, deleteReminder };
+  return { getBulkReminder, createReminder, deleteReminder };
 };
 
 export {

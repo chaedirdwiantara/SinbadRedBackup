@@ -140,6 +140,7 @@ export interface ProductDetail {
   packagedDimensionWidth: number;
   packagedDimensionHeight: number;
   packagedDimensionLabel: string;
+  isStockAvailable: boolean;
 }
 
 export type ProductSubModule = 'recommendations' | undefined;
