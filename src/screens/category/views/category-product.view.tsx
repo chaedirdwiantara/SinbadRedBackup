@@ -13,6 +13,7 @@ import ModalFilterView from '@core/components/product/product-list/modal-filter.
 import ModalNotInUrbanView from '@core/components/product/product-list/modal-not-in-urban.view';
 import ModalErrorStockView from '@core/components/product/product-list/modal-error-stock.view';
 import ModalErrorProductDetailView from '@core/components/product/product-list/modal-error-product-detail.view';
+import ModalErrorAddToCartView from '@core/components/product/product-list/modal-error-add-to-cart.view';
 import CategoryTabListView from '@core/components/product/product-list/category-tab-list.view';
 import { ProductListProvider } from '@core/components/product/product-list/product-list.context';
 /** === IMPORT FUNCTIONS === */
@@ -83,6 +84,7 @@ const CategoryProductView: FC = () => {
         <ModalNotInUrbanView testID={testID} />
         <ModalErrorStockView testID={testID} />
         <ModalErrorProductDetailView testID={testID} />
+        <ModalErrorAddToCartView testID={testID} />
       </View>
     </SnbContainer>
   );
