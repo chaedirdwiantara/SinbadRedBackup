@@ -341,13 +341,13 @@ const useCheckStockAction = () => {
               productId: productItem.productId,
               warehouseId: productItem.warehouseId,
               qty: productItem.qty,
+              locationId: stateCart.checkBuyer.data?.locationId!,
             });
           });
         });
         dispatch(
           Actions.checkStockProcess(contextDispatch, {
             data: {
-              locationId: stateCart.checkBuyer.data.locationId,
               cartId: stateCart.get.data.id,
               reserved: isReserved,
               carts: data,
@@ -380,6 +380,7 @@ const usePostCheckStockAction = () => {
                 productId: productItem.productId,
                 warehouseId: productItem.warehouseId,
                 qty: productItem.qty,
+                locationId: stateCart.checkBuyer.data?.locationId!,
               });
             }
           });
@@ -387,7 +388,6 @@ const usePostCheckStockAction = () => {
         dispatch(
           Actions.postCheckStockProcess(contextDispatch, {
             data: {
-              locationId: stateCart.checkBuyer.data.locationId,
               cartId: cartData.id,
               reserved: true,
               carts: data,
