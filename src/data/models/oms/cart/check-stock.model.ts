@@ -14,7 +14,6 @@ export interface CheckStockResponse {
 }
 
 export interface CheckStockPayload {
-  locationId: string;
   reserved: boolean;
   cartId: string;
   carts: CheckStockPayloadCarts[];
@@ -24,4 +23,5 @@ export interface CheckStockPayloadCarts {
   productId: string;
   warehouseId: number;
   qty: number;
+  locationId: string;
 }
