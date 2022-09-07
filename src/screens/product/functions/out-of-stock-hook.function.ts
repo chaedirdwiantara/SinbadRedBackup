@@ -67,6 +67,10 @@ export const useOutOfStockUtil = (props: Props) => {
   const onCreateReminder = useCallback(() => {
     createReminder(dispatchStockReminder);
   }, []);
+  // remove reminder
+  const onRemoveReminder = useCallback(() => {
+    deleteReminder(dispatchStockReminder);
+  }, []);
   // side effect get bulk reminder if product detail not have stock reminder
   useEffect(() => {
     if (!stockReminder) {
@@ -84,5 +88,6 @@ export const useOutOfStockUtil = (props: Props) => {
     buttonLabelReminder,
     buttonTypeReminder,
     onCreateReminder,
+    onRemoveReminder,
   };
 };
