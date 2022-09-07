@@ -177,21 +177,26 @@ const UserView: FC = ({ start }: any) => {
     const ownerData = stateUser.detail.data?.ownerData;
     const buyerData = stateUser.detail.data?.buyerData;
     if (stateUser.detail?.data?.wasRejected) {
+      setOpenModalConfirmation(false);
       if (
-        !ownerData?.info.isImageIdOcrValidate &&
-        !ownerData?.info.isTaxNo &&
-        !ownerData?.info.isSelfieImageUrl &&
-        !buyerData?.buyerInformation?.buyerAccount?.name &&
-        !buyerData?.buyerAddress?.address
+        !ownerData?.info.isImageIdOcrValidate ||
+        !ownerData?.info.isTaxNo ||
+        !ownerData?.info.isSelfieImageUrl ||
+        !buyerData?.buyerInformation?.buyerAccount?.name ||
+        !buyerData?.buyerAddress?.address ||
+        buyerData?.buyerInformation?.buyerAccount?.imageUrl !== null
       ) {
-        setOpenModalConfirmation(false);
-      } else {
         setOpenModalConfirmation(true);
       }
     } else {
       setOpenModalConfirmation(false);
     }
-  }, []);
+  }, [stateUser]);
+
+  console.log(
+    'datah:',
+    stateUser.detail.data?.ownerData?.info.isImageIdOcrValidate
+  );
 
   useEffect(() => {
     if (completeDataConfirmationState.data) {
@@ -200,6 +205,7 @@ const UserView: FC = ({ start }: any) => {
       resetCompleteDataConfirmation();
     }
   }, [completeDataConfirmationState]);
+  
   /** === GO TO PAGE === */
   const goTo = (data: any) => {
     const { type, title } = data;
@@ -218,6 +224,7 @@ const UserView: FC = ({ start }: any) => {
       case 'storeAddress':
         handleAddressNavigation();
         break;
+      case 'store':
       case 'npwp':
       case 'selfie':
         NavigationAction.navigate('MerchantEditPhotoView', { title, type });
@@ -602,6 +609,29 @@ const UserView: FC = ({ start }: any) => {
                     />
                   </View>
                 )}
+                {!buyerData?.buyerInformation?.buyerAccount?.imageUrl && (
+                  <View style={{ marginBottom: layout.spacing.lg }}>
+                    <Content.MenuList
+                      title="Upload Foto Toko"
+                      iconComponent={
+                        <SnbIcon
+                          name="create"
+                          color={colorV2.iconColor.blue}
+                          size={24}
+                        />
+                      }
+                      actionType="string"
+                      actionText="Lengkapi"
+                      onActionPress={() =>
+                        goTo({
+                          type: 'store',
+                          title: 'Foto Toko',
+                        })
+                      }
+                      background
+                    />
+                  </View>
+                )}
                 {!buyerData?.buyerAddress?.address && (
                   <View style={{ marginBottom: layout.spacing.lg }}>
                     <Content.MenuList
@@ -696,7 +726,7 @@ const UserView: FC = ({ start }: any) => {
       );
     }
 
-    if (stateUser.detail.data) {
+    if (stateUser?.detail?.data) {
       return (
         <View>
           {header()}
