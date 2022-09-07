@@ -25,7 +25,7 @@ import LoadingPage from '@core/components/LoadingPage';
 import { setErrorMessage } from '@screen/auth/functions';
 import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
 import { copilotOptions } from '@screen/account/views/shared';
-import { useCoachmark } from '@screen/account/functions';
+import { useCoachmark, useEasyRegistration } from '@screen/account/functions';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Svg from '@svg';
@@ -51,6 +51,12 @@ const UserView: FC = ({ start }: any) => {
   const [clickFromCart, setClickFromCart] = useState(false);
   const { updateBadgeProfile, resetUpdateBadgeProfile } =
     UserHookFunc.useUpdateBadgeProfile();
+  const [openModalConfirmation, setOpenModalConfirmation] = useState(false);
+  const {
+    completeDataConfirmation,
+    completeDataConfirmationState,
+    resetCompleteDataConfirmation,
+  } = useEasyRegistration();
   const dataHeader = [
     {
       id: 1,
@@ -166,6 +172,40 @@ const UserView: FC = ({ start }: any) => {
       setLoadingCarousel(false);
     }
   }, [loadingCarousel]);
+
+  useEffect(() => {
+    const ownerData = stateUser.detail.data?.ownerData;
+    const buyerData = stateUser.detail.data?.buyerData;
+    if (stateUser.detail?.data?.wasRejected) {
+      setOpenModalConfirmation(false);
+      if (
+        !ownerData?.info.isImageIdOcrValidate ||
+        !ownerData?.info.isTaxNo ||
+        !ownerData?.info.isSelfieImageUrl ||
+        !buyerData?.buyerInformation?.buyerAccount?.name ||
+        !buyerData?.buyerAddress?.address ||
+        buyerData?.buyerInformation?.buyerAccount?.imageUrl !== null
+      ) {
+        setOpenModalConfirmation(true);
+      }
+    } else {
+      setOpenModalConfirmation(false);
+    }
+  }, [stateUser]);
+
+  console.log(
+    'datah:',
+    stateUser.detail.data?.ownerData?.info.isImageIdOcrValidate
+  );
+
+  useEffect(() => {
+    if (completeDataConfirmationState.data) {
+      storeDetailAction.detail(dispatchUser);
+      setOpenModalConfirmation(false);
+      resetCompleteDataConfirmation();
+    }
+  }, [completeDataConfirmationState]);
+  
   /** === GO TO PAGE === */
   const goTo = (data: any) => {
     const { type, title } = data;
@@ -184,6 +224,7 @@ const UserView: FC = ({ start }: any) => {
       case 'storeAddress':
         handleAddressNavigation();
         break;
+      case 'store':
       case 'npwp':
       case 'selfie':
         NavigationAction.navigate('MerchantEditPhotoView', { title, type });
@@ -568,6 +609,29 @@ const UserView: FC = ({ start }: any) => {
                     />
                   </View>
                 )}
+                {!buyerData?.buyerInformation?.buyerAccount?.imageUrl && (
+                  <View style={{ marginBottom: layout.spacing.lg }}>
+                    <Content.MenuList
+                      title="Upload Foto Toko"
+                      iconComponent={
+                        <SnbIcon
+                          name="create"
+                          color={colorV2.iconColor.blue}
+                          size={24}
+                        />
+                      }
+                      actionType="string"
+                      actionText="Lengkapi"
+                      onActionPress={() =>
+                        goTo({
+                          type: 'store',
+                          title: 'Foto Toko',
+                        })
+                      }
+                      background
+                    />
+                  </View>
+                )}
                 {!buyerData?.buyerAddress?.address && (
                   <View style={{ marginBottom: layout.spacing.lg }}>
                     <Content.MenuList
@@ -662,7 +726,7 @@ const UserView: FC = ({ start }: any) => {
       );
     }
 
-    if (stateUser.detail.data) {
+    if (stateUser?.detail?.data) {
       return (
         <View>
           {header()}
@@ -691,7 +755,12 @@ const UserView: FC = ({ start }: any) => {
     <View style={{ flex: 1 }}>
       <SnbContainer color={'grey'}>{content()}</SnbContainer>
       <ModalLogout ref={refModalLogout} />
-      <ModalCompletnessConfirmation open={true} />
+      <ModalCompletnessConfirmation
+        open={openModalConfirmation}
+        onPress={() => completeDataConfirmation()}
+        loading={completeDataConfirmationState.loading}
+        disabled={completeDataConfirmationState.loading}
+      />
     </View>
   );
 };
