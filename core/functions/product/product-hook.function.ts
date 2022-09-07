@@ -2,6 +2,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 /** === IMPORT FUNCTIONS ===  */
 import { goToCategory } from '@screen/category/functions';
+import debounce from 'lodash/debounce';
 import {
   useStockReminderContext,
   useTagContext,
@@ -371,19 +372,22 @@ export const useProductCardUtil = (
     return isHaveStockReminder ? 'secondary' : 'primary';
   }, [isHaveStockReminder, product.isStockAvailable]);
   // callback button order & reminder
-  const onButtonPress = useCallback(() => {
-    if (outOfStock) {
-      if (isHaveStockReminder) {
-        // action call remove reminder
-        deleteReminder(dispatchStockReminder);
-      } else {
-        // action call create reminder
-        createReminder(dispatchStockReminder);
+  const onButtonPress = useCallback(
+    debounce(() => {
+      if (outOfStock) {
+        if (isHaveStockReminder) {
+          // action call remove reminder
+          deleteReminder(dispatchStockReminder);
+        } else {
+          // action call create reminder
+          createReminder(dispatchStockReminder);
+        }
+        return void 0;
       }
-      return void 0;
-    }
-    product.onOrderPress();
-  }, [outOfStock, product.onOrderPress, isHaveStockReminder]);
+      product.onOrderPress();
+    }, 500),
+    [outOfStock, product.onOrderPress, isHaveStockReminder],
+  );
 
   return {
     badge,

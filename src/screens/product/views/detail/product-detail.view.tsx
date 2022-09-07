@@ -25,6 +25,7 @@ import BottomSheetError from '@core/components/BottomSheetError';
 import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
+import debounce from 'lodash/debounce';
 import { contexts } from '@contexts';
 import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
 import { goBack, useOutOfStockUtil } from '../../functions';
@@ -96,6 +97,7 @@ const ProductDetailView: FC = () => {
     iconReminder,
     stockReminder,
     onCreateReminder,
+    onRemoveReminder,
   } = useOutOfStockUtil({ id, warehouseId });
 
   /** => for bulk price */
@@ -126,20 +128,23 @@ const ProductDetailView: FC = () => {
 
   const handleOnReminderPress = useCallback(() => {
     if (stockReminder?.stockRemind) {
-      alert('remove reminder');
+      onRemoveReminder();
     } else {
       onCreateReminder();
     }
-  }, []);
+  }, [stockReminder?.stockRemind]);
 
   /** => action from button order */
-  const onPressMainFooterButton = useCallback(() => {
-    if (dataProduct?.isStockAvailable) {
-      handleOrderPress();
-    } else {
-      handleOnReminderPress();
-    }
-  }, [dataProduct?.isStockAvailable, handleOrderPress, handleOnReminderPress]);
+  const onPressMainFooterButton = useCallback(
+    debounce(() => {
+      if (dataProduct?.isStockAvailable) {
+        handleOrderPress();
+      } else {
+        handleOnReminderPress();
+      }
+    }, 500),
+    [dataProduct?.isStockAvailable, handleOrderPress, handleOnReminderPress],
+  );
 
   /** => action close modal add to cart */
   const handleCloseModal = () => {
