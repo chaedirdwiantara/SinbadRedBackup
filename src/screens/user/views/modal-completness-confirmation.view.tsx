@@ -11,6 +11,9 @@ import { View } from 'react-native';
 
 interface Props {
   open: boolean;
+  onPress: () => void;
+  loading?: boolean;
+  disabled?: boolean;
 }
 
 const ModalCompletnessConfirmation: React.FC<Props> = (props) => {
@@ -58,12 +61,12 @@ const ModalCompletnessConfirmation: React.FC<Props> = (props) => {
           }}>
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
-              onPress={() => {
-                bottomSheetRef.current?.close;
-              }}
+              onPress={props.onPress}
               title="Konfirmasi"
               size="medium"
               full
+              loading={props.loading}
+              disabled={props.disabled}
             />
           </View>
         </View>
