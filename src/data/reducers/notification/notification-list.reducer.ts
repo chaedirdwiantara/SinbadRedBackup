@@ -49,6 +49,22 @@ export const notificationListReducer = simplifyReducer(
         totalPage: action.payload.meta.totalPage,
       };
     },
+    /** => success mark read */
+    [types.NOTIFICATION_MARK_READ_SUCCESS](
+      state = notificationlistInitialState,
+      action: models.ListSuccessV3Action<string>,
+    ) {
+      // reoder notif read fe side
+      const id = action.payload.data;
+      const data = [...state.data];
+      const indexNotif = state.data.findIndex((i) => i.id == id);
+      data[indexNotif].isRead = true;
+
+      return {
+        ...state,
+        data,
+      };
+    },
     /** => list failed */
     [types.NOTIFICATION_LIST_FAILED](
       state = notificationlistInitialState,

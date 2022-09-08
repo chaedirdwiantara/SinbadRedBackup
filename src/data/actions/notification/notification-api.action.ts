@@ -52,8 +52,8 @@ export const notificationMarkReadProcess = (
   };
 };
 /** => notification mark read success */
-export const notificationMarkReadSuccess = () => {
-  return { type: types.NOTIFICATION_MARK_READ_SUCCESS };
+export const notificationMarkReadSuccess = (id: string) => {
+  return { type: types.NOTIFICATION_MARK_READ_SUCCESS, payload: { data: id } };
 };
 /** => notification mark read failed */
 export const notificationMarkReadFailed = (
