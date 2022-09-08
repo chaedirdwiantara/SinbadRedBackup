@@ -176,7 +176,10 @@ const UserView: FC = ({ start }: any) => {
   useEffect(() => {
     const ownerData = stateUser.detail.data?.ownerData;
     const buyerData = stateUser.detail.data?.buyerData;
-    if (stateUser.detail?.data?.wasRejected && isFocused) {
+    const dataComplete =
+      typeof stateUser.detail.data?.isDataCompleted === 'boolean' &&
+      stateUser.detail.data?.isDataCompleted === false;
+    if (stateUser.detail?.data?.wasRejected && isFocused && dataComplete) {
       setOpenModalConfirmation(false);
       if (
         !ownerData?.info.isImageIdOcrValidate ||
