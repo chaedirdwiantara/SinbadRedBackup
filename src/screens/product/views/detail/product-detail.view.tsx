@@ -10,7 +10,7 @@ import {
   SnbInfoBox2,
 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
-import { EmptyState } from '@core/components/EmptyState';
+import { ErrorView } from '../../components';
 import SnbHtml2 from '@core/components/HtmlComponent';
 import BulkPricingList from '@core/components/product/BulkPricingList';
 import { ProductDetailHeader } from './ProductDetailHeader';
@@ -401,9 +401,9 @@ const ProductDetailView: FC = () => {
               onRefresh={() => handleRetryGetProduct()}
             />
           }>
-          <EmptyState
-            title="Terjadi Kesalahan"
-            description="Boleh coba refresh lagi?"
+          <ErrorView
+            testID={testID}
+            onPress={() => NavigationAction.goToMenu('HomeView')}
           />
         </ScrollView>
       </SnbContainer>
