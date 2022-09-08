@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/core';
 import { View, ScrollView, Image, Dimensions } from 'react-native';
 import {
   SnbContainer,
@@ -57,6 +57,7 @@ const UserView: FC = ({ start }: any) => {
     completeDataConfirmationState,
     resetCompleteDataConfirmation,
   } = useEasyRegistration();
+  const isFocused = useIsFocused();
   const dataHeader = [
     {
       id: 1,
@@ -126,7 +127,6 @@ const UserView: FC = ({ start }: any) => {
           : false,
     },
   ];
-
   // usage for show modal
   const [modalUserProfileCompletion, setModalUserProfileCompletion] =
     React.useState(false);
@@ -176,7 +176,7 @@ const UserView: FC = ({ start }: any) => {
   useEffect(() => {
     const ownerData = stateUser.detail.data?.ownerData;
     const buyerData = stateUser.detail.data?.buyerData;
-    if (stateUser.detail?.data?.wasRejected) {
+    if (stateUser.detail?.data?.wasRejected && isFocused) {
       setOpenModalConfirmation(false);
       if (
         !ownerData?.info.isImageIdOcrValidate ||
@@ -191,12 +191,7 @@ const UserView: FC = ({ start }: any) => {
     } else {
       setOpenModalConfirmation(false);
     }
-  }, [stateUser]);
-
-  console.log(
-    'datah:',
-    stateUser.detail.data?.ownerData?.info.isImageIdOcrValidate
-  );
+  }, [stateUser, isFocused]);
 
   useEffect(() => {
     if (completeDataConfirmationState.data) {
@@ -205,7 +200,7 @@ const UserView: FC = ({ start }: any) => {
       resetCompleteDataConfirmation();
     }
   }, [completeDataConfirmationState]);
-  
+
   /** === GO TO PAGE === */
   const goTo = (data: any) => {
     const { type, title } = data;
@@ -233,6 +228,7 @@ const UserView: FC = ({ start }: any) => {
         break;
     }
   };
+
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -760,6 +756,7 @@ const UserView: FC = ({ start }: any) => {
         onPress={() => completeDataConfirmation()}
         loading={completeDataConfirmationState.loading}
         disabled={completeDataConfirmationState.loading}
+        closseAction={() => setOpenModalConfirmation(false)}
       />
     </View>
   );

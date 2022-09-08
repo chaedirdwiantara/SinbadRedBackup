@@ -14,6 +14,7 @@ interface Props {
   onPress: () => void;
   loading?: boolean;
   disabled?: boolean;
+  closseAction?: () => void;
 }
 
 const ModalCompletnessConfirmation: React.FC<Props> = (props) => {
@@ -23,6 +24,8 @@ const ModalCompletnessConfirmation: React.FC<Props> = (props) => {
   React.useEffect(() => {
     if (props.open) {
       bottomSheetRef.current?.open();
+    } else {
+      bottomSheetRef.current?.close();
     }
   }, [bottomSheetRef.current, props.open]);
 
@@ -39,7 +42,7 @@ const ModalCompletnessConfirmation: React.FC<Props> = (props) => {
       navigation={
         <SnbBottomSheetPart.Navigation
           iconRight1Name="x"
-          onRight1Action={bottomSheetRef.current?.close}
+          onRight1Action={props.closseAction}
         />
       }
       name="modal-logout"
