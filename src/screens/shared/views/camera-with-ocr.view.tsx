@@ -48,7 +48,7 @@ const CameraWithOCRView = () => {
   const [isMounted, setIsMounted] = React.useState(true)
   const { goBack } = useNavigation();
   const { params }: any = useRoute();
-  const { processImage, ocrImageState, setOcrStatusRtdb, ocrImageReset } =
+  const { processImage, ocrImageState, setOcrStatusRtdb, ocrImageReset, resetOcrDataRtdb } =
     useOCR(true);
   const { ocrStatus } = useDataFlagRTDB() || {};
   useCheckFlagByTask('ocrStatus');
@@ -169,6 +169,7 @@ const CameraWithOCRView = () => {
             title1='Lanjutkan'
             button1Press={() => {
               setOcrStatusRtdb('none');
+              resetOcrDataRtdb()
               setRetake(true);
               bottomSheetRef.current?.close()
               setTimeout(() => {
