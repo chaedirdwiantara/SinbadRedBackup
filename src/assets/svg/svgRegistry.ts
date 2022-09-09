@@ -39,6 +39,7 @@ import check_circle from './check_circle.svg';
 import x_circle from './x_circle.svg';
 // product no in urban
 import kategori_toko from './kategori_toko.svg';
+import produk_tidak_ditemukan from './produk_tidak_ditemukan.svg';
 // voucher
 import reward_voucher from './reward_voucher.svg';
 import reward_voucher_not_eligible from './reward_voucher_not_eligible.svg';
@@ -80,6 +81,7 @@ export const SvgRegistery = {
   check_circle,
   x_circle,
   kategori_toko,
+  produk_tidak_ditemukan,
   shield,
   shield_blue,
   error,
