@@ -1,3 +1,4 @@
+import { useDataAuth } from '@core/redux/Data';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useStockReminderContext } from 'src/data/contexts/product';
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
@@ -8,6 +9,8 @@ type Props = {
   warehouseId: string;
 };
 export const useOutOfStockUtil = (props: Props) => {
+  const { me } = useDataAuth();
+
   const { getBulkReminder, createReminder, deleteReminder } =
     useStockReminderActions({
       productId: props.id,
@@ -73,11 +76,13 @@ export const useOutOfStockUtil = (props: Props) => {
   }, []);
   // side effect get bulk reminder if product detail not have stock reminder
   useEffect(() => {
-    if (!stockReminder) {
-      const payload = [
-        { productId: props.id, warehouseId: Number(props.warehouseId) },
-      ];
-      getBulkReminder(dispatchStockReminder, payload);
+    if (me.data) {
+      if (!stockReminder) {
+        const payload = [
+          { productId: props.id, warehouseId: Number(props.warehouseId) },
+        ];
+        getBulkReminder(dispatchStockReminder, payload);
+      }
     }
   }, [stockReminder, props.id, props.warehouseId]);
 
