@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { View, StyleSheet, ScrollView, Image, Keyboard } from 'react-native';
 import {
   SnbContainer,
@@ -15,10 +15,10 @@ import {
   useCheckPhoneRegistrationV3,
   setErrorMessage,
   useCheckReferralCode,
+  useReferral,
 } from '@screen/auth/functions';
 import { useDataPermanent } from '@core/redux/Data';
 import { ModalOTPMethod, ModalSalesman } from '../shared';
-import { debounce } from 'lodash';
 
 const SelfRegisterView: React.FC = () => {
   const { navigate } = useNavigation();
@@ -33,10 +33,12 @@ const SelfRegisterView: React.FC = () => {
   const refModalOTP = React.useRef<SnbBottomSheet2Ref>(null);
   const refModalSalesman = React.useRef<SnbBottomSheet2Ref>(null);
   const [referal, setReferal] = React.useState('');
-  const [loadingReferal, setLoadingReferal] = React.useState(false);
+  // const [loadingReferal, setLoadingReferal] = React.useState(false);
   const [statusReferal, setStatusReferal] = React.useState('default');
   const { checkReferralCode, checkReferralCodeData, resetReferralCode } =
     useCheckReferralCode();
+  const { searchReferral, referralValue, debouncedValue } = useReferral();
+  const [isInitialDebounce, setInitialDebounce] = React.useState(false);
 
   React.useEffect(() => {
     if (checkPhoneRegistrationState?.data !== null) {
@@ -76,32 +78,36 @@ const SelfRegisterView: React.FC = () => {
   React.useEffect(() => {
     if (checkReferralCodeData.data !== null) {
       setStatusReferal('success');
-      setLoadingReferal(false);
+      setInitialDebounce(false);
     }
     if (checkReferralCodeData.error !== null) {
       if (referal !== '') {
         setStatusReferal('error');
+        setInitialDebounce(false);
       } else {
         setStatusReferal('default');
+        setInitialDebounce(false);
       }
-      setLoadingReferal(false);
     }
   }, [checkReferralCodeData]);
-
-  const handleOnChangeReferal = useCallback(
-    debounce((text) => {
-      if (text) {
-        checkReferralCode({ code: text });
-      }
-    }, 1500),
-    [referal],
-  );
 
   React.useEffect(() => {
     if (referal === '') {
       setStatusReferal('default');
     }
   }, [referal]);
+
+  React.useEffect(() => {
+    if (
+      (debouncedValue.length >= 3 || debouncedValue.length === 0) &&
+      !checkReferralCodeData.loading &&
+      isInitialDebounce
+    ) {
+      checkReferralCode({ code: referralValue });
+    } else {
+      setInitialDebounce(false);
+    }
+  }, [debouncedValue, checkReferralCodeData.loading]);
 
   const header = () => {
     return (
@@ -138,13 +144,13 @@ const SelfRegisterView: React.FC = () => {
               onChangeText={(text) => {
                 setReferal(text);
                 setStatusReferal('default');
-                setLoadingReferal(true);
-                handleOnChangeReferal(text);
+                setInitialDebounce(true);
+                // setLoadingReferal(true);
+                // handleOnChangeReferal(text);
+                searchReferral(text);
               }}
               helperText={
-                loadingReferal || checkReferralCodeData.loading
-                  ? 'Pengecekan Kode...'
-                  : ''
+                checkReferralCodeData.loading ? 'Pengecekan Kode...' : ''
               }
               keyboardType="default"
               labelText="Masukkan Kode Referal (Optional)"
@@ -189,7 +195,6 @@ const SelfRegisterView: React.FC = () => {
             phone.value === '' ||
             phone.valMsgError !== '' ||
             checkPhoneRegistrationState.loading ||
-            loadingReferal ||
             checkReferralCodeData.loading
           }
           loadingButton={checkPhoneRegistrationState.loading}
