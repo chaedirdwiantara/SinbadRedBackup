@@ -33,7 +33,6 @@ const SelfRegisterView: React.FC = () => {
   const refModalOTP = React.useRef<SnbBottomSheet2Ref>(null);
   const refModalSalesman = React.useRef<SnbBottomSheet2Ref>(null);
   const [referal, setReferal] = React.useState('');
-  // const [loadingReferal, setLoadingReferal] = React.useState(false);
   const [statusReferal, setStatusReferal] = React.useState('default');
   const { checkReferralCode, checkReferralCodeData, resetReferralCode } =
     useCheckReferralCode();
