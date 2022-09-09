@@ -144,8 +144,6 @@ const SelfRegisterView: React.FC = () => {
                 setReferal(text);
                 setStatusReferal('default');
                 setInitialDebounce(true);
-                // setLoadingReferal(true);
-                // handleOnChangeReferal(text);
                 searchReferral(text);
               }}
               helperText={
