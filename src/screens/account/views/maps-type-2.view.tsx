@@ -265,6 +265,7 @@ const MapsViewType2: React.FC = () => {
             container: styles.searchBarContainer,
             textInput: styles.searchBarTextInput
           }}
+          enablePoweredByContainer={false}
         />
         <MapView
           initialRegion={{
