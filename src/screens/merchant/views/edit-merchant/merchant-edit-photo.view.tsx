@@ -284,14 +284,13 @@ const MerchantEditPhotoView = () => {
                 resizeMode: 'contain',
                 height: undefined,
                 width: '100%',
-                marginTop: layout.spacing.xl,
+                marginVertical: layout.spacing.xl,
                 aspectRatio:
                   params?.type === 'selfie'
                     ? 6 / 5
                     : params?.type === 'store'
                     ? 8 / 7
-                    : 8 / 5,
-              marginVertical: layout.spacing.xl,
+                    : 8 / 5
               }}
             />
             <View>
