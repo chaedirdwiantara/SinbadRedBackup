@@ -236,7 +236,7 @@ const MerchantEditPhotoView = () => {
                   : params?.type === 'store'
                     ? 8 / 7
                     : 8 / 5,
-              marginTop: 24,
+              marginVertical: layout.spacing.xl,
             }}
           />
           <View style={{ justifyContent: 'space-between' }}>
