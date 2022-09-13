@@ -6,14 +6,17 @@ import { renderIF, useCamera } from '@screen/auth/functions';
 import { MerchantHookFunc } from '@screen/merchant/function';
 import { UserHookFunc } from '@screen/user/functions';
 import React from 'react';
-import { Image, View } from 'react-native';
+import { Image, View, ScrollView } from 'react-native';
 import {
   SnbButton2,
   SnbContainer,
   SnbTopNav2,
   SnbToast,
   spacingV2 as layout,
+  SnbTextField2,
+  FooterButton,
 } from 'react-native-sinbad-ui';
+import { useInputFormat } from '@screen/auth/functions';
 
 function setRules(type: string) {
   switch (type) {
@@ -90,6 +93,11 @@ const MerchantEditPhotoView = () => {
     contexts.GlobalContext,
   );
   const [imageUrl, setImageUrl] = React.useState<string | undefined>(' ');
+  const npwp = useInputFormat(
+    stateUser.detail.data?.ownerData?.profile?.taxNo || '',
+    'number-only',
+    'npwp',
+  );
 
   React.useEffect(() => {
     editProfileAction.reset(dispatchSupplier);
@@ -220,49 +228,133 @@ const MerchantEditPhotoView = () => {
     } else {
       uri = imageUrl;
     }
+
+    const handleSaveNpwp = () => {
+      const npwpIsChanged =
+        npwp.value !== '' &&
+        npwp.value.replace(/[^0-9]/g, '') !==
+          stateUser.detail.data?.ownerData?.profile?.taxNo;
+      const data = {
+        user: {
+          taxNo: npwp.value?.replace(/[^0-9]/g, ''),
+        },
+      };
+
+      if (capturedImage?.data?.type === 'npwp') {
+        if (npwpIsChanged) {
+          upload(dispatchGlobal, capturedImage.data.url);
+          editProfileAction.editProfile(dispatchSupplier, { data });
+        } else {
+          upload(dispatchGlobal, capturedImage.data.url);
+        }
+      }
+      if (npwpIsChanged) {
+        editProfileAction.editProfile(dispatchSupplier, { data });
+      }
+    };
+
+    const checkNpwp = () => {
+      if (params?.type === 'npwp') {
+        if (
+          npwp.value === stateUser.detail.data?.ownerData?.profile?.taxNo ||
+          !npwp.value
+        ) {
+          return true;
+        }
+      }
+    };
+
     return (
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>
-          <Image
-            resizeMode="contain"
-            source={{ uri }}
+        <View
+          style={{
+            flex: 1,
+          }}>
+          <ScrollView
             style={{
-              resizeMode: 'contain',
-              height: undefined,
-              width: '100%',
-              aspectRatio:
-                params?.type === 'selfie'
-                  ? 6 / 5
-                  : params?.type === 'store'
+              flex: 1,
+              paddingHorizontal: layout.spacing.xl,
+              maxHeight: 370,
+            }}>
+            <Image
+              resizeMode="contain"
+              source={{ uri }}
+              borderRadius={4}
+              style={{
+                resizeMode: 'contain',
+                height: undefined,
+                width: '100%',
+                marginTop: layout.spacing.xl,
+                aspectRatio:
+                  params?.type === 'selfie'
+                    ? 6 / 5
+                    : params?.type === 'store'
                     ? 8 / 7
                     : 8 / 5,
               marginVertical: layout.spacing.xl,
-            }}
-          />
-          <View style={{ justifyContent: 'space-between' }}>
-            <View style={{ padding: layout.spacing.lg, alignItems: 'center' }}>
-              <SnbButton2.Link
-                size="small"
-                title="Ubah Foto"
-                onPress={() => {
-                  openCamera(params?.type);
-                }}
-                disabled={false}
-                full
-              />
+              }}
+            />
+            <View>
+              {params?.type === 'npwp' ? (
+                <SnbTextField2.Text
+                  {...npwp}
+                  labelText={'Nomor NPWP'}
+                  placeholder={'Masukkan Nomor NPWP'}
+                  keyboardType="number-pad"
+                  maxLength={20}
+                  helperText={'Abaikan bila sudah sesuai dengan NPWP'}
+                />
+              ) : null}
             </View>
+          </ScrollView>
+
+          {params?.type !== 'npwp' ? (
+            <View style={{ justifyContent: 'space-between' }}>
+              <View
+                style={{ padding: layout.spacing.lg, alignItems: 'center' }}>
+                <SnbButton2.Link
+                  size="small"
+                  title="Ubah Foto"
+                  onPress={() => {
+                    openCamera(params?.type);
+                  }}
+                  disabled={false}
+                  full
+                />
+              </View>
+            </View>
+          ) : null}
+        </View>
+        {params?.type !== 'npwp' ? (
+          <View style={{ padding: layout.spacing.lg }}>
+            <SnbButton2.Primary
+              title={'Simpan'}
+              onPress={action}
+              loading={stateGlobal.uploadImage.loading}
+              disabled={stateGlobal.uploadImage.loading || !isImageCaptured}
+              size="medium"
+              full
+            />
           </View>
-        </View>
-        <View style={{ padding: layout.spacing.lg }}>
-          <SnbButton2.Primary
-            title={'Simpan'}
-            onPress={action}
-            loading={stateGlobal.uploadImage.loading}
-            disabled={stateGlobal.uploadImage.loading || !isImageCaptured}
-            size="medium"
-            full
+        ) : (
+          <FooterButton.Dual
+            title2={capturedImage?.data?.url ? 'Ulangi' : 'Ubah Foto'}
+            button2Press={() => openCamera(params?.type)}
+            disabled={
+              stateGlobal.uploadImage.loading ||
+              stateMerchant.profileEdit.loading ||
+              npwp.type === 'error' ||
+              checkNpwp()
+            }
+            title1={'Simpan'}
+            button1Press={handleSaveNpwp}
+            loadingButton={
+              stateGlobal.uploadImage.loading ||
+              stateMerchant.profileEdit.loading
+            }
+            testID={'12.3'}
           />
-        </View>
+        )}
       </View>
     );
   };

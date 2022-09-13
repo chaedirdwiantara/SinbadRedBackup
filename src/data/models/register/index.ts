@@ -12,6 +12,7 @@ export interface ICheckEmailAvailabilitySuccess {}
 export interface IVerifyOTPRegister {
   mobilePhoneNo: string | undefined;
   otp: string;
+  salesmanReferralCode: string;
 }
 
 export interface ISendOTP {
@@ -100,6 +101,19 @@ export interface IUpdateUserMedeaProcess {
 }
 
 export interface IUpdateUserMedeaSuccess {
+  data: {
+    id: Number;
+    createdAt: string;
+    updatedAt: string;
+  };
+  message: string;
+}
+
+export interface ICheckReferralProcess {
+  code: string;
+}
+
+export interface ICheckReferralSuccess {
   data: {
     id: Number;
     createdAt: string;
