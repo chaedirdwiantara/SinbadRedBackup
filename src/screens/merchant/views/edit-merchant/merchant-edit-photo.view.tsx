@@ -281,9 +281,16 @@ const MerchantEditPhotoView = () => {
               source={{ uri }}
               borderRadius={4}
               style={{
-                height: 200,
-                width: undefined,
-                marginBottom: layout.spacing.md,
+                resizeMode: 'contain',
+                height: undefined,
+                width: '100%',
+                marginTop: layout.spacing.xl,
+                aspectRatio:
+                  params?.type === 'selfie'
+                    ? 6 / 5
+                    : params?.type === 'store'
+                    ? 8 / 7
+                    : 8 / 5,
               }}
             />
             <View>
