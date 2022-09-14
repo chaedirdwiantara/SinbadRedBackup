@@ -29,9 +29,11 @@ const TabNavigator = () => {
         name="HomeView"
         component={HomeView}
         options={{
+          tabBarTestID: 'menuBar.beranda',
+          tabBarAccessibilityLabel: 'menuBar.beranda',
           tabBarLabel: ({ color }) => (
             <View style={{ paddingBottom: 8 }}>
-              <SnbText2.Caption.Small color={color}>
+              <SnbText2.Caption.Small color={color} testID={'menuBar.beranda'}>
                 Beranda
               </SnbText2.Caption.Small>
             </View>
@@ -40,6 +42,7 @@ const TabNavigator = () => {
             <View style={{ paddingTop: 8 }}>
               <View style={{ height: 24 }}>
                 <SnbIconHint2
+                  testID="menuBar.beranda"
                   value={0}
                   iconColor={color}
                   iconName="home"
@@ -64,9 +67,11 @@ const TabNavigator = () => {
           },
         })}
         options={{
+          tabBarTestID: 'menuBar.pesanan',
+          tabBarAccessibilityLabel: 'menuBar.pesanan',
           tabBarLabel: ({ color }) => (
             <View style={{ paddingBottom: 8 }}>
-              <SnbText2.Caption.Small color={color}>
+              <SnbText2.Caption.Small color={color} testID={'menuBar.pesanan'}>
                 Pesanan
               </SnbText2.Caption.Small>
             </View>
@@ -74,6 +79,7 @@ const TabNavigator = () => {
           tabBarIcon: ({ color }) => (
             <View style={{ paddingTop: 8 }}>
               <SnbIconHint2
+                testID="menuBar.pesanan"
                 value={0}
                 iconColor={color}
                 iconName="log_history"
@@ -87,9 +93,11 @@ const TabNavigator = () => {
         name="HelpView"
         component={HelpView}
         options={{
+          tabBarTestID: 'menuBar.bantuan',
+          tabBarAccessibilityLabel: 'menuBar.bantuan',
           tabBarLabel: ({ color }) => (
             <View style={{ paddingBottom: 8 }}>
-              <SnbText2.Caption.Small color={color}>
+              <SnbText2.Caption.Small color={color} testID={'menuBar.bantuan'}>
                 Bantuan
               </SnbText2.Caption.Small>
             </View>
@@ -97,6 +105,7 @@ const TabNavigator = () => {
           tabBarIcon: ({ color }) => (
             <View style={{ paddingTop: 8 }}>
               <SnbIconHint2
+                testID="menuBar.bantuan"
                 value={0}
                 iconColor={color}
                 iconName="help"
@@ -120,9 +129,11 @@ const TabNavigator = () => {
           },
         })}
         options={{
+          tabBarTestID: 'menuBar.profil',
+          tabBarAccessibilityLabel: 'menuBar.profil',
           tabBarLabel: ({ color }) => (
             <View style={{ paddingBottom: 8 }}>
-              <SnbText2.Caption.Small color={color}>
+              <SnbText2.Caption.Small color={color} testID={'menuBar.profil'}>
                 Profil
               </SnbText2.Caption.Small>
             </View>
@@ -130,6 +141,7 @@ const TabNavigator = () => {
           tabBarIcon: ({ color }) => (
             <View style={{ paddingTop: 8 }}>
               <SnbIconHint2
+                testID="menuBar.profil"
                 value={0}
                 iconColor={color}
                 iconName="person_circle"

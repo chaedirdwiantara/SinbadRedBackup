@@ -1612,10 +1612,10 @@
   resolved "http://lib.sinbad.web.id/@sinbad%2fimage-editor/-/image-editor-2.3.1.tgz#0b517c411026ed3a015792e6be68646d3ee511c4"
   integrity sha512-KjBqHNalgPXr8DRPqNjWhvVBVWbwzb6SvzHDXu+Rxbyx7rY/XQa+G2s0/VDMLr5SQiJ+CTzZj35P1SCwNLaTUw==
 
-"@sinbad/react-native-sinbad-ui@1.0.96":
-  version "1.0.96"
-  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.96.tgz#13df64695996b7fffef317c0b4548a90ea015957"
-  integrity sha512-pc4qAwXBJY014km5Fuj+BpmNU3ZjX2KHMXC3K+rxH5ob8oUc28q0h2RJhw01Aku6+U4+qIicXTYx35VPCuXWhQ==
+"@sinbad/react-native-sinbad-ui@1.0.100":
+  version "1.0.100"
+  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.100.tgz#c4453c4e5c51b9d8ad220ea576422eaa7948e8ed"
+  integrity sha512-Bs0D9VpXJI1oud8n6p/j5hVlr7onFVrChPYOpGy4ZDJzyw1iWjTuEflS8UdgzZw9r/4vQoIeOOWZsxzKwL6RBQ==
   dependencies:
     "@sinbad/design-token" "0.0.1"
     lodash "4.17.21"
@@ -7063,10 +7063,10 @@ react-native-modal@13.0.0:
     prop-types "^15.6.2"
     react-native-animatable "1.3.3"
 
-react-native-moengage@7.4.0:
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/react-native-moengage/-/react-native-moengage-7.4.0.tgz#0360933b52bfde8b4aa278bdbcb7bcfa17ed82c2"
-  integrity sha512-nQyFF//tByQN5YVoEsMHqknJV47JpJk6yN4nCDQG8O8rgBDlCFdN650ORf9Mq5mSZv2iV7qYnqfnGY3wKYts6Q==
+react-native-moengage@7.4.1:
+  version "7.4.1"
+  resolved "https://registry.yarnpkg.com/react-native-moengage/-/react-native-moengage-7.4.1.tgz#a7777443d2b4b8e48a835b885b7740e679483e72"
+  integrity sha512-GtvEovTISHHce1EBeY0ndScKqIzmEdTFNoMehwAx3p9YTFmZVCn1IOZz7gbSATusrzrjp86sOFjlEoTFqOSh7g==
 
 react-native-otp-verify@1.0.4:
   version "1.0.4"

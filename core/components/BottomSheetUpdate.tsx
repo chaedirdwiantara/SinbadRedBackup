@@ -31,12 +31,15 @@ const BottomSheetUpdate: React.FC<ErrorProps> = (props) => {
 
   /** => title */
   const title = () => {
-    return <SnbBottomSheetPart.Title swipeIndicator />;
+    return (
+      <SnbBottomSheetPart.Title testID="bottomSheetUpdate" swipeIndicator />
+    );
   };
   /** => button */
   const button = () => {
     return (
       <FooterButton.Dual
+        testID="bottomSheetUpdate"
         title1="Perbarui"
         title2="Nanti Saja"
         shadow={false}
@@ -68,6 +71,7 @@ const BottomSheetUpdate: React.FC<ErrorProps> = (props) => {
   /** => main */
   return (
     <SnbBottomSheet2
+      testID="bottomSheetUpdate"
       ref={bottomSheetRef}
       name={'updateApp'}
       type="content"
