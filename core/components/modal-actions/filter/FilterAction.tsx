@@ -140,7 +140,9 @@ const FilterAction = forwardRef<FilterActionRef, FilterActionProps>(
     return (
       <>
         <View style={{ marginBottom: spacing.sm }}>
-          <SnbText2.Body.Default>Urutkan</SnbText2.Body.Default>
+          <SnbText2.Body.Default testID={`urutkan.${testID}`}>
+            Urutkan
+          </SnbText2.Body.Default>
         </View>
         <View style={{ flexDirection: 'row', marginBottom: spacing.xl }}>
           {filterPrice.map((i) => (

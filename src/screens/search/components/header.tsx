@@ -24,6 +24,7 @@ import { contexts } from '@contexts';
 /** === TYPE === */
 interface NavigationHeaderProps {
   onFetch: (params: { keyword: string }) => void;
+  testID: string;
 }
 type SearchProductRouteParams = {
   SearchProduct: {
@@ -37,7 +38,7 @@ type SearchProductRouteProps = RouteProp<
 >;
 /** === COMPONENT === */
 const header: FC<NavigationHeaderProps> = (props) => {
-  const { onFetch } = props;
+  const { onFetch, testID } = props;
 
   const {
     params: { keyword },
@@ -82,7 +83,7 @@ const header: FC<NavigationHeaderProps> = (props) => {
 
   return (
     <SnbTopNav2.Type8
-      testID="pdp-list-header"
+      testID={testID}
       backAction={goBack}
       color="white"
       onClearText={() => setLocalKeyword('')}

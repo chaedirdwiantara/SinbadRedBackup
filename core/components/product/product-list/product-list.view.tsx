@@ -60,9 +60,11 @@ const Main: FC<Props> = ({ testID }) => {
         onOrderPress={handleOrderPress}
         isRefreshing={productListState.refresh}
         onRefresh={() => fetch(dispatchProduct, state.query)}
-        onLoadMore={() =>
-          loadMore(dispatchProduct, productListState, state.query)
-        }
+        onLoadMore={() => {
+          if (!productListState.loadMore) {
+            loadMore(dispatchProduct, productListState, state.query);
+          }
+        }}
         loading={productListState.loading}
         error={productListState.error}
         onChangeLayoutListPress={() => {}}

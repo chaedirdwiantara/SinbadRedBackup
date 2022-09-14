@@ -7,11 +7,7 @@ import {
   StatusBar,
   StyleSheet,
 } from 'react-native';
-import {
-  SnbTopNav2,
-  colorV2,
-  spacingV2 as layout,
-} from '@sinbad/react-native-sinbad-ui';
+import { colorV2, spacingV2 as layout } from '@sinbad/react-native-sinbad-ui';
 
 import { BannerHomeView } from '../../banner/views';
 import { Benefits, Categories, Brands, Header } from '../components';
@@ -26,7 +22,6 @@ import {
 import { useDataAuth, useDataUpdateApp } from '@core/redux/Data';
 import { renderIF } from '@screen/auth/functions';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { NavigationAction } from '@navigation';
 import BottomSheetUpdate from '@core/components/BottomSheetUpdate';
 import { useFocusEffect } from '@react-navigation/native';
 import { useAuthCoreAction } from '@core/functions/auth';
@@ -34,8 +29,10 @@ import { useAuthCoreAction } from '@core/functions/auth';
 const { width } = Dimensions.get('window');
 const CopilotView = walkthroughable(View);
 
+// constant
+const testID = 'home-page';
+
 const HomeView: FC = ({ start }: any) => {
-  const [keyword, setKeyword] = useState('');
   const { meV2 } = useDataAuth();
   const { isUpdateApp } = useDataUpdateApp();
   const tabBarHeight = useBottomTabBarHeight();
@@ -95,8 +92,8 @@ const HomeView: FC = ({ start }: any) => {
             <Benefits />
           </CopilotView>
         </CopilotStep>
-        <Categories />
-        <Brands />
+        <Categories testID={testID} />
+        <Brands testID={testID} />
       </ScrollView>
       <ModalStartCoachmark onStartCoachmark={start} />
       {renderIF(

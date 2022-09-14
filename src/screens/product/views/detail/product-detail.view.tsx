@@ -7,9 +7,10 @@ import {
   SnbToast2,
   spacingV2,
   FooterButton,
+  SnbInfoBox2,
 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
-import { EmptyState } from '@core/components/EmptyState';
+import { ErrorView } from '../../components';
 import SnbHtml2 from '@core/components/HtmlComponent';
 import BulkPricingList from '@core/components/product/BulkPricingList';
 import { ProductDetailHeader } from './ProductDetailHeader';
@@ -24,9 +25,10 @@ import BottomSheetError from '@core/components/BottomSheetError';
 import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
+import debounce from 'lodash/debounce';
 import { contexts } from '@contexts';
 import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
-import { goBack } from '../../functions';
+import { goBack, useOutOfStockUtil } from '../../functions';
 /** === IMPORT HOOKS === */
 import { useCheckDataSupplier } from '@core/functions/supplier';
 import {
@@ -88,6 +90,15 @@ const ProductDetailView: FC = () => {
     },
     dispatchStock,
   } = useStockContext();
+  const {
+    infoBoxReminderLabel,
+    buttonLabelReminder,
+    buttonTypeReminder,
+    iconReminder,
+    stockReminder,
+    onCreateReminder,
+    onRemoveReminder,
+  } = useOutOfStockUtil({ id, warehouseId });
 
   /** => for bulk price */
   const { bulkPriceAterTax, isPriceGrosir } = useAddToCart(orderQty, true);
@@ -101,7 +112,7 @@ const ProductDetailView: FC = () => {
     onFunctionActions,
   } = useCheckDataSupplier(setOrderModalVisible);
 
-  /** => action from button order */
+  // function
   const handleOrderPress = useCallback(() => {
     if (me.data !== null) {
       if (me.data.approvalStatus === 'verified') {
@@ -114,6 +125,26 @@ const ProductDetailView: FC = () => {
       setModalNeedToLogin(true);
     }
   }, [me.data]);
+
+  const handleOnReminderPress = useCallback(() => {
+    if (stockReminder?.stockRemind) {
+      onRemoveReminder();
+    } else {
+      onCreateReminder();
+    }
+  }, [stockReminder?.stockRemind]);
+
+  /** => action from button order */
+  const onPressMainFooterButton = useCallback(
+    debounce(() => {
+      if (dataProduct?.isStockAvailable) {
+        handleOrderPress();
+      } else {
+        handleOnReminderPress();
+      }
+    }, 500),
+    [dataProduct?.isStockAvailable, handleOrderPress, handleOnReminderPress],
+  );
 
   /** => action close modal add to cart */
   const handleCloseModal = () => {
@@ -212,21 +243,6 @@ const ProductDetailView: FC = () => {
     return `${length}${unit} X ${width}${unit} X ${height}${unit}`;
   }, [dataProduct]);
   /** === FUNCTION === */
-  const getActionButtonTitle = () => {
-    if (defaultProperties.stock >= (dataProduct?.minQty ?? 1)) {
-      if (defaultProperties.isBundle) {
-        return 'Check Promo Bundle';
-      } else if (me.data === null) {
-        return 'Tambah ke Keranjang';
-      } else {
-        return 'Tambah ke Keranjang';
-      }
-    } else if (me.data === null) {
-      return 'Tambah ke Keranjang';
-    }
-
-    return 'Stock Habis';
-  };
 
   const handleRetryGetProduct = () => {
     setLoadingButton(true);
@@ -385,9 +401,9 @@ const ProductDetailView: FC = () => {
               onRefresh={() => handleRetryGetProduct()}
             />
           }>
-          <EmptyState
-            title="Terjadi Kesalahan"
-            description="Boleh coba refresh lagi?"
+          <ErrorView
+            testID={testID}
+            onPress={() => NavigationAction.goToMenu('HomeView')}
           />
         </ScrollView>
       </SnbContainer>
@@ -410,6 +426,17 @@ const ProductDetailView: FC = () => {
             />
           }>
           <ProductDetailCarousel images={dataProduct?.images!} />
+          {!dataProduct?.isStockAvailable && (
+            <SnbInfoBox2
+              full
+              testID={testID}
+              color="yellow"
+              title="Stok Habis"
+              leftIconSize={24}
+              leftIcon="info"
+              description={infoBoxReminderLabel}
+            />
+          )}
           <ProductDetailMainInfo
             name={dataProduct?.name!}
             priceAfterTax={dataProduct?.priceAfterTax!}
@@ -469,16 +496,18 @@ const ProductDetailView: FC = () => {
         {isAvailable ? (
           <FooterButton.Dual
             testID={testID}
-            title1={getActionButtonTitle()}
+            title1={buttonLabelReminder}
             title2=""
             shadow={false}
             loading={loadingButton}
             loadingButton={loadingButton}
-            disabled={
-              me.data !== null &&
-              defaultProperties.stock < (dataProduct?.minQty ?? 1)
-            }
-            button1Press={handleOrderPress}
+            // disabled={
+            //   me.data !== null &&
+            //   defaultProperties.stock < (dataProduct?.minQty ?? 1)
+            // }
+            button1Type={buttonTypeReminder}
+            icon1Button={iconReminder}
+            button1Press={onPressMainFooterButton}
             button2Press={onOpenWhatsApp}
             iconButton="chat"
           />

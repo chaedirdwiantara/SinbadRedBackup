@@ -8,6 +8,7 @@ interface TagListType1Props {
   shadow?: boolean;
   onTagPress: (tag: string) => void;
   onTagRemove: (tag: string) => void;
+  testID: string;
 }
 /** => var */
 const { textColor } = colorV2;
@@ -17,7 +18,7 @@ export const TagListType1: FC<TagListType1Props> = ({
   tags,
   shadow,
   onTagPress,
-  onTagRemove,
+  testID,
 }) => {
   const tagList = useMemo(() => {
     const list = [...tags];
@@ -31,6 +32,7 @@ export const TagListType1: FC<TagListType1Props> = ({
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity
+            testID={`btn.list-history.${item}.${testID}`}
             onPress={() => onTagPress(item)}
             style={{ marginTop: spacing.md }}>
             <SnbText2.Paragraph.Small color={textColor.secondary}>

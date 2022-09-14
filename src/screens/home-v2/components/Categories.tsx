@@ -13,6 +13,11 @@ import {
   goToProduct,
 } from 'src/screens/category/functions';
 
+// types
+type Props = {
+  testID: string;
+};
+
 const otherCategories: models.CategoryHome = {
   icon: 'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/semua+kategori%403x.png',
   name: 'Kategori Lainnya',
@@ -20,7 +25,7 @@ const otherCategories: models.CategoryHome = {
   hasChild: false,
 };
 
-export const Categories: FC = () => {
+export const Categories: FC<Props> = ({ testID }) => {
   const {
     stateCategory: {
       home: { list: categoryHomeState },
@@ -54,6 +59,7 @@ export const Categories: FC = () => {
               alignItems: 'center',
             }}>
             <SpecialButton.Feature
+              testID={`card-category.${category.name}.${testID}`}
               type="category"
               title={category.name}
               imageUrl={category.icon}
@@ -78,6 +84,7 @@ export const Categories: FC = () => {
                 alignItems: 'center',
               }}>
               <SpecialButton.Feature
+                testID={`card-category.${category.name}.${testID}`}
                 type="category"
                 title={category.name}
                 imageUrl={category.icon}

@@ -17,7 +17,12 @@ import {
 } from 'src/screens/brand/functions';
 import { BrandListItem } from '@model/brand';
 
-export const Brands: FC = () => {
+// types
+type Props = {
+  testID: string;
+};
+
+export const Brands: FC<Props> = ({ testID }) => {
   const {
     stateBrand: { list: brandListState },
     dispatchBrand,
@@ -35,9 +40,11 @@ export const Brands: FC = () => {
       <View style={{ paddingHorizontal: layout.spacing.lg }}>
         <Text.Title
           text="Brand Resmi Kami"
+          testID={'brand.' + testID}
           actionComponent={
             <SnbButton2.Link
               title="Lihat Semua"
+              testID={'brand.' + testID}
               size="medium"
               onPress={goToBrandList}
             />
@@ -48,6 +55,7 @@ export const Brands: FC = () => {
         <SnbHorizontalScrollContainer
           ItemComponent={(item: BrandListItem) => (
             <Content.NewBrand.Square
+              testID={`card-brand.${item.name}.${testID}`}
               name={item.name}
               image={item.image}
               onPress={() => goToProduct(item)}
