@@ -1,6 +1,8 @@
+import React from 'react';
 import * as Actions from '@actions';
 import * as models from '@models';
 import { useDispatch, useSelector } from 'react-redux';
+import { useDebounce } from '@core/functions/hook/debounce';
 
 export const useCheckPhoneV2 = () => {
   const dispatch = useDispatch();
@@ -43,5 +45,31 @@ export const useCheckPhoneRegistrationV3 = () => {
       dispatch(Actions.checkPhoneRegistrationV3Reset());
     },
     checkPhoneRegisterV3,
+  };
+};
+export const useCheckReferralCode = () => {
+  const dispatch = useDispatch();
+  const { checkReferralCodeData } = useSelector((state: any) => state.register);
+  return {
+    checkReferralCode: (data: models.ICheckReferralProcess) => {
+      dispatch(Actions.checkReferralCodeProcess(data));
+    },
+    resetReferralCode: () => {
+      dispatch(Actions.checkReferralCodeReset());
+    },
+    checkReferralCodeData,
+  };
+};
+
+export const useReferral = () => {
+  const [referralValue, setReferralValue] = React.useState('');
+  const debouncedValue = useDebounce<string>(referralValue!);
+
+  return {
+    searchReferral: (value: string) => {
+      setReferralValue(value);
+    },
+    referralValue,
+    debouncedValue,
   };
 };

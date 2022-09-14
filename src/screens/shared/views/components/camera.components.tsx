@@ -1,4 +1,5 @@
 /** === IMPORT LIB HERE === */
+import { testProps } from '@core/functions/global/test-props';
 import {
   borderV2,
   colorV2,
@@ -175,7 +176,11 @@ const Camera: React.FC<Props> = (props) => {
   function renderFooter() {
     return (
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.boxCircleCamera} onPress={takePicture}>
+        <TouchableOpacity
+          {...testProps(`btn-camera_alt.${props.testID}`)}
+          style={styles.boxCircleCamera}
+          onPress={takePicture}
+        >
           <SnbIcon
             name={'camera_alt'}
             size={24}

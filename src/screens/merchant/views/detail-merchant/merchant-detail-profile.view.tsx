@@ -261,7 +261,6 @@ const MerchantDetailProfileView: FC = () => {
           value: ownerData?.profile.taxNo
             ? formatter(ownerData?.profile.taxNo, [2, 5, 8, 9, 12, 15], '.')
             : '-',
-          action: ownerData?.profile.taxNo ? 'ubah' : 'tambah',
           type: 'merchantOwnerTaxNo',
           title: ownerData?.profile.taxNo ? 'Ubah NPWP' : 'Tambah NPWP',
         })}
