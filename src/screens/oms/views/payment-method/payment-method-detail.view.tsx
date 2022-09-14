@@ -50,7 +50,7 @@ const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
                 withFraction: false,
               })
             : isSelected != [] && isSelected[0] && dataChoose == null
-            ? toCurrency(isSelected[0].serviceFeeDeduct, {
+            ? toCurrency(isSelected[0]?.serviceFeeDeduct, {
                 withFraction: false,
               })
             : 'Rp -'
@@ -67,7 +67,8 @@ const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
                 },
               )
             : toCurrency(
-                dataFromCheckout.totalPaymentNumber -
+                dataFromCheckout.totalPaymentNumber +
+                  isSelected[0]?.serviceFeeDeduct -
                   sinbadVoucherDiscountOrder,
                 {
                   withFraction: false,
