@@ -290,7 +290,7 @@ const MerchantEditPhotoView = () => {
                     ? 6 / 5
                     : params?.type === 'store'
                     ? 8 / 7
-                    : 8 / 5
+                    : 8 / 5,
               }}
             />
             <View>
@@ -352,6 +352,7 @@ const MerchantEditPhotoView = () => {
               stateMerchant.profileEdit.loading
             }
             testID={'12.3'}
+            button1Disabled={!isImageCaptured}
           />
         )}
       </View>
