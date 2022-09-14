@@ -34,8 +34,10 @@ import { useAuthCoreAction } from '@core/functions/auth';
 const { width } = Dimensions.get('window');
 const CopilotView = walkthroughable(View);
 
+// constant
+const testID = 'home-page';
+
 const HomeView: FC = ({ start }: any) => {
-  const [keyword, setKeyword] = useState('');
   const { meV2 } = useDataAuth();
   const { isUpdateApp } = useDataUpdateApp();
   const tabBarHeight = useBottomTabBarHeight();
@@ -95,7 +97,7 @@ const HomeView: FC = ({ start }: any) => {
             <Benefits />
           </CopilotView>
         </CopilotStep>
-        <Categories />
+        <Categories testID={testID} />
         <Brands />
       </ScrollView>
       <ModalStartCoachmark onStartCoachmark={start} />
