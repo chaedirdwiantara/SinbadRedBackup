@@ -50,7 +50,6 @@ const updateCart = (
     'v2',
     'UPDATE',
     {
-      buyerName: data.data.buyerName,
       carts: data.data.carts,
     },
   );
@@ -109,7 +108,7 @@ const checkStock = ({
     'auth',
     path,
     'warehouse',
-    'v1',
+    'v2',
     'CREATE',
     data,
   );

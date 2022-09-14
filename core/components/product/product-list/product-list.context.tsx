@@ -27,6 +27,7 @@ type PropValue = {
     needLogin: boolean;
     errorStock: boolean;
     errorProduct: boolean;
+    errorAddToCart: boolean;
   };
   layout: 'grid' | 'list';
   productSelected: string;

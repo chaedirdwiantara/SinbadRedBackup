@@ -48,7 +48,6 @@ const useProductListFunction = () => {
     setSelectProduct('');
     stockValidationActions.reset(dispatchStock);
     productDetailActions.reset(dispatchProduct);
-    addToCartActions.reset(dispatchCart);
   }, []);
 
   const onGetProductDetail = useCallback((id: string) => {

@@ -2,7 +2,6 @@
  * CHECK SINBAD VOUCHER
  */
 export interface CheckSinbadVoucherResponse {
-  isVoucherExist: boolean;
   sinbadVoucherId: number | null;
   totalOrder: number;
   sinbadVoucherDiscountOrder: number;
