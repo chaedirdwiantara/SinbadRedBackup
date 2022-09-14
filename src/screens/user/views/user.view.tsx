@@ -608,13 +608,13 @@ const UserView: FC = ({ start }: any) => {
                     />
                   </View>
                 )}
-                {!buyerData?.buyerInformation?.buyerAccount?.imageUrl && (
+                {!ownerData?.info?.isImageBuyer && (
                   <View style={{ marginBottom: layout.spacing.lg }}>
                     <Content.MenuList
                       title="Upload Foto Toko"
                       iconComponent={
                         <SnbIcon
-                          name="create"
+                          name="ktp"
                           color={colorV2.iconColor.blue}
                           size={24}
                         />
