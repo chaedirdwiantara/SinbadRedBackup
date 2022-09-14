@@ -98,7 +98,7 @@ const HomeView: FC = ({ start }: any) => {
           </CopilotView>
         </CopilotStep>
         <Categories testID={testID} />
-        <Brands />
+        <Brands testID={testID} />
       </ScrollView>
       <ModalStartCoachmark onStartCoachmark={start} />
       {renderIF(
