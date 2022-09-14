@@ -96,6 +96,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
             <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
           }>
           <EmptyState
+            testID={testID}
             title="Terjadi Kesalahan"
             description="Boleh coba refresh lagi?"
           />
