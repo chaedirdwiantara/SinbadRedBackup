@@ -71,6 +71,9 @@ const SelfRegisterView: React.FC = () => {
     return () => {
       checkPhoneRegistrationReset();
       phone.clearText();
+      resetReferralCode();
+      setReferal('');
+      setStatusReferal('default');
     };
   }, []);
 
@@ -186,6 +189,8 @@ const SelfRegisterView: React.FC = () => {
           description={'Sudah punya akun Sinbad?'}
           textLinkPress={() => {
             phone.clearText();
+            setReferal('');
+            setStatusReferal('default');
             navigate(LOGIN_PHONE_VIEW);
           }}
           disabled={
@@ -209,7 +214,11 @@ const SelfRegisterView: React.FC = () => {
         ref={refModalOTP}
         phone={phone.value}
         action="register"
-        onResetField={phone.clearText}
+        onResetField={() => {
+          phone.clearText();
+          setReferal('');
+          setStatusReferal('default');
+        }}
         referralCode={statusReferal === 'success' ? referal : undefined}
       />
       <ModalSalesman ref={refModalSalesman} />
