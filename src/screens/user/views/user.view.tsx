@@ -179,17 +179,20 @@ const UserView: FC = ({ start }: any) => {
     const dataComplete =
       typeof stateUser.detail.data?.isDataCompleted === 'boolean' &&
       stateUser.detail.data?.isDataCompleted === false;
-    if (stateUser.detail?.data?.wasRejected && isFocused && dataComplete) {
-      setOpenModalConfirmation(false);
-      if (
-        !ownerData?.info.isImageIdOcrValidate ||
-        !ownerData?.info.isTaxNo ||
-        !ownerData?.info.isSelfieImageUrl ||
-        !buyerData?.buyerInformation?.buyerAccount?.name ||
-        !buyerData?.buyerAddress?.address ||
-        buyerData?.buyerInformation?.buyerAccount?.imageUrl !== null
-      ) {
-        setOpenModalConfirmation(true);
+    if (stateUser.detail?.data?.wasRejected && isFocused) {
+      if (!dataComplete) {
+        if (
+          !ownerData?.info.isImageIdOcrValidate ||
+          !ownerData?.info.isTaxNo ||
+          !ownerData?.info.isSelfieImageUrl ||
+          !buyerData?.buyerInformation?.buyerAccount?.name ||
+          !buyerData?.buyerAddress?.address ||
+          buyerData?.buyerInformation?.buyerAccount?.imageUrl !== null
+        ) {
+          setOpenModalConfirmation(true);
+        }
+      } else {
+        setOpenModalConfirmation(false);
       }
     } else {
       setOpenModalConfirmation(false);
