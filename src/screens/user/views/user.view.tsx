@@ -180,17 +180,16 @@ const UserView: FC = ({ start }: any) => {
       typeof stateUser.detail.data?.isDataCompleted === 'boolean' &&
       stateUser.detail.data?.isDataCompleted === false;
     if (stateUser.detail?.data?.wasRejected && isFocused) {
-      if (!dataComplete) {
-        if (
-          !ownerData?.info.isImageIdOcrValidate ||
-          !ownerData?.info.isTaxNo ||
-          !ownerData?.info.isSelfieImageUrl ||
-          !buyerData?.buyerInformation?.buyerAccount?.name ||
-          !buyerData?.buyerAddress?.address ||
-          !ownerData?.info?.isImageBuyer
-        ) {
-          setOpenModalConfirmation(true);
-        }
+      if (
+        ownerData?.info.isImageIdOcrValidate &&
+        ownerData?.info.isTaxNo &&
+        ownerData?.info.isSelfieImageUrl &&
+        buyerData?.buyerInformation?.buyerAccount?.name &&
+        buyerData?.buyerAddress?.address &&
+        ownerData?.info?.isImageBuyer &&
+        dataComplete
+      ) {
+        setOpenModalConfirmation(true);
       } else {
         setOpenModalConfirmation(false);
       }
