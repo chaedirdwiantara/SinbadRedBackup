@@ -13,6 +13,7 @@ export interface DetailProps<T> {
 /** === THIS FOR PROCESS GET DATA === */
 export interface DetailProcessProps {
   id: string;
+  warehouseId: string;
 }
 /** === THIS FOR SUCCESS GET DATA === */
 export interface DetailSuccessProps<T> {

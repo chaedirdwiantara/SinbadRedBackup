@@ -332,7 +332,7 @@ const useCheckStockAction = () => {
   const dispatch = useDispatch();
   return {
     fetch: (contextDispatch: (action: any) => any, isReserved: boolean) => {
-      if (stateCart.get.data !== null) {
+      if (stateCart.get.data !== null && stateCart.checkBuyer.data !== null) {
         // format payload from redux master
         const data: models.CheckStockPayloadCarts[] = [];
         stateCart.get.data?.sellers.map((sellerItem) => {
@@ -341,6 +341,7 @@ const useCheckStockAction = () => {
               productId: productItem.productId,
               warehouseId: productItem.warehouseId,
               qty: productItem.qty,
+              locationId: stateCart.checkBuyer.data?.locationId!,
             });
           });
         });
@@ -362,13 +363,14 @@ const useCheckStockAction = () => {
 };
 /** => post check stock action */
 const usePostCheckStockAction = () => {
+  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
     fetch: (
       contextDispatch: (action: any) => any,
       cartData: models.CartMaster,
     ) => {
-      if (cartData?.sellers !== null) {
+      if (cartData?.sellers !== null && stateCart.checkBuyer.data !== null) {
         // format payload from redux master
         const data: models.CheckStockPayloadCarts[] = [];
         cartData.sellers.map((sellerItem) => {
@@ -378,6 +380,7 @@ const usePostCheckStockAction = () => {
                 productId: productItem.productId,
                 warehouseId: productItem.warehouseId,
                 qty: productItem.qty,
+                locationId: stateCart.checkBuyer.data?.locationId!,
               });
             }
           });

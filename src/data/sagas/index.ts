@@ -16,6 +16,7 @@ import SupplierSaga from './supplier/supplier.saga';
 import ProductReserveStockSaga from './product/reserve-stock.saga';
 import HistorySaga from './history.saga';
 import StockSaga from './product/stock.saga';
+import StockReminderSaga from './product/stock-reminder.saga';
 import QuestSaga from './quest.saga';
 import CartSaga from './oms/cart/cart.saga';
 import CheckoutSaga from './oms/checkout/checkout.saga';
@@ -47,6 +48,7 @@ function* rootSaga() {
   yield all([fork(HistorySaga)]);
   yield all([fork(ProductReserveStockSaga)]);
   yield all([fork(StockSaga)]);
+  yield all([fork(StockReminderSaga)]);
   yield all([fork(QuestSaga)]);
   yield all([fork(CartSaga)]);
   yield all([fork(CheckoutSaga)]);

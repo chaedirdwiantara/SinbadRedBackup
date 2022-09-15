@@ -2,7 +2,12 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 /** === IMPORT FUNCTIONS ===  */
 import { goToCategory } from '@screen/category/functions';
-import { useTagContext } from 'src/data/contexts/product';
+import debounce from 'lodash/debounce';
+import {
+  useStockReminderContext,
+  useTagContext,
+} from 'src/data/contexts/product';
+import { useStockReminderActions } from '@screen/product/functions';
 /** === IMPORT TYPES ===  */
 import * as models from '@models';
 import {
@@ -279,4 +284,117 @@ export const useProductTags = (
   };
 
   return { tags, selectedTags, handleTagPress };
+};
+// shorthand function known is type boolean
+const isBoolean = (status?: boolean) => typeof status == 'boolean';
+// util helper for proudct type grid & list
+export const useProductCardUtil = (
+  product: models.ProductCard,
+  layout: 'grid' | 'list',
+) => {
+  // hooks stock reminder list
+  const {
+    stateStockReminder: { list: stockReminderList },
+    dispatchStockReminder,
+  } = useStockReminderContext();
+  const { createReminder, deleteReminder } = useStockReminderActions({
+    warehouseId: Number(product.warehouseOriginId),
+    productId: product.id,
+  });
+  // find stock product
+  const stockReminder = useMemo(() => {
+    return stockReminderList.data.find(
+      (i) =>
+        `${i.productId}${i.warehouseId}` ==
+        `${product.id}${product.warehouseOriginId}`,
+    );
+  }, [stockReminderList.data]);
+  // define the badge
+  const badge = useMemo(() => {
+    if (product.hasBulkPrice)
+      return {
+        title: 'Harga Grosir',
+        type: 'information',
+        iconName: 'cart',
+      };
+    if (product.isExclusive)
+      return {
+        title: 'Exclusive',
+        type: 'warning',
+        iconName: 'stars',
+      };
+    return undefined;
+  }, [product.isExclusive, product.hasBulkPrice]);
+  // check condition is stock available
+  const outOfStock = useMemo(() => {
+    if (isBoolean(product.isStockAvailable)) {
+      return !product.isStockAvailable;
+    }
+    // false outOfStock = product ada
+    return false;
+  }, [product.isStockAvailable]);
+  // check condition is have stock reminder
+  const isHaveStockReminder = useMemo(() => {
+    if (isBoolean(stockReminder?.stockRemind)) {
+      return stockReminder?.stockRemind;
+    }
+    // false outOfStock = product ada
+    return false;
+  }, [stockReminder?.stockRemind]);
+  const deleteReminderLabel = useMemo(
+    () => (layout === 'grid' ? 'Hapus Pengingat' : 'Hapus'),
+    [layout],
+  );
+  const addReminderLabel = useMemo(
+    () => (layout === 'grid' ? 'Ingatkan Saya' : 'Ingatkan'),
+    [layout],
+  );
+  // button text label
+  const buttonText = useMemo(() => {
+    if (outOfStock) {
+      return isHaveStockReminder ? deleteReminderLabel : addReminderLabel;
+    }
+    return 'Pesan';
+  }, [
+    stockReminder?.stockRemind,
+    outOfStock,
+    deleteReminderLabel,
+    addReminderLabel,
+  ]);
+  // make outline button if out of stock
+  const buttonOutline = useMemo(() => {
+    if (product.isStockAvailable) return false;
+    return outOfStock;
+  }, [outOfStock, product.isStockAvailable]);
+  // make button grey if have stock reminder
+  const buttonType: 'secondary' | 'primary' = useMemo(() => {
+    if (product.isStockAvailable) return 'primary';
+    return isHaveStockReminder ? 'secondary' : 'primary';
+  }, [isHaveStockReminder, product.isStockAvailable]);
+  // callback button order & reminder
+  const onButtonPress = useCallback(
+    debounce(() => {
+      if (outOfStock) {
+        if (isHaveStockReminder) {
+          // action call remove reminder
+          deleteReminder(dispatchStockReminder);
+        } else {
+          // action call create reminder
+          createReminder(dispatchStockReminder);
+        }
+        return void 0;
+      }
+      product.onOrderPress();
+    }, 500),
+    [outOfStock, product.onOrderPress, isHaveStockReminder],
+  );
+
+  return {
+    badge,
+    outOfStock,
+    buttonOutline,
+    buttonText,
+    buttonType,
+    onButtonPress,
+  };
 };

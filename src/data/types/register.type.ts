@@ -55,3 +55,8 @@ export const UPDATE_USER_MEDEA_PROCESS = 'UpdateUserMedeaProcess';
 export const UPDATE_USER_MEDEA_SUCCESS = 'UpdateUserMedeaSuccess';
 export const UPDATE_USER_MEDEA_FAILED = 'UpdateUserMedeaFailed';
 export const UPDATE_USER_MEDEA_RESET = 'UpdateUserMedeaReset';
+
+export const CHECK_REFERRAL_CODE_PROCESS = 'CheckReferralCodeProcess';
+export const CHECK_REFERRAL_CODE_SUCCESS = 'CheckReferralCodeSuccess';
+export const CHECK_REFERRAL_CODE_FAILED = 'CheckReferralCodeFailed';
+export const CHECK_REFERRAL_CODE_RESET = 'CheckReferralCodeReset';

@@ -1,9 +1,11 @@
 /** === IMPORT PACKAGES === */
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useStockReminderContext } from 'src/data/contexts/product';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
 import * as models from '@models';
+import { useDataAuth } from '@core/redux/Data';
 
 /** === TYPES === */
 type ProductDetailId = { id: string; warehouseId: string };
@@ -11,6 +13,7 @@ type ProductDetailId = { id: string; warehouseId: string };
 /** === Fetch Product Related === */
 const callProcessAction = (
   contextDispatch: (action: any) => any,
+  contextDispatchStockReminder: (action: any) => any,
   loading: boolean,
   page: number,
   perPage: number,
@@ -19,6 +22,7 @@ const callProcessAction = (
 ) => {
   return Actions.productListProcess(
     contextDispatch,
+    contextDispatchStockReminder,
     {
       ...queryOptions,
       loading,
@@ -32,25 +36,29 @@ const perPage = 10;
 const page = 1;
 const useProductListActions = (subModule?: models.ProductSubModule) => {
   const dispatch = useDispatch();
-
+  const { dispatchStockReminder } = useStockReminderContext();
+  const { meV2 } = useDataAuth();
   const fetch = useCallback(
     (
       contextDispatch: (action: any) => any,
       queryOptions?: models.ProductListQueryOptions,
     ) => {
       contextDispatch(Actions.productListReset());
+      // reset state stock remider
+      contextDispatch(Actions.stockReminderListReset());
       dispatch(
         callProcessAction(
           contextDispatch,
+          dispatchStockReminder,
           true,
           page,
           perPage,
-          queryOptions,
+          { ...queryOptions, isLogin: Boolean(meV2.data) },
           subModule,
         ),
       );
     },
-    [subModule],
+    [subModule, meV2.data],
   );
 
   const refresh = useCallback(
@@ -62,15 +70,16 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
       dispatch(
         callProcessAction(
           contextDispatch,
+          dispatchStockReminder,
           true,
           page,
           perPage,
-          queryOptions,
+          { ...queryOptions, isLogin: Boolean(meV2.data) },
           subModule,
         ),
       );
     },
-    [subModule],
+    [subModule, meV2.data],
   );
 
   const loadMore = useCallback(
@@ -84,12 +93,14 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
           ...queryOptions,
           page: state.page + 1,
           perPage: state.perPage,
+          isLogin: Boolean(meV2.data),
         };
 
         contextDispatch(Actions.productListLoadMore());
         dispatch(
           callProcessAction(
             contextDispatch,
+            dispatchStockReminder,
             false,
             query.page,
             perPage,
@@ -99,7 +110,7 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
         );
       }
     },
-    [subModule],
+    [subModule, meV2.data],
   );
 
   const clearContents = useCallback((contextDispatch: (action: any) => any) => {
@@ -333,6 +344,35 @@ const useStockInformationAction = () => {
   };
 };
 
+const useStockReminderActions = (props: models.StockReminderGetProps) => {
+  const dispatch = useDispatch();
+
+  const getBulkReminder = useCallback(
+    (
+      contextDispatch: (action: any) => any,
+      payload: models.StockReminderGetProps[],
+    ) => {
+      dispatch(Actions.stockReminderListProcess(contextDispatch, payload));
+    },
+    [],
+  );
+
+  const createReminder = useCallback(
+    (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.createStockReminderProcess(contextDispatch, props));
+    },
+    [props],
+  );
+
+  const deleteReminder = useCallback(
+    (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.deleteStockReminderProcess(contextDispatch, props));
+    },
+    [props],
+  );
+  return { getBulkReminder, createReminder, deleteReminder };
+};
+
 export {
   useProductListActions,
   useOrderQuantity,
@@ -345,4 +385,5 @@ export {
   useStockInformationAction,
   useProductDetailCartAction,
   useAddToCartDetailActions,
+  useStockReminderActions,
 };

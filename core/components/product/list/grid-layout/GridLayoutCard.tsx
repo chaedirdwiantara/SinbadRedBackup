@@ -37,6 +37,7 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
         marginBottom: spacing.lg,
       }}>
       <ProductGridCard
+        {...product}
         testID={testID}
         name={product.name}
         imageUrl={`${product.thumbnail}?tr=w-${imageKitWidth}`}
@@ -45,8 +46,7 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
         }
         priceAfterTax={product.priceAfterTax}
         hasBulkPrice={product.hasBulkPrice}
-        isBundle={product.isBundle}
-        isPromo={product.isPromo}
+        isStockAvailable={product.isStockAvailable}
         isExclusive={product.isExclusive}
         onCardPress={() => {
           goToProductDetail({

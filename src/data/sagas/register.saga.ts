@@ -98,6 +98,19 @@ function* updateUserMedea(
   }
 }
 
+function* checkReferralCode(
+  action: models.IRegisterAction<models.ICheckReferralProcess>,
+) {
+  try {
+    const response: models.ICheckReferralSuccess = yield call(() =>
+      registerApi.checkReferralCode(action.payload),
+    );
+    yield put(ActionCreators.checkReferralCodeSuccess(response));
+  } catch (error) {
+    yield put(ActionCreators.checkReferralCodeFailed(error));
+  }
+}
+
 function* RegisterSaga() {
   yield takeLatest(types.VERIFY_OTP_REGISTER_PROCESS, verifyOTPRegister);
   yield takeLatest(
@@ -112,6 +125,7 @@ function* RegisterSaga() {
   );
   yield takeLatest(types.GET_USER_MEDEA_PROCESS, getUserMedea);
   yield takeLatest(types.UPDATE_USER_MEDEA_PROCESS, updateUserMedea);
+  yield takeLatest(types.CHECK_REFERRAL_CODE_PROCESS, checkReferralCode);
 }
 
 export default RegisterSaga;

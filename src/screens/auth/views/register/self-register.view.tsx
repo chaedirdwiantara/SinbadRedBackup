@@ -14,6 +14,8 @@ import {
   useInputPhone,
   useCheckPhoneRegistrationV3,
   setErrorMessage,
+  useCheckReferralCode,
+  useReferral,
 } from '@screen/auth/functions';
 import { useDataPermanent } from '@core/redux/Data';
 import { ModalOTPMethod, ModalSalesman } from '../shared';
@@ -30,12 +32,18 @@ const SelfRegisterView: React.FC = () => {
 
   const refModalOTP = React.useRef<SnbBottomSheet2Ref>(null);
   const refModalSalesman = React.useRef<SnbBottomSheet2Ref>(null);
+  const [referal, setReferal] = React.useState('');
+  const [statusReferal, setStatusReferal] = React.useState('default');
+  const { checkReferralCode, checkReferralCodeData, resetReferralCode } =
+    useCheckReferralCode();
+  const { searchReferral, referralValue, debouncedValue } = useReferral();
+  const [isInitialDebounce, setInitialDebounce] = React.useState(false);
 
   React.useEffect(() => {
     if (checkPhoneRegistrationState?.data !== null) {
       if (checkPhoneRegistrationState?.data?.phoneNumberAvailable) {
         //SHOW MODAL SEND OTP DAN NAVIGATE KE OTP PAGE
-        refModalOTP.current?.open()
+        refModalOTP.current?.open();
       } else if (checkPhoneRegistrationState?.data?.isUserAgent) {
         phone.clearText();
         checkPhoneRegistrationReset();
@@ -55,6 +63,9 @@ const SelfRegisterView: React.FC = () => {
 
   React.useEffect(() => {
     checkPhoneRegistrationReset();
+    resetReferralCode();
+    setReferal('');
+    setStatusReferal('default');
     phone.setMessageError('');
     phone.setType('default');
     return () => {
@@ -62,6 +73,41 @@ const SelfRegisterView: React.FC = () => {
       phone.clearText();
     };
   }, []);
+
+  React.useEffect(() => {
+    if (checkReferralCodeData.data !== null) {
+      setStatusReferal('success');
+      setInitialDebounce(false);
+    }
+    if (checkReferralCodeData.error !== null) {
+      if (referal !== '') {
+        setStatusReferal('error');
+        setInitialDebounce(false);
+      } else {
+        setStatusReferal('default');
+        setInitialDebounce(false);
+      }
+    }
+  }, [checkReferralCodeData]);
+
+  React.useEffect(() => {
+    if (referal === '') {
+      setStatusReferal('default');
+    }
+  }, [referal]);
+
+  React.useEffect(() => {
+    if (
+      (debouncedValue.length >= 3 || debouncedValue.length === 0) &&
+      !checkReferralCodeData.loading &&
+      isInitialDebounce
+    ) {
+      checkReferralCode({ code: referralValue });
+    } else {
+      setInitialDebounce(false);
+    }
+  }, [debouncedValue, checkReferralCodeData.loading]);
+
   const header = () => {
     return (
       <SnbTopNav2.Type3
@@ -88,6 +134,33 @@ const SelfRegisterView: React.FC = () => {
               testID={'02'}
               {...phone}
               keyboardType="phone-pad"
+            />
+          </View>
+          <View style={{ padding: layout.spacing.lg }}>
+            <SnbTextField2.Text
+              testID={'02'}
+              value={referal}
+              onChangeText={(text) => {
+                setReferal(text);
+                setStatusReferal('default');
+                setInitialDebounce(true);
+                searchReferral(text);
+              }}
+              helperText={
+                checkReferralCodeData.loading ? 'Pengecekan Kode...' : ''
+              }
+              keyboardType="default"
+              labelText="Masukkan Kode Referal (Optional)"
+              placeholder="Masukkan kode referal jika ada"
+              type={
+                statusReferal === 'error'
+                  ? 'error'
+                  : statusReferal === 'success'
+                  ? 'success'
+                  : 'default'
+              }
+              valMsgError={'Kode referal tidak ditemukan'}
+              valMsgSuccess={'Kode referal dapat digunakan'}
             />
           </View>
         </View>
@@ -118,7 +191,8 @@ const SelfRegisterView: React.FC = () => {
           disabled={
             phone.value === '' ||
             phone.valMsgError !== '' ||
-            checkPhoneRegistrationState.loading
+            checkPhoneRegistrationState.loading ||
+            checkReferralCodeData.loading
           }
           loadingButton={checkPhoneRegistrationState.loading}
         />
@@ -136,6 +210,7 @@ const SelfRegisterView: React.FC = () => {
         phone={phone.value}
         action="register"
         onResetField={phone.clearText}
+        referralCode={statusReferal === 'success' ? referal : undefined}
       />
       <ModalSalesman ref={refModalSalesman} />
     </SnbContainer>

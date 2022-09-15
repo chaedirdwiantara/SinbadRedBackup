@@ -44,7 +44,7 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
   return (
     <SnbContainer color="grey">
       <ScrollView style={VoucherCartListStyles.container}>
-        <SnbRadioGroup 
+        <SnbRadioGroup
           value={props?.selectedVoucher?.sinbadVoucherId}
           onChange={(value) => onSelectedChange(value as number)}>
           {eligibleVoucherFiltered &&

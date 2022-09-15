@@ -57,12 +57,17 @@ const GridLayout: FC<ProductLayoutProps> = ({
         scrollEventThrottle={10}>
         {displayState === 'error' && (
           <EmptyState
+            testID={testID}
             title="Terjadi Kesalahan"
             description="Boleh coba refresh lagi?"
           />
         )}
         {displayState === 'empty' && (
-          <EmptyState title="Produk Kosong" description="Maaf Produk Kosong" />
+          <EmptyState
+            testID={testID}
+            title="Produk Kosong"
+            description="Maaf Produk Kosong"
+          />
         )}
         {displayState === 'success' && (
           <View
@@ -80,7 +85,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
                   productIndex % 2 === 0 && (
                     <GridLayoutCard
                       testID={testID}
-                      key={product.id}
+                      key={`${product.id}_${product.warehouseOriginId}`}
                       product={product}
                       index={productIndex}
                       onCardPress={onCardPress}
@@ -95,7 +100,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
                   productIndex % 2 === 1 && (
                     <GridLayoutCard
                       testID={testID}
-                      key={product.id}
+                      key={`${product.id}_${product.warehouseOriginId}`}
                       product={product}
                       index={productIndex}
                       onCardPress={onCardPress}

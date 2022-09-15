@@ -11,7 +11,7 @@ const checkEmailAvailability = (
 
 const verifyOTPRegister = (data: models.IVerifyOTPRegister) => {
   const path = 'validate-otp';
-  return apiAuth(path, 'v3', 'POST', data);
+  return apiAuth(path, 'v4', 'POST', data);
 };
 
 const checkPhoneV2 = (data: models.ICheckPhoneV2Process) => {
@@ -46,6 +46,11 @@ const UpdateUserMedea = (data: models.IUpdateUserMedeaProcess) => {
   );
 };
 
+const checkReferralCode = (data: models.ICheckReferralProcess) => {
+  const path = `referral-code?code=${data.code}`;
+  return apiAuth(path, 'v1', 'GET');
+};
+
 export const registerApi = {
   checkEmailAvailability,
   verifyOTPRegister,
@@ -54,4 +59,5 @@ export const registerApi = {
   checkPhoneRegistrationV3,
   getUserMedea,
   UpdateUserMedea,
+  checkReferralCode,
 };

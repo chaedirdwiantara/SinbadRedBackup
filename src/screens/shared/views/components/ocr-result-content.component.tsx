@@ -10,7 +10,7 @@ import {
 import { View, Image } from 'react-native';
 import { IOCRResult } from '@model/global';
 import * as models from '@models';
-import { useCamera } from '@screen/auth/functions/global-hooks.functions';
+import { useOCR } from '@screen/auth/functions/global-hooks.functions';
 import apiHost from '@core/services/apiHost';
 import { useEasyRegistration } from '@screen/account/functions';
 interface Props {
@@ -19,20 +19,22 @@ interface Props {
   testID?: string;
 }
 
-const OCRResultContent: React.FC<Props> = ({
-  onChangeValue,
-  value,
-  testID,
-}) => {
+const OCRResultContent: React.FC<Props> = ({ onChangeValue, value, testID }) => {
+  const { ocrImageResult, resetOcrDataRtdb, ocrImageState } = useOCR(true);
   const nameOnKtp = useInput('');
   const idNumber = useInput('', 'number-only');
   const { completeDataState } = useEasyRegistration();
-  const { capturedImage, resetCamera } = useCamera()
 
   React.useEffect(() => {
-    return resetCamera
+    return resetOcrDataRtdb;
   }, []);
 
+  React.useEffect(() => {
+    if (ocrImageResult) {
+      nameOnKtp.setValue(ocrImageResult?.nameOnKtp);
+      idNumber.setValue(ocrImageResult?.idNumber);
+    }
+  }, [ocrImageResult]);
 
   React.useEffect(() => {
     if (value?.nameOnKtp) {
@@ -49,24 +51,25 @@ const OCRResultContent: React.FC<Props> = ({
     if (idNumber && nameOnKtp) {
       onChangeValue({ idNumber: idNumber.value, nameOnKtp: nameOnKtp.value });
     }
+    if (!nameOnKtp.value) {
+      nameOnKtp.setMessageError('Bagian ini belum diisi');
+      nameOnKtp.setType('error');
+    }
   }, [nameOnKtp.value, idNumber.value]);
 
-  const isImageCaptured = capturedImage?.data?.type === 'ktp';
-  let source: any | undefined = '';
-  if (isImageCaptured) {
-    source = { uri: capturedImage?.data?.url }
-  } else {
-    source = {
-      uri: `${apiHost.base}/common/api/v1/shared/public/secure-files/${completeDataState.data?.userData?.imageId}`,
-      headers: { 'x-platform': 'sinbad-app' },
-    }
-  }
+  const imageId = ocrImageResult?.imageUid ||
+    ocrImageState?.data?.uploadImageData?.data?.id ||
+    completeDataState.data?.userData?.imageId
+
   return (
     <View style={{ flex: 1, padding: layout.spacing.lg }}>
       <SnbText2.Headline.Small>Foto KTP Diupload</SnbText2.Headline.Small>
       <View style={{ marginVertical: layout.spacing.xxsm }} />
       <Image
-        source={source}
+        source={{
+          uri: `${apiHost.base}/common/api/v1/shared/public/secure-files/${imageId}`,
+          headers: { 'x-platform': 'sinbad-app' },
+        }}
         resizeMode="contain"
         style={{
           height: 200,
@@ -118,8 +121,11 @@ const OCRResultContent: React.FC<Props> = ({
           marginTop: layout.spacing.lg,
         }}>
         <SnbText2.Paragraph.Small color={colorV2.textColor.link}>
-          Nama secara otomatis diambil dari foto KTP yang anda upload. Periksa
-          kembali nama anda bila terjadi kesalahan.
+          {ocrImageResult !== null
+            ? "Nama secara otomatis diambil dari foto KTP yang anda upload. Periksa kembali nama anda bila terjadi kesalahan."
+            : "Isi Nama & NIK anda sesuai dengan KTP dan Periksa kembali nama anda bila terjadi kesalahan."
+          }
+
         </SnbText2.Paragraph.Small>
       </View>
     </View>

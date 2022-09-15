@@ -15,7 +15,8 @@ const useProductListContext = () => {
         | 'addToCart'
         | 'needLogin'
         | 'errorStock'
-        | 'errorProduct',
+        | 'errorProduct'
+        | 'errorAddToCart',
       status: boolean,
     ) => {
       setState((prev) => {

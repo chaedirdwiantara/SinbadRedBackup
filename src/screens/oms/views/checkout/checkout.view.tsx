@@ -38,6 +38,7 @@ import {
 } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
 import { useVoucherLocalData } from '@screen/voucher/functions';
+import { findIdSeller } from '@screen/oms/functions/payment-method/payment-method.function';
 import * as models from '@models';
 /** === GLOBAL === */
 const screenName = 'checkoutPage';
@@ -54,11 +55,11 @@ const OmsCheckoutView: FC = () => {
   const { dispatchCart } = useContext(contexts.CartContext);
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
-  const paymentMethodList = usePaymentMethodListContent();
   const paymentMethodCreateOrder = usePaymentMethodCreateOrder();
   const PaymentMethodSubRtdb = usePaymentMethodSubRtdb();
   const thankYouPageCancelOrderAction = useThankYouPageCancelOrderAction();
   const thankYouPageAction = useThankYouPageAction();
+  const getPaymentMethodListContent = usePaymentMethodListContent();
 
   /** === HOOK === */
   const { stateCheckout } = useContext(contexts.CheckoutContext);
@@ -74,6 +75,26 @@ const OmsCheckoutView: FC = () => {
   const refBackToCartModal = React.useRef<SnbBottomSheet2Ref>(null);
   const refParcelDetailModal = React.useRef<SnbBottomSheet2Ref>(null);
   const refValidationLimitModal = React.useRef<SnbBottomSheet2Ref>(null);
+
+  const checkoutContextData = stateCheckout.checkout.data;
+  const idSeller = findIdSeller(checkoutContextData?.sellers);
+
+  /** => handle payment method */
+  const handlePaymentMethodList = () => {
+    const payloadPaymentMethod: any = {
+      amount: stateCheckout.checkout.data?.totalOrderAfterSinbadVoucher,
+      page: 1,
+      perPage: 10,
+      keyword: '',
+      sort: 'desc',
+      sortBy: '',
+      sellerIds: idSeller,
+    };
+    getPaymentMethodListContent.paymentMethodListContentGet(
+      dispatchPaymentMethod,
+      payloadPaymentMethod,
+    );
+  };
 
   /** => Back handler */
   useCustomBackHardware(() => refBackToCartModal.current?.open());
@@ -104,15 +125,16 @@ const OmsCheckoutView: FC = () => {
   const timeToExpired = addTime - timeNow;
   const timeRef = useRef<any>(null);
   useEffect(() => {
+    getPaymentMethodListContent.reset(dispatchPaymentMethod);
     timeRef.current = setTimeout(() => {
       refExpiredTimeModal.current?.open();
     }, timeToExpired);
+    handlePaymentMethodList();
   }, []);
 
   /** => to Payment Method Page  */
   const dataToPaymentMethod = { totalPaymentNumber, addTime, totalQtyCheckout };
   const toPaymentMethod = () => {
-    paymentMethodList.reset(dispatchPaymentMethod);
     paymentMethodCreateOrder.reset(dispatchPaymentMethod);
     PaymentMethodSubRtdb.reset(dispatchPaymentMethod);
     thankYouPageCancelOrderAction.reset(dispatchThankYouPage);

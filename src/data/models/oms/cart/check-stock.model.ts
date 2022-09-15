@@ -23,4 +23,5 @@ export interface CheckStockPayloadCarts {
   productId: string;
   warehouseId: number;
   qty: number;
+  locationId: string;
 }

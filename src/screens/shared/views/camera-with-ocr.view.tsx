@@ -8,12 +8,12 @@ import {
   colorV2,
   SnbBottomSheet2,
   SnbText2,
-  SnbButton2,
   SnbProgress,
   spacingV2 as layout,
   borderV2,
   SnbBottomSheetPart,
   SnbBottomSheet2Ref,
+  FooterButton,
 } from 'react-native-sinbad-ui';
 import ImageEditor from '@sinbad/image-editor';
 import { renderIF } from '@screen/auth/functions';
@@ -41,20 +41,24 @@ const KtpPhotoFrame = () => (
 );
 
 const CameraWithOCRView = () => {
-  const { goBack } = useNavigation();
-  const { params }: any = useRoute();
   const [retake, setRetake] = React.useState<boolean>(false);
-  const { processImage, ocrImageState, resetOcrStatusRtdb, ocrImageReset } =
-    useOCR(true);
-  const { ocrStatus } = useDataFlagRTDB() || {};
-  useCheckFlagByTask('ocrStatus');
   const [isImageProcessed, setIsImageProcessed] = React.useState(false);
   const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
   const [contentHeight, setContentHeight] = React.useState(0);
+  const [isMounted, setIsMounted] = React.useState(true)
+  const { goBack } = useNavigation();
+  const { params }: any = useRoute();
+  const { processImage, ocrImageState, setOcrStatusRtdb, ocrImageReset, resetOcrDataRtdb } =
+    useOCR(true);
+  const { ocrStatus } = useDataFlagRTDB() || {};
+  useCheckFlagByTask('ocrStatus');
 
   React.useEffect(() => {
-    resetOcrStatusRtdb();
-    return resetOcrStatusRtdb;
+    setOcrStatusRtdb('none');
+    return () => {
+      setIsMounted(false)
+      setOcrStatusRtdb('none');
+    }
   }, []);
 
   const handleBackButton = React.useCallback(() => {
@@ -79,6 +83,7 @@ const CameraWithOCRView = () => {
       goBack();
     } else if (ocrStatus === 'processing') {
       ocrTimeout = setTimeout(() => {
+        setOcrStatusRtdb('none')
         bottomSheetRef.current?.open();
       }, 15 * 1000);
     }
@@ -108,6 +113,7 @@ const CameraWithOCRView = () => {
   return (
     <View style={{ flex: 1 }}>
       <Camera
+        testID='03.0'
         title={params?.title}
         subtitle={params?.subtitle}
         type={'back'}
@@ -153,24 +159,30 @@ const CameraWithOCRView = () => {
           />
         }
         close={() => {
-          resetOcrStatusRtdb();
-          setRetake(true);
+          setOcrStatusRtdb('none');
+          isMounted && setRetake(true);
         }}
         content={renderContent()}
         button={
-          <View style={{ padding: layout.spacing.lg }}>
-            <SnbButton2.Primary
-              title="Saya Mengerti"
-              onPress={() => {
-                resetOcrStatusRtdb();
-                setRetake(true);
-                bottomSheetRef.current?.close();
-              }}
-              disabled={false}
-              size="medium"
-              full
-            />
-          </View>
+          <FooterButton.Dual
+            testID='03.1'
+            title1='Lanjutkan'
+            button1Press={() => {
+              setOcrStatusRtdb('none');
+              resetOcrDataRtdb()
+              setRetake(true);
+              bottomSheetRef.current?.close()
+              setTimeout(() => {
+                goBack()
+              }, 100)
+            }}
+            title2='Foto Ulang'
+            button2Press={() => {
+              setOcrStatusRtdb('none');
+              setRetake(true);
+              bottomSheetRef.current?.close();
+            }}
+          />
         }
       />
       {renderIF(

@@ -60,9 +60,11 @@ const ListLayout: FC<ProductLayoutProps> = ({
           marginBottom: spacing.xl,
         }}>
         <ProductListCard
+          {...item}
           testID={testID}
           name={item.name}
           imageUrl={item.thumbnail}
+          isStockAvailable={item.isStockAvailable}
           priceAfterTax={item.priceAfterTax}
           hasBulkPrice={item.hasBulkPrice}
           qtySoldLabel={item.qtySoldValue ? `Terjual ${item.qtySoldLabel}` : ''}
@@ -94,6 +96,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
             <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
           }>
           <EmptyState
+            testID={testID}
             title="Terjadi Kesalahan"
             description="Boleh coba refresh lagi?"
           />
@@ -125,7 +128,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
         }}
         data={products}
         renderItem={renderListCard}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => `${item.id}_${item.warehouseOriginId}`}
         onEndReachedThreshold={0.1}
         onEndReached={onLoadMore}
         showsVerticalScrollIndicator={true}

@@ -301,7 +301,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     if (stateVoucher.checkSinbadVoucher.error !== null) {
       resetSelectedVoucher();
       setFooterData({
-        isVoucherExist: false,
         sinbadVoucherId: null,
         totalOrder: countTotalPrice,
         sinbadVoucherDiscountOrder: 0,
@@ -329,11 +328,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
   /** => listen relate count total selected product */
   useEffect(() => {
-    if (
-      stateVoucher.checkSinbadVoucher.data &&
-      stateVoucher.checkSinbadVoucher.data.isVoucherExist &&
-      countTotalProduct === 0
-    ) {
+    if (stateVoucher.checkSinbadVoucher.data && countTotalProduct === 0) {
       handleResetSelectedVoucher();
       setTimeout(() => {
         handleParentToast(
@@ -422,29 +417,19 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     const isVoucherSelected =
       selectedVoucher && selectedVoucher.voucherId !== null;
     const isProductSelected = countTotalProduct > 0;
-    const isSinbadVoucherExist =
-      (footerData && footerData.isVoucherExist) || false;
     let voucherStatus: IVoucherStatus, voucherBadgeTitle, voucherBadgeSubtitle;
 
-    if (isSinbadVoucherExist && isProductSelected && isVoucherSelected) {
+    if (isProductSelected && isVoucherSelected) {
       voucherStatus = 'green';
       voucherBadgeTitle = `Kamu Hemat ${toCurrency(
         (footerData && footerData.sinbadVoucherDiscountOrder) || 0,
         { withFraction: false },
       )}`;
       voucherBadgeSubtitle = '1 Voucher digunakan';
-    } else if (
-      isSinbadVoucherExist &&
-      isProductSelected &&
-      !isVoucherSelected
-    ) {
+    } else if (isProductSelected && !isVoucherSelected) {
       voucherStatus = 'yellow';
       voucherBadgeTitle = 'Gunakan voucher untuk dapat diskon';
-    } else if (
-      isSinbadVoucherExist &&
-      !isProductSelected &&
-      isAnyActiveProduct
-    ) {
+    } else if (!isProductSelected && isAnyActiveProduct) {
       voucherStatus = 'gray';
       voucherBadgeTitle = 'Pilih produk sebelum pakai voucher';
     } else {

@@ -3,6 +3,7 @@ import apiHost from '@core/services/apiHost';
 import { useNavigation } from '@react-navigation/core';
 import { UploadPhotoRules } from '@screen/account/views/shared';
 import { renderIF, useCamera } from '@screen/auth/functions';
+import { useOCR } from '@screen/auth/functions/global-hooks.functions';
 import { MerchantHookFunc } from '@screen/merchant/function';
 import { OCRResultView } from '@screen/shared/views';
 import { UserHookFunc } from '@screen/user/functions';
@@ -25,13 +26,18 @@ const rules = [
 
 const Content: React.FC = () => {
   const { goBack } = useNavigation();
-  const { openCamera, capturedImage } = useCamera();
+  const { openCameraWithOCR } = useCamera();
   const editProfileAction = MerchantHookFunc.useEditProfile();
   const { stateMerchant, dispatchSupplier } = React.useContext(
     contexts.MerchantContext,
   );
   const { dispatchUser, stateUser } = React.useContext(contexts.UserContext);
   const { detail } = UserHookFunc.useStoreDetailAction();
+  const { ocrImageState, ocrImageReset } = useOCR();
+
+  React.useEffect(() => {
+    return ocrImageReset;
+  }, []);
 
   React.useEffect(() => {
     if (stateMerchant.profileEdit.data !== null) {
@@ -47,6 +53,7 @@ const Content: React.FC = () => {
       goBack();
       editProfileAction.reset(dispatchSupplier);
       detail(dispatchUser);
+      ocrImageReset();
     }
   }, [stateMerchant.profileEdit]);
 
@@ -71,7 +78,7 @@ const Content: React.FC = () => {
             size="medium"
             title="Ubah Foto"
             full
-            onPress={() => openCamera('ktp')}
+            onPress={() => openCameraWithOCR('ktp')}
             testID={'13.1'}
           />
         </View>
@@ -79,12 +86,12 @@ const Content: React.FC = () => {
     );
   };
 
-  const isImageCaptured = capturedImage?.data?.type === 'ktp';
+  const isOcrSuccess = ocrImageState.data !== null;
 
   return (
     <View style={{ flex: 1 }}>
       {renderIF(
-        isImageCaptured,
+        isOcrSuccess,
         <OCRResultView />,
         renderIF(
           stateUser?.detail?.data?.ownerData?.profile?.imageId === null,
@@ -92,7 +99,7 @@ const Content: React.FC = () => {
             rulesTitle={'Pastikan Foto KTP Anda Sesuai Ketentuan'}
             imgSrc={require('../../../../assets/images/ktp_image.png')}
             rules={rules}
-            action={() => openCamera('ktp')}
+            action={() => openCameraWithOCR('ktp')}
             type="vertical"
             resizeMode="contain"
             blurRadius={2.2}
