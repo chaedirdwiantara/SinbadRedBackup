@@ -10,6 +10,7 @@ interface RecentSearchProps {
   onKeywordDelete: (keyword: string) => void;
   onAllDelete: () => void;
   onKeywordPress: (keyword: string) => void;
+  testID: string;
 }
 /** => var */
 const { textColor } = colorV2;
@@ -19,17 +20,23 @@ const RecentSearch: FC<RecentSearchProps> = ({
   onKeywordDelete,
   onAllDelete,
   onKeywordPress,
+  testID,
 }) => (
   <View style={{ padding: 16 }}>
     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-      <SnbText2.Headline.Small>Pencarian Terakhir</SnbText2.Headline.Small>
-      <TouchableOpacity onPress={onAllDelete} testID="clear-search-history">
+      <SnbText2.Headline.Small testID={'label-pencarian-terakhir.' + testID}>
+        Pencarian Terakhir
+      </SnbText2.Headline.Small>
+      <TouchableOpacity
+        onPress={onAllDelete}
+        testID={'btn.clear-search-history.' + testID}>
         <SnbText2.Body.Small color={textColor.link}>
           Hapus Semua
         </SnbText2.Body.Small>
       </TouchableOpacity>
     </View>
     <TagListType1
+      testID={testID}
       tags={keywords}
       onTagRemove={onKeywordDelete}
       onTagPress={(tag) => onKeywordPress(tag)}

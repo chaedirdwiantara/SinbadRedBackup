@@ -15,6 +15,7 @@ export interface ProductList {
   qtySoldLabel: string;
   qtySoldValue: number;
   warehouseOriginId: string;
+  isStockAvailable: boolean;
 }
 
 export interface ProductListProcessProps extends models.ListProcessV3Props {
@@ -26,6 +27,7 @@ export interface ProductListProcessProps extends models.ListProcessV3Props {
   maxPrice?: number;
   sellerId?: string;
   perPage?: number;
+  isLogin?: boolean;
 }
 
 export type ProductListQueryOptions = Omit<
@@ -138,15 +140,38 @@ export interface ProductDetail {
   packagedDimensionWidth: number;
   packagedDimensionHeight: number;
   packagedDimensionLabel: string;
+  isStockAvailable: boolean;
 }
 
 export type ProductSubModule = 'recommendations' | undefined;
 
-export interface ProductListProcessAction extends models.ListProcessV3Action {
+interface queryPrductList {
+  isLogin?: boolean;
+}
+
+export interface ProductListProcessAction
+  extends models.ListProcessV3Action<queryPrductList> {
   subModule?: ProductSubModule;
+  contextDispatchStockReminder: (action: any) => any;
 }
 
 export interface DetailProductProcess {
   id: string;
   warehouseId: string;
+}
+
+export interface ProductCard {
+  testID: string;
+  name: string;
+  imageUrl: string;
+  qtySoldLabel: string;
+  priceAfterTax: number;
+  id: string;
+  warehouseOriginId: string;
+  hasBulkPrice: boolean;
+  isExclusive?: boolean;
+  onCardPress?: () => void;
+  withOrderButton?: boolean;
+  onOrderPress: () => void;
+  isStockAvailable?: boolean;
 }

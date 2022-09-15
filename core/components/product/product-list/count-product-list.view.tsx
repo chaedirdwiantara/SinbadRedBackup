@@ -57,7 +57,7 @@ const App: FC<TitleSectionProps> = ({ testID }) => {
               <SnbIcon name="filter_list" size={24} />
             </TouchableOpacity>
             <TouchableOpacity
-              testID={'btn-change-layout.count-product.' + testID}
+              testID={`btn-change-layout.count-product.${iconLayout}.${testID}`}
               onPress={onPressLayout}>
               <SnbIcon name={iconLayout} size={24} />
             </TouchableOpacity>

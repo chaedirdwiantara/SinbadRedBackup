@@ -16,6 +16,9 @@ import {
   goToHome,
   goToShoppingCart,
 } from '../functions';
+
+// constant
+const testID = 'search-product';
 /** === COMPONENT === */
 const SearchView: FC = () => {
   /** === HOOKS === */
@@ -44,6 +47,7 @@ const SearchView: FC = () => {
   return (
     <SnbContainer color="white">
       <SnbTopNav2.Type8
+        testID={testID}
         icon1Name="cart"
         icon1Value={stateCart.total.data?.totalProducts}
         icon1Action={validateCartVisit}
@@ -59,6 +63,7 @@ const SearchView: FC = () => {
       />
       <View style={{ flex: 1 }}>
         <RecentSearch
+          testID={testID}
           keywords={searchedKeywords}
           onKeywordDelete={deleteKeyword}
           onAllDelete={deleteAllKeywords}

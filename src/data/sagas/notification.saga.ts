@@ -59,16 +59,8 @@ function* notificationMarkRead(
       yield call(() => NotificationApi.notificationMarkRead(id));
     } catch (error) {}
     // success mark read
-    yield put(ActionCreators.notificationMarkReadSuccess());
-    // refresh get list notification
-    yield put(ActionCreators.notificationListReset());
-    yield action.contextDispatch(ActionCreators.notificationListReset());
-    yield put(
-      ActionCreators.notificationListProcess(action.contextDispatch, {
-        loading: true,
-        page: 1,
-        perPage: 10,
-      }),
+    yield action.contextDispatch(
+      ActionCreators.notificationMarkReadSuccess(id),
     );
   } catch (error) {
     // has some error
