@@ -71,6 +71,9 @@ const SelfRegisterView: React.FC = () => {
     return () => {
       checkPhoneRegistrationReset();
       phone.clearText();
+      resetReferralCode();
+      setReferal('');
+      setStatusReferal('default');
     };
   }, []);
 

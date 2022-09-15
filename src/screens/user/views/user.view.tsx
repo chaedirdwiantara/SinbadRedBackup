@@ -187,7 +187,7 @@ const UserView: FC = ({ start }: any) => {
           !ownerData?.info.isSelfieImageUrl ||
           !buyerData?.buyerInformation?.buyerAccount?.name ||
           !buyerData?.buyerAddress?.address ||
-          buyerData?.buyerInformation?.buyerAccount?.imageUrl !== null
+          !ownerData?.info?.isImageBuyer
         ) {
           setOpenModalConfirmation(true);
         }
