@@ -1,4 +1,4 @@
-package sinbad.app.development;
+package sinbad.app.sandbox;
 
 import android.content.Context;
 import com.facebook.flipper.android.AndroidFlipperClient;

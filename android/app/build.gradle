@@ -10,7 +10,7 @@ project.ext.react = [
 ]
 apply from: '../../node_modules/react-native/react.gradle'
 
-def enableSeparateBuildPerCPUArchitecture = true
+def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = true
 def jscFlavor = 'org.webkit:android-jsc:+'
 def enableHermes = project.ext.react.get('enableHermes', false);
@@ -24,7 +24,7 @@ android {
     }
 
     defaultConfig {
-        applicationId 'sinbad.app.development'
+        applicationId 'sinbad.app.sandbox'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 22
@@ -36,7 +36,7 @@ android {
         abi {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
-            universalApk false
+            universalApk true
             include 'armeabi-v7a', 'x86', 'arm64-v8a', 'x86_64'
         }
     }
