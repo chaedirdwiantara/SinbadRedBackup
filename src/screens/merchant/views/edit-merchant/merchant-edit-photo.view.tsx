@@ -233,7 +233,7 @@ const MerchantEditPhotoView = () => {
       const npwpIsChanged =
         npwp.value !== '' &&
         npwp.value.replace(/[^0-9]/g, '') !==
-          stateUser.detail.data?.ownerData?.profile?.taxNo;
+        stateUser.detail.data?.ownerData?.profile?.taxNo;
       const data = {
         user: {
           taxNo: npwp.value?.replace(/[^0-9]/g, ''),
@@ -256,11 +256,12 @@ const MerchantEditPhotoView = () => {
     const checkNpwp = () => {
       if (params?.type === 'npwp') {
         if (
-          npwp.value === stateUser.detail.data?.ownerData?.profile?.taxNo ||
+          npwp.value.replace(/[^0-9]/g, '') === stateUser.detail.data?.ownerData?.profile?.taxNo ||
           !npwp.value
         ) {
           return true;
         }
+        return false
       }
     };
 
@@ -289,8 +290,8 @@ const MerchantEditPhotoView = () => {
                   params?.type === 'selfie'
                     ? 6 / 5
                     : params?.type === 'store'
-                    ? 8 / 7
-                    : 8 / 5,
+                      ? 8 / 7
+                      : 8 / 5,
               }}
             />
             <View>
@@ -341,9 +342,7 @@ const MerchantEditPhotoView = () => {
             button2Press={() => openCamera(params?.type)}
             disabled={
               stateGlobal.uploadImage.loading ||
-              stateMerchant.profileEdit.loading ||
-              npwp.type === 'error' ||
-              checkNpwp()
+              stateMerchant.profileEdit.loading
             }
             title1={'Simpan'}
             button1Press={handleSaveNpwp}
@@ -352,7 +351,10 @@ const MerchantEditPhotoView = () => {
               stateMerchant.profileEdit.loading
             }
             testID={'12.3'}
-            button1Disabled={!isImageCaptured}
+            button1Disabled={
+              (!isImageCaptured || !stateUser.detail.data?.ownerData?.profile?.taxImageUrl || npwp.type === 'error') &&
+              (npwp.type === 'error' || checkNpwp())
+            }
           />
         )}
       </View>
