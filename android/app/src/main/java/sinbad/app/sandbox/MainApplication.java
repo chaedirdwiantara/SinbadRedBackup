@@ -1,4 +1,4 @@
-package sinbad.app.development;
+package sinbad.app.sandbox;
 
 import android.content.Context;
 
@@ -81,7 +81,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
       Context context, ReactInstanceManager reactInstanceManager) {
     if (BuildConfig.DEBUG) {
       try {
-        Class<?> aClass = Class.forName("sinbad.app.development.ReactNativeFlipper");
+        Class<?> aClass = Class.forName("sinbad.app.sandbox.ReactNativeFlipper");
         aClass
             .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
             .invoke(null, context, reactInstanceManager);

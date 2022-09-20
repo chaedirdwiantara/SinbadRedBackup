@@ -18,20 +18,17 @@ default_platform(:android)
 platform :android do
   desc "Generate APK files"
   lane :apk do
-    sh "chmod +x ../gradlew"
-    sh "rm -rf ../.gradle"
-    gradle(task: "clean")
-    gradle(task: "cleanBuildCache")
     gradle(task: "app:assembleRelease")
   end
 
   desc "Generate AAB files"
   lane :aab do
-    sh "chmod +x ../gradlew"
-    sh "rm -rf ../.gradle"
-    gradle(task: "clean")
-    gradle(task: "cleanBuildCache")
     gradle(task: "app:bundleRelease")
+  end
+
+  desc "Generate AAB and APK files"
+  lane :both do
+    gradle(tasks: ["app:bundleRelease", "app:assembleRelease"])
   end
 
   desc "Upload AAB Files to Internal Test Play Store"
